@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BillboardControlPanel/BillboardControlPanel.iml" filepath="$PROJECT_DIR$/BillboardControlPanel/BillboardControlPanel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BillboardServer/BillboardServer.iml" filepath="$PROJECT_DIR$/BillboardServer/BillboardServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BillboardViewer/BillboardViewer.iml" filepath="$PROJECT_DIR$/BillboardViewer/BillboardViewer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Cab302-Major-Project.iml" filepath="$PROJECT_DIR$/.idea/Cab302-Major-Project.iml" />
+    </modules>
+  </component>
+</project>
