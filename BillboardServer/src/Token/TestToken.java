@@ -1,4 +1,4 @@
-package Server;
+package Token;
 
 public class TestToken {
 }

@@ -1,4 +1,4 @@
-package Server;
+package Token;
 
 import java.util.Random;
 import java.time.LocalDateTime;
@@ -7,10 +7,11 @@ public class Token {
     private String sessionToken;
     private LocalDateTime expiryTime;
 
-    Token(){
+    public Token(){
         sessionToken = generateToken();
         expiryTime = generateExpiryDate();
     }
+
     private String generateToken() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
@@ -23,8 +24,18 @@ public class Token {
                 .toString();
         return generatedString;
     }
+
     private LocalDateTime generateExpiryDate(){
         LocalDateTime dateTime = LocalDateTime.now();
         return dateTime.plusDays(1);
     }
+
+    public String getToken(){
+        return sessionToken;
+    }
+
+    public LocalDateTime getExpiry(){
+        return expiryTime;
+    }
+
 }
