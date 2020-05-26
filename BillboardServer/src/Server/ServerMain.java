@@ -2,6 +2,7 @@ package Server;
 
 import Token.Token;
 
+import java.sql.Connection;
 import java.util.HashMap;
 
 public class ServerMain {
@@ -9,6 +10,8 @@ public class ServerMain {
     static String username = "jerry";
 
     public static void main(String[] Args){
+
+        Connection connection = DBConnection.getInstance();
 
         HashMap<Token, String> tokenStore = new HashMap<Token, String>();
         Token token = new Token();
