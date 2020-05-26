@@ -18,3 +18,4 @@ After you've done quite abit and everything works and you want to push it up to 
 7. git checkout xxxxxx  <- the name of the branch you were working on
 8. git merge master (merges your branch with master)(once you done this check that there were no merge conflicts and everything works, if not then fix it)
 9. git push origin xxxxxx <- the name of the branch you were working on
+10. go on git hub and do a pull request
