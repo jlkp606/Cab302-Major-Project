@@ -8,11 +8,11 @@ public class Token {
     private LocalDateTime expiryTime;
 
     public Token(){
-        sessionToken = generateToken();
+        sessionToken = generateRandomString();
         expiryTime = generateExpiryDate();
     }
 
-    private String generateToken() {
+    public static String generateRandomString() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 20;
