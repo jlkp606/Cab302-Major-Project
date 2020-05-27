@@ -40,7 +40,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
    private PreparedStatement rowCount;
 
    public JDBCDatabaseSource() {
-      connection = DBConnection.getInstance();
+      connection = DataBase.DBConnection.getInstance();
       try {
          Statement st = connection.createStatement();
          st.execute(CREATE_BILLBOARD_TABLE);

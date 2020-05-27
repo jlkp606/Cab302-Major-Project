@@ -1,18 +1,19 @@
 package Token;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.time.LocalDateTime;
 
-public class Token {
+public class Token implements Serializable {
     private String sessionToken;
     private LocalDateTime expiryTime;
 
     public Token(){
-        sessionToken = generateToken();
+        sessionToken = generateRandomString();
         expiryTime = generateExpiryDate();
     }
 
-    private String generateToken() {
+    public static String generateRandomString() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 20;
