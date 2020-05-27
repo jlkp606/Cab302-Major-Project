@@ -1,4 +1,4 @@
-package com.company;
+package Viewer;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.event.*;
@@ -11,7 +11,7 @@ public class BillboardViewer {
         MouseListener mouseexit = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                    frame.dispose();
+                frame.dispose();
             }
 
             @Override
