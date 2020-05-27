@@ -2,7 +2,7 @@ package Database;
 
 import javax.swing.*;
 
-public class DatabaseInit {
+public class DatabaseData {
 
     DefaultListModel listModel;
 
@@ -14,9 +14,9 @@ public class DatabaseInit {
      * application.
      *
      */
-    public DatabaseInit() {
+    public DatabaseData() {
         listModel = new DefaultListModel();
-        billboardData = new JDBCDataBaseSource();
+        billboardData = new JDBCDatabaseSource();
 
         // add the retrieved data to the list model
         for (String name : billboardData.nameSet()) {
@@ -25,9 +25,9 @@ public class DatabaseInit {
     }
 
     /**
-     * Adds a person to the address book.
+     * Adds a Billboard to the table.
      *
-     * @param b A Billboard to add to the address book.
+     * @param b A Billboard to add to the database.
      */
     public void add(Billboard b) {
 

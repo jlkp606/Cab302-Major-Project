@@ -1,6 +1,7 @@
 package Server;
 
 import Database.DBConnection;
+import Database.DatabaseData;
 import Token.Token;
 
 import java.sql.Connection;
@@ -10,13 +11,22 @@ public class ServerMain {
     //mock data
     static String username = "jerry";
 
+    private static void createDBTest() {new DatabaseData(); }
+
     public static void main(String[] Args){
 
         Connection connection = DBConnection.getInstance();
 
+        /**
+         * Testing function to create database tables
+         */
+        createDBTest();
+
         HashMap<Token, String> tokenStore = new HashMap<Token, String>();
         Token token = new Token();
         tokenStore.put(token, username);
+
+
 
 //        System.out.println(tokenStore.get(token));
 //        System.out.println(token.getToken());

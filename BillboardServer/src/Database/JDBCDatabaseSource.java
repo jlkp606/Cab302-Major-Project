@@ -6,9 +6,9 @@ import java.util.TreeSet;
 
 
 /**
- * Class for retrieving data from the XML file holding the address list.
+ * Class for retrieving data from the XML file holding the billboard list.
  */
-public class JDBCDataBaseSource implements DatabaseSource{
+public class JDBCDatabaseSource implements DatabaseSource{
 
    public static final String CREATE_BILLBOARD_TABLE =
            "CREATE TABLE IF NOT EXISTS billboard ("
@@ -39,7 +39,7 @@ public class JDBCDataBaseSource implements DatabaseSource{
 
    private PreparedStatement rowCount;
 
-   public JDBCDataBaseSource() {
+   public JDBCDatabaseSource() {
       connection = DBConnection.getInstance();
       try {
          Statement st = connection.createStatement();

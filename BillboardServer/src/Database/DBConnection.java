@@ -10,7 +10,15 @@ import java.util.Properties;
 
 public class DBConnection {
 
+   /**
+    * The singleton instance of the database connection.
+    */
+
    private static Connection instance = null;
+
+   /**
+    * Constructor initialises the connection.
+    */
 
    private DBConnection() {
       Properties props = new Properties();
@@ -30,6 +38,8 @@ public class DBConnection {
          // get a connection
          instance = DriverManager.getConnection(url + "/" + schema, username, password);
          System.out.println( "Connection with database established." );
+
+
       } catch (SQLException sqlex) {
          System.err.println(sqlex);
       } catch (FileNotFoundException fnfex) {
@@ -39,6 +49,12 @@ public class DBConnection {
       }
 
    }
+
+   /**
+    * Provides global access to the singleton instance of the UrlSet.
+    *
+    * @return a handle to the singleton instance of the UrlSet.
+    */
 
    public static Connection getInstance() {
       if (instance == null) {
