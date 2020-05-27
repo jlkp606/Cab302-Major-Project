@@ -1,5 +1,6 @@
 package Server;
 
+import Database.DBConnection;
 import Token.Token;
 
 import java.sql.Connection;

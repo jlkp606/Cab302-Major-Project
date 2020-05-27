@@ -1,4 +1,4 @@
-package Server;
+package Database;
 
 import java.sql.*;
 import java.util.Set;
