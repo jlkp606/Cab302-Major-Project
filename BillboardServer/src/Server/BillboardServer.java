@@ -46,6 +46,7 @@ public class BillboardServer {
 
             switch ((String) request.get("type")){
                 case "log in":
+                    System.out.println("hi");
                     Token token = new Token();
                     tokenStore.put(token, (String) request.get("username"));
                     HashMap<String, Object> res = new HashMap<String, Object>();

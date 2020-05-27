@@ -1,5 +1,4 @@
 package Server;
-import Token.Token;
 
 import java.io.*;
 import java.util.HashMap;
@@ -42,19 +41,17 @@ public class Client {
 
         // test request
         HashMap<String, Object> request = new HashMap<>();
-        request.put("type", "login");
+        request.put("type", "log in");
         request.put("username","josho");
         request.put("password", "asd123asd");
 
 
         Socket socket = getClientSocket();
-
         sendRequest(socket, request);
 
         HashMap<String, Object> res = getResponse(socket);
 
-//        System.out.println(res.get("token"));
-//        //System.out.println(token.getToken());
+        System.out.println(res.get("token"));
 
         socket.close();
 
