@@ -17,14 +17,18 @@ public class JDBCBillboardDataSource{
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS users ("
                     + "userID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE," // from https://stackoverflow.com/a/41028314
+                    + "username VARCHAR(30) UNIQUE,"
                     + "password VARCHAR(30),"
                     + "passwordSalt VARCHAR(30)" + ");";
 
-    private static final String INSERT_USER = "INSERT INTO users (userID, password, passwordSalt) VALUES (?, ?, ?);";
+    private static final String INSERT_USER = "INSERT INTO users (username, password, passwordSalt) VALUES (?, ?, ?);";
+
+    private static final String DELETE_USER = "DELETE FROM users WHERE userID=?;";
 
     private Connection connection;
 
     private PreparedStatement addUser;
+    private PreparedStatement deleteUser;
 
     public JDBCBillboardDataSource() {
         connection = DBConnection.getInstance();
@@ -33,6 +37,7 @@ public class JDBCBillboardDataSource{
             st.execute(CREATE_TABLE);
             /* BEGIN MISSING CODE */
             addUser = connection.prepareStatement(INSERT_USER);
+            deleteUser = connection.prepareStatement(DELETE_USER);
             /* END MISSING CODE */
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -44,7 +49,7 @@ public class JDBCBillboardDataSource{
      */
     public void addUser(User p) {
         try {
-            addUser.setString(1, p.getUserID());
+            addUser.setString(1, p.getUsername());
             addUser.setString(2, p.getPassword());
             addUser.setString(3, p.getPasswordSalt());
             addUser.execute();

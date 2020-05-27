@@ -1,4 +1,4 @@
 jdbc.url=jdbc:mariadb://localhost:3306
-jdbc.schema=billboarddb
+jdbc.schema=testdb
 jdbc.username=root
 jdbc.password=

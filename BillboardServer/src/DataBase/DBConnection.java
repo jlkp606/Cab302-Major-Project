@@ -19,11 +19,12 @@ public class DBConnection {
     /**
      * Constructor intializes the connection.
      */
+
     private DBConnection() {
         Properties props = new Properties();
         FileInputStream in = null;
         try {
-            in = new FileInputStream("./db.props");
+            in = new FileInputStream("./BillboardServer/db.props");
             props.load(in);
             in.close();
 

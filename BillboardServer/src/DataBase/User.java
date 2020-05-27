@@ -6,21 +6,21 @@ import java.util.HashMap;
 import static Token.Token.generateRandomString;
 
 public class User implements Serializable {
-    private String userID;
+    private String username;
     private String password;
     private String passwordSalt;
 
     private HashMap<String, Boolean> permission;
 
-    public User(String userID, String password) {
-        this.userID = userID;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
         this.passwordSalt = generateRandomString();
     }
 
 
-    public String getUserID() {
-        return userID;
+    public String getUsername() {
+        return username;
     }
     public String getPassword() {
         return password;
