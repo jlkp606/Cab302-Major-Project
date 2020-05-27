@@ -8,7 +8,7 @@ import java.util.TreeSet;
 /**
  * Class for retrieving data from the XML file holding the address list.
  */
-public class JDBCDataBaseSource {
+public class JDBCDataBaseSource implements DatabaseSource{
 
    public static final String CREATE_BILLBOARD_TABLE =
            "CREATE TABLE IF NOT EXISTS billboard ("
@@ -69,4 +69,61 @@ public class JDBCDataBaseSource {
          ex.printStackTrace();
       }
    }
+    /**
+     * @see DatabaseSource#nameSet()
+     */
+    public Set<String> nameSet() {
+        Set<String> names = new TreeSet<String>();
+        ResultSet rs = null;
+
+        try {
+            rs = getNameList.executeQuery();
+            while (rs.next()) {
+                names.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return names;
+    }
+
+    /**
+     * @see DatabaseSource#getBillboard(String)
+     */
+    public Billboard getBillboard(String name) {
+        Billboard b = new Billboard();
+        ResultSet rs = null;
+
+        try {
+            getBillboard.setString(1, name);
+            rs = getBillboard.executeQuery();
+            rs.next();
+            b.setbName(rs.getString("Name"));
+            b.setbRep(rs.getString("Representative"));
+            b.setbData(rs.getString("Billboard Data"));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return b;
+    }
+
+    /**
+     * @see DatabaseSource#getSize()
+     */
+    public int getSize() {
+        ResultSet rs = null;
+        int rows = 0;
+
+        try {
+            rs = rowCount.executeQuery();
+            rs.next();
+            rows = rs.getInt(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return rows;
+    }
 }

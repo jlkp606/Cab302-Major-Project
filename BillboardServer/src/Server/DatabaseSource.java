@@ -10,6 +10,30 @@ public interface DatabaseSource {
      * @param b  Billboard to add
      */
     void addBillboard(Billboard b);
+
+    /**
+     * Extracts all the details of a Billboard from the table based on the
+     * name passed in.
+     *
+     * @param bName The name of the billboard as a String to search for.
+     * @return all details in a Person object for the name
+     */
+    Billboard getBillboard(String bName);
+
+    /**
+     * Gets the number of addresses in the address book.
+     *
+     * @return size of address book.
+     */
+    int getSize();
+
+    /**
+     * Retrieves a set of names of billboards from the data source that are used in
+     * the name list.
+     *
+     * @return set of names.
+     */
+    Set<String> nameSet();
 }
 
 
