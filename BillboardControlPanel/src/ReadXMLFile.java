@@ -10,13 +10,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 public class ReadXMLFile {
-    public static final String xmlFilePath = System.getProperty("user.dir")+"/xmlFile.xml";
-    public void read() throws ParserConfigurationException, IOException, SAXException {
+    //public static final String xmlFilePath = System.getProperty("user.dir")+"/xmlFile.xml";
+    public String[] read(String xmlFilePath) throws ParserConfigurationException, IOException, SAXException {
+        String path = xmlFilePath;
+        String arr[]=new String[10];
+
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
 
-        Document document = documentBuilder.parse(xmlFilePath);
+        Document document = documentBuilder.parse(path);
 
         NodeList list = document.getElementsByTagName("billboard");
 
@@ -29,9 +32,12 @@ public class ReadXMLFile {
                 String message = element.getElementsByTagName("message").item(0).getTextContent();
                 String info = element.getElementsByTagName("information").item(0).getTextContent();
 
-                System.out.println(background);
-                System.out.println(message);
-                System.out.println(info);
+//                System.out.println(background);
+//                System.out.println(message);
+//                System.out.println(info);
+                arr[0] = background;
+                arr[1] = message;
+                arr[2] = info;
 
 
             }
@@ -45,7 +51,10 @@ public class ReadXMLFile {
             if (node_1.getNodeType() == Node.ELEMENT_NODE) {
                 Element element_1 = (Element) node_1;
                 String colour_message = element_1.getAttribute("colour");
-                System.out.println(colour_message);
+//                System.out.println(colour_message);
+                //return colour_message;
+                arr[4] = colour_message;
+
             }
         }
 
@@ -58,7 +67,9 @@ public class ReadXMLFile {
             if (node_2.getNodeType() == Node.ELEMENT_NODE) {
                 Element element_2 = (Element) node_2;
                 String colour_info = element_2.getAttribute("colour");
-                System.out.println(colour_info);
+//                System.out.println(colour_info);
+                //return colour_info;
+                arr[5] = colour_info;
             }
         }
 
@@ -72,16 +83,27 @@ public class ReadXMLFile {
                 String image_data = element_3.getAttribute("data");
                 String image_url = element_3.getAttribute("url");
 
-                System.out.println(image_data);
-                System.out.println(image_url);
+//                System.out.println(image_data);
+//                System.out.println(image_url);
+                //return image_data;
+                //return  image_url;
+                arr[6] = image_data;
+                arr[7] = image_url;
+
             }
         }
 
 
+        return arr;
     }
 
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+        final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
         ReadXMLFile file = new ReadXMLFile();
-        file.read();
+        String arr1[]=new String[10];
+        arr1 = file.read(xmlFilePath);
+        for(int i =0;i<8;i++){
+            System.out.println(arr1[i]);
+        }
     }
 }
