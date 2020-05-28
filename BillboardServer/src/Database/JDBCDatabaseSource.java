@@ -4,66 +4,41 @@ import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
 
-
 /**
  * Class for retrieving data from the XML file holding the billboard list.
  */
 public class JDBCDatabaseSource implements DatabaseSource{
 
-//
-//    public static final String CREATE_TABLE =
-//            "CREATE TABLE IF NOT EXISTS users ("
-//                    + "userID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE," // from https://stackoverflow.com/a/41028314
-//                    + "username VARCHAR(30) UNIQUE,"
-//                    + "password VARCHAR(30),"
-//                    + "passwordSalt VARCHAR(30)" + ");";
-//
-//    private static final String INSERT_USER = "INSERT INTO users (username, password, passwordSalt) VALUES (?, ?, ?);";
-//
-//    private static final String DELETE_USER = "DELETE FROM users WHERE userID=?;";
-//
-//    private Connection connection;
-//
-//    private PreparedStatement addUser;
-//    private PreparedStatement deleteUser;
-//
-//    public JDBCBillboardDataSource() {
-//        connection = DBConnection.getInstance();
-//        try {
-//            Statement st = connection.createStatement();
-//            st.execute(CREATE_TABLE);
-//            /* BEGIN MISSING CODE */
-//            addUser = connection.prepareStatement(INSERT_USER);
-//            deleteUser = connection.prepareStatement(DELETE_USER);
-//            /* END MISSING CODE */
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    /**
-//     * @see dataExercise.AddressBookDataSource#addPerson(dataExercise.Person)
-//     */
-//    public void addUser(User p) {
-//        try {
-//            addUser.setString(1, p.getUsername());
-//            addUser.setString(2, p.getPassword());
-//            addUser.setString(3, p.getPasswordSalt());
-//            addUser.execute();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
+   public static final String CREATE_USER_TABLE =
+           "CREATE TABLE IF NOT EXISTS users ("
+                   + "userID INTEGER PRIMARY KEY NOT NULL /*!40101 AUTO_INCREMENT */ UNIQUE," // from https://stackoverflow.com/a/41028314
+                   + "username VARCHAR(30) UNIQUE,"
+                   + "password VARCHAR(30),"
+                   + "passwordSalt VARCHAR(30)" + ");";
 
+   private static final String INSERT_USER = "INSERT INTO users (username, password, passwordSalt) VALUES (?, ?, ?);";
 
+   private static final String DELETE_USER = "DELETE FROM users WHERE username=?;";
+
+   private static final String GET_USER = "SELECT username FROM users WHERE username=?";
+
+   private static final String SET_USER_PASSWORD = "UPDATE users SET password=? WHERE username=?";
+
+   private PreparedStatement addUser;
+
+   private PreparedStatement getUser;
+
+   private PreparedStatement setUserPassword;
+
+   private PreparedStatement deleteUser;
 
    public static final String CREATE_BILLBOARD_TABLE =
-           "CREATE TABLE IF NOT EXISTS billboard ("
-                   + "bID INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
-                   + "bName VARCHAR(30),"
-                   + "bRep VARCHAR(30),"
-                   + "bData VARCHAR(30)" + ");";
+            "CREATE TABLE IF NOT EXISTS billboard ("
+                    + "bID INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
+                    + "bName VARCHAR(30),"
+                    + "bRep VARCHAR(30),"
+                    + "bData VARCHAR(30)" + ");";
 
    private static final String INSERT_BILLBOARD = "INSERT INTO billboard (bID, bName, bRep, bData) VALUES (?, ?, ?, ?);";
 
@@ -90,21 +65,77 @@ public class JDBCDatabaseSource implements DatabaseSource{
    public JDBCDatabaseSource() {
       connection = DataBase.DBConnection.getInstance();
       try {
-         Statement st = connection.createStatement();
-         st.execute(CREATE_BILLBOARD_TABLE);
 
-         addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
-         getNameList = connection.prepareStatement(GET_BILLBOARD_NAME);
-         getBillboard = connection.prepareStatement(GET_BILLBOARD);
-         deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
-         rowCount = connection.prepareStatement(COUNT_ROWS);
+          Statement st = connection.createStatement();
+
+          st.execute(CREATE_USER_TABLE);
+
+          addUser = connection.prepareStatement(INSERT_USER);
+          getUser = connection.prepareStatement(GET_USER);
+          setUserPassword = connection.prepareStatement(SET_USER_PASSWORD);
+          deleteUser = connection.prepareStatement(DELETE_USER);
+
+          st.execute(CREATE_BILLBOARD_TABLE);
+
+          addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
+          getNameList = connection.prepareStatement(GET_BILLBOARD_NAME);
+          getBillboard = connection.prepareStatement(GET_BILLBOARD);
+          deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
+          rowCount = connection.prepareStatement(COUNT_ROWS);
+
+          System.out.println("Tables created successfully");
 
       } catch (SQLException ex) {
          ex.printStackTrace();
       }
    }
 
-   /**
+    /**
+     * @see DatabaseSource
+     */
+    public void addUser(DataBase.User u) {
+        try {
+            addUser.setString(1, u.getUsername());
+            addUser.setString(2, u.getPassword());
+            addUser.setString(3, u.getPasswordSalt());
+            addUser.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    /**
+     * @see DatabaseSource#getUser(String)
+     */
+    public DataBase.User getUser(String name) {
+        DataBase.User u = new DataBase.User();
+        ResultSet rs = null;
+
+        try {
+            getUser.setString(1, name);
+            rs = getUser.executeQuery();
+            rs.next();
+            u.setUsername(rs.getString("Username"));
+            u.setPassword(rs.getString("Password"));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return u;
+    }
+
+    /**
+     * @see DatabaseSource#deleteUser(String)
+     */
+    public void deleteUser(String name) {
+        try {
+            deleteUser.setString(1, name);
+            deleteUser.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
     * @see DatabaseSource#addBillboard(Billboard)
     */
    public void addBillboard(Billboard b) {

@@ -1,6 +1,7 @@
 package Server;
 
 import DataBase.User;
+import Database.JDBCDatabaseSource;
 import Token.Token;
 
 import java.io.*;
@@ -34,7 +35,7 @@ public class BillboardServer {
         ServerSocket serverSocket = getServerSocket();
 
         //connect to database
-        JDBCBillboardDataSource dataSource = new JDBCBillboardDataSource();
+        JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
 
         for ( ; ; ) {
             Socket clientSocket = serverSocket.accept();
