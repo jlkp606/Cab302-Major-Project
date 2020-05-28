@@ -13,15 +13,12 @@ public class User implements Comparable<User>, Serializable {
 
     private HashMap<String, Boolean> permission;
 
-    public User() {
-    }
-
-    public User(String username, String password) {
+    public User(String username) {
         this.username = username;
-        this.password = password;
         this.passwordSalt = generateRandomString();
     }
 
+    public void setPassword(String password){ this.password = password; }
 
     public String getUsername() {
         return username;
@@ -31,8 +28,6 @@ public class User implements Comparable<User>, Serializable {
     public String getPassword() {
         return password;
     }
-    public void setPassword(String bName) {this.password = password;}
-
     public String getPasswordSalt() {
         return passwordSalt;
     }
@@ -51,9 +46,4 @@ public class User implements Comparable<User>, Serializable {
     public int compareTo(User other) {
         return this.username.compareTo(other.username);
     }
-
-    public String toString() {
-        return username + " " + password + ", " + passwordSalt;
-    }
-
 }
