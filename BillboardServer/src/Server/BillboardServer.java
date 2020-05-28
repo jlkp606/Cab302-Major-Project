@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import Server.Hash;
@@ -102,8 +103,10 @@ public class BillboardServer {
                     break;
                 }
                 case "listUsers":{
-                    dataSource.listUsers();
-                    sendResponse(clientSocket);
+//                    ArrayList<String> userlist= dataSource.listUsers();
+//                    HashMap<String, Object> response = new HashMap<>();
+//                    response.put("userList", userlist);
+//                    sendResponse(clientSocket, reponse);
                     break;
                 }
                 case "createUser": {
@@ -125,9 +128,16 @@ public class BillboardServer {
                     break;
                 }
                 case "setUserPassword":{
+                    String username = (String) request.get("username");
+                    String password = (String) request.get("password");
+                    String salt = dataSource.getSalt(username);
+                    String dbPassword = Hash.getHash(password + salt);
+                    dataSource.setUserPassword(username, dbPassword);
                     break;
                 }
                 case "deleteUser": {
+                    String username = (String) request.get("username");
+                    dataSource.deleteUser(username);
                     break;
                 }
             }
