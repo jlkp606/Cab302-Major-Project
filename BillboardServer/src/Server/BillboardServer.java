@@ -128,17 +128,17 @@ public class BillboardServer {
                     break;
                 }
                 case "setUserPassword":{
-                    String username = (String) request.get("username");
-                    String password = (String) request.get("password");
-                    String salt = dataSource.getSalt(username);
-                    String dbPassword = Hash.getHash(password + salt);
-                    dataSource.setUserPassword(username, dbPassword);
-                    break;
+//                    String username = (String) request.get("username");
+//                    String password = (String) request.get("password");
+//                    String salt = dataSource.getSalt(username);
+//                    String dbPassword = Hash.getHash(password + salt);
+//                    dataSource.setUserPassword(username, dbPassword);
+//                    break;
                 }
                 case "deleteUser": {
-                    String username = (String) request.get("username");
-                    dataSource.deleteUser(username);
-                    break;
+//                    String username = (String) request.get("username");
+//                    dataSource.deleteUser(username);
+//                    break;
                 }
             }
 
