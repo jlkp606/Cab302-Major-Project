@@ -13,8 +13,7 @@ public class User implements Comparable<User>, Serializable {
 
     private HashMap<String, Boolean> permission;
 
-    public User(String username) {
-        this.username = username;
+    public User() {
         this.passwordSalt = generateRandomString();
     }
 

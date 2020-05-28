@@ -1,4 +1,4 @@
-package Database;
+package DataBase;
 
 import java.sql.*;
 import java.util.Set;
@@ -7,7 +7,7 @@ import java.util.TreeSet;
 /**
  * Class for retrieving data from the XML file holding the billboard list.
  */
-public class JDBCDatabaseSource implements DatabaseSource{
+public class JDBCDatabaseSource implements DatabaseSource {
 
 
    public static final String CREATE_USER_TABLE =

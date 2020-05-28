@@ -1,4 +1,4 @@
-package Database;
+package DataBase;
 
 import javax.swing.*;
 
