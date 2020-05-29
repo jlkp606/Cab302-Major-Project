@@ -42,7 +42,7 @@ public class Client {
 
         // test request
         HashMap<String, Object> request = new HashMap<>();
-        request.put("type", "log in");
+        request.put("type", "logIn");
         request.put("username","josho");
         request.put("password", "asd123asd");
 
