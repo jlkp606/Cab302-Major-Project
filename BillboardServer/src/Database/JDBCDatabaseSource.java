@@ -12,6 +12,8 @@ import java.lang.*;
 public class JDBCDatabaseSource implements DatabaseSource{
 
 
+   private Connection connection;
+
    public static final String CREATE_USER_TABLE =
            "CREATE TABLE IF NOT EXISTS users ("
                    + "userID INTEGER PRIMARY KEY NOT NULL /*!40101 AUTO_INCREMENT */ UNIQUE," // from https://stackoverflow.com/a/41028314
@@ -27,7 +29,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private static final String SET_USER_PASSWORD = "UPDATE users SET password=? WHERE username=?";
 
-   private static final String GET_ALL_USERS = "SELECT username FROM users";
+   //private static final String GET_ALL_USERS = "SELECT * FROM users";
 
    private PreparedStatement addUser;
 
@@ -37,7 +39,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private PreparedStatement deleteUser;
 
-   private PreparedStatement getAllUsers;
+   //private PreparedStatement getAllUsers;
 
 
    public static final String CREATE_BILLBOARD_TABLE =
@@ -57,9 +59,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM billboard";
 
-   private static final String GET_ALL_BILLBOARDS = "SELECT * FROM billboard";
-
-   private Connection connection;
+   //private static final String GET_ALL_BILLBOARDS = "SELECT * FROM billboard"; -- Use ALL in placeholder instead
 
    private PreparedStatement addBillboard;
 
@@ -71,7 +71,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private PreparedStatement rowCount;
 
-   private PreparedStatement getAllBillboards;
+   //private PreparedStatement getAllBillboards;
 
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
@@ -83,13 +83,13 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bID=?";
 
-   private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
+   //private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
 
    private PreparedStatement addSchedule;
 
    private PreparedStatement getSchedule;
 
-   private PreparedStatement getAllSchedules;
+   //private PreparedStatement getAllSchedules;
 
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
@@ -129,12 +129,13 @@ public class JDBCDatabaseSource implements DatabaseSource{
           getBillboard = connection.prepareStatement(GET_BILLBOARD);
           deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
           rowCount = connection.prepareStatement(COUNT_ROWS);
+          //getAllBillboards = connection.prepareStatement(GET_ALL_BILLBOARDS);
 
-         st.execute(CREATE_SCHEDULE_TABLE);
+          st.execute(CREATE_SCHEDULE_TABLE);
 
-         //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+          //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
 
-         st.execute(CREATE_PERMISSION_TABLE);
+          st.execute(CREATE_PERMISSION_TABLE);
 
           System.out.println("Tables created successfully");
 
@@ -201,7 +202,10 @@ public class JDBCDatabaseSource implements DatabaseSource{
          ex.printStackTrace();
       }
    }
-    /**
+
+
+
+   /**
      * @see DatabaseSource#nameSet()
      */
     public Set<String> nameSet() {
