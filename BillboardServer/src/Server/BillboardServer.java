@@ -112,12 +112,19 @@ public class BillboardServer {
                             break;
                         }
                         case "viewSchedule":{
+//                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
+//                            response.put("scheduleList", scheduleList);
+//                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "scheduleBillboard":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.addSchedule(schedule);
                             break;
                         }
                         case "removeBillboardFromSchedule":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.deleteSchedule(schedule);
                             break;
                         }
                         case "listUsers":{
