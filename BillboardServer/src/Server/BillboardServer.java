@@ -1,8 +1,7 @@
 package Server;
 
-import DataBase.Billboard;
-import DataBase.JDBCDatabaseSource;
-import DataBase.User;
+import Database.JDBCDatabaseSource;
+import Database.User;
 import Token.Token;
 
 import java.io.*;

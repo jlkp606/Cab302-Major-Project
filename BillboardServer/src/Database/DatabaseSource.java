@@ -1,5 +1,6 @@
 package DataBase;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public interface DatabaseSource {
@@ -9,7 +10,7 @@ public interface DatabaseSource {
      *
      * @param u  Billboard to add
      */
-    void addUser(DataBase.User u);
+    void addUser(User u);
 
     /**
      * Extracts all the details of a Billboard from the table based on the
@@ -18,7 +19,7 @@ public interface DatabaseSource {
      * @param username The name of the billboard as a String to search for.
      * @return all details in a Person object for the name
      */
-    DataBase.User getUser(String username);
+    User getUser(String username);
 
     /**
      * Deletes a USER from the database.
@@ -57,6 +58,14 @@ public interface DatabaseSource {
      * @return set of names.
      */
     Set<String> nameSet();
+
+    /**
+     * Adds permissions to a specific user
+     *
+     * @param u User to add permissions to.
+     * @param permissionList An arraylist of strings that contain only true or false.
+     */
+    void addUserPerms(User u, ArrayList<String> permissionList);
 }
 
 
