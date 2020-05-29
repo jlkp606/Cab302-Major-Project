@@ -110,7 +110,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
 
    public JDBCDatabaseSource() {
-      connection = DataBase.DBConnection.getInstance();
+      connection = Database.DBConnection.getInstance();
       try {
 
           Statement st = connection.createStatement();
