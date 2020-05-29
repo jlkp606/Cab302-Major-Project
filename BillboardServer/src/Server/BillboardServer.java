@@ -57,6 +57,7 @@ public class BillboardServer {
             String requestType = (String) request.get("type");
 
             if (requestType == "logIn"){
+                System.out.println("hi");
                 String username = (String) request.get("username");
                 //hashed
                 String password = (String) request.get("password");
@@ -112,12 +113,19 @@ public class BillboardServer {
                             break;
                         }
                         case "viewSchedule":{
+//                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
+//                            response.put("scheduleList", scheduleList);
+//                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "scheduleBillboard":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.addSchedule(schedule);
                             break;
                         }
                         case "removeBillboardFromSchedule":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.deleteSchedule(schedule);
                             break;
                         }
                         case "listUsers":{
@@ -159,6 +167,10 @@ public class BillboardServer {
         //                    dataSource.setUserPassword(username, dbPassword);
         //                    break;
                         }
+                        case "modifyUser": {
+                            //delete user
+                            //make a new one
+                        }
                         case "deleteUser": {
         //                    String username = (String) request.get("username");
         //                    dataSource.deleteUser(username);
@@ -166,7 +178,7 @@ public class BillboardServer {
                         }
                     }
                 } else {
-                    System.out.println("Invalid Key");
+                    System.out.println("Invalid Token");
                 }
             }
             clientSocket.close();

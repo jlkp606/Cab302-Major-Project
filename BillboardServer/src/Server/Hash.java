@@ -29,4 +29,8 @@ public class Hash {
         }
         return new String(hexChars);
     }
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        String hi = getHash("hi");
+                System.out.println(hi);
+    }
 }
