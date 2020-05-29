@@ -1,8 +1,10 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
+import java.lang.*;
 
 /**
  * Class for retrieving data from the XML file holding the billboard list.
@@ -14,8 +16,8 @@ public class JDBCDatabaseSource implements DatabaseSource{
            "CREATE TABLE IF NOT EXISTS users ("
                    + "userID INTEGER PRIMARY KEY NOT NULL /*!40101 AUTO_INCREMENT */ UNIQUE," // from https://stackoverflow.com/a/41028314
                    + "username VARCHAR(30) UNIQUE,"
-                   + "password VARCHAR(30),"
-                   + "passwordSalt VARCHAR(30)" + ");";
+                   + "password VARCHAR(100),"
+                   + "passwordSalt VARCHAR(100)" + ");";
 
    private static final String INSERT_USER = "INSERT INTO users (username, password, passwordSalt) VALUES (?, ?, ?);";
 
@@ -25,6 +27,8 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private static final String SET_USER_PASSWORD = "UPDATE users SET password=? WHERE username=?";
 
+   private static final String GET_ALL_USERS = "SELECT username FROM users";
+
    private PreparedStatement addUser;
 
    private PreparedStatement getUser;
@@ -33,12 +37,15 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
    private PreparedStatement deleteUser;
 
+   private PreparedStatement getAllUsers;
+
+
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
                     + "bID INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
                     + "bName VARCHAR(30),"
                     + "bRep VARCHAR(30),"
-                    + "bData VARCHAR(30)" + ");";
+                    + "bData TEXT" + ");";
 
    private static final String INSERT_BILLBOARD = "INSERT INTO billboard (bID, bName, bRep, bData) VALUES (?, ?, ?, ?);";
 
@@ -49,6 +56,8 @@ public class JDBCDatabaseSource implements DatabaseSource{
    private static final String DELETE_BILLBOARD = "DELETE FROM billboard WHERE BName=?";
 
    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM billboard";
+
+   private static final String GET_ALL_BILLBOARDS = "SELECT * FROM billboard";
 
    private Connection connection;
 
@@ -61,6 +70,44 @@ public class JDBCDatabaseSource implements DatabaseSource{
    private PreparedStatement deleteBillboard;
 
    private PreparedStatement rowCount;
+
+   private PreparedStatement getAllBillboards;
+
+   public static final String CREATE_SCHEDULE_TABLE =
+           "CREATE TABLE IF NOT EXISTS schedule ("
+                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "bStartTime DATETIME"
+                   + "bEndTime DATETIME" + ");";
+
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (bID, bStartTime, bEndtime) VALUES (?, ?, ?)";
+
+   private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bID=?";
+
+   private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
+
+   private PreparedStatement addSchedule;
+
+   private PreparedStatement getSchedule;
+
+   private PreparedStatement getAllSchedules;
+
+   public static final String CREATE_PERMISSION_TABLE =
+           "CREATE TABLE IF NOT EXISTS permissions ("
+                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "createBillboard BOOLEAN"
+                   + "editAllBillboards BOOLEAN"
+                   + "editSchedule BOOLEAN"
+                   + "editUsers BOOLEAN" + ");";
+
+   private static final String INSERT_PERMISSIONS = "INSERT INTO schedule (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?)";
+
+   private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
+
+   private PreparedStatement addPerms;
+
+   private PreparedStatement setPerms;
+
+
 
    public JDBCDatabaseSource() {
       connection = DataBase.DBConnection.getInstance();
@@ -83,6 +130,12 @@ public class JDBCDatabaseSource implements DatabaseSource{
           deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
           rowCount = connection.prepareStatement(COUNT_ROWS);
 
+         st.execute(CREATE_SCHEDULE_TABLE);
+
+         //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+
+         st.execute(CREATE_PERMISSION_TABLE);
+
           System.out.println("Tables created successfully");
 
       } catch (SQLException ex) {
@@ -93,7 +146,7 @@ public class JDBCDatabaseSource implements DatabaseSource{
     /**
      * @see DatabaseSource
      */
-    public void addUser(DataBase.User u) {
+    public void addUser(User u) {
         try {
             addUser.setString(1, u.getUsername());
             addUser.setString(2, u.getPassword());
@@ -106,8 +159,8 @@ public class JDBCDatabaseSource implements DatabaseSource{
     /**
      * @see DatabaseSource#getUser(String)
      */
-    public DataBase.User getUser(String name) {
-        DataBase.User u = new DataBase.User();
+    public User getUser(String name) {
+        User u = new User();
         ResultSet rs = null;
 
         try {
@@ -205,4 +258,26 @@ public class JDBCDatabaseSource implements DatabaseSource{
 
         return rows;
     }
+
+   /**
+    * @see DatabaseSource#addUserPerms
+    */
+   public void addUserPerms(User u, ArrayList<String> permissionList) {
+
+      try {
+         addPerms.setString(1, u.getUsername());
+         addPerms.setString(2, permissionList.get(0));
+         addPerms.setString(3, permissionList.get(1));
+         addPerms.setString(4, permissionList.get(2));
+         addPerms.setString(5, permissionList.get(3));
+
+         addPerms.execute();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+
+
+
 }

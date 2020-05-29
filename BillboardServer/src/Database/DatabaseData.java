@@ -1,6 +1,7 @@
 package Database;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class DatabaseData {
 
@@ -29,7 +30,7 @@ public class DatabaseData {
      *
      * @param u A user to add to the database
      */
-    public void UserAdd(DataBase.User u)  {
+    public void UserAdd(User u)  {
 
         // check to see if the person is already in the table
         // if not add the user to the table and the list model
@@ -79,5 +80,17 @@ public class DatabaseData {
     public int getSize() {
         return databaseData.getSize();
     }
+
+    /**
+     * Adds permissions with a username attached to the table.
+     *
+     * @param u A User to add perms to.
+     * @param permissionList
+     */
+    public void addUserPerms(User u, ArrayList<String> permissionList) {
+
+            databaseData.addUserPerms(u, permissionList);
+    }
+
 }
 
