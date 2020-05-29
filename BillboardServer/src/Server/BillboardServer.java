@@ -2,6 +2,7 @@ package Server;
 
 import Database.JDBCDatabaseSource;
 import Database.User;
+import Database.Billboard;
 import Token.Token;
 
 import java.io.*;
