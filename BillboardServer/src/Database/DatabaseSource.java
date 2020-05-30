@@ -22,6 +22,14 @@ public interface DatabaseSource {
     User getUser(String username);
 
     /**
+     * Updates a USER's password
+     *
+     * @param name The user of the new password.
+     * @param newPassword The new password to replace the old one.
+     */
+    void setUserPassword(String name, String newPassword);
+
+    /**
      * Deletes a USER from the database.
      *
      * @param name The name to delete from the table.
