@@ -117,7 +117,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
 
-   private static final String DELETE_USER_PERMISSIONS = "DELETE FROM billboard WHERE username=?";
+   private static final String DELETE_USER_PERMISSIONS = "DELETE FROM permissions WHERE username=?";
+
+   private static final String GET_USER_PERMISSIONS = "SELECT * FROM permissions WHERE username = ?";
 
 
 
@@ -126,6 +128,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
    private PreparedStatement setPerms;
 
    private PreparedStatement deletePerms;
+
+   private PreparedStatement getUserPerms;
 
 
 
@@ -164,6 +168,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
           addPerms = connection.prepareStatement(INSERT_PERMISSIONS);
           setPerms = connection.prepareStatement(SET_USER_PERMISSIONS);
           deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
+          getUserPerms = connection.prepareStatement(GET_USER_PERMISSIONS);
 
           System.out.println("Tables created successfully");
 
@@ -276,9 +281,21 @@ public class JDBCDatabaseSource implements DatabaseSource {
       }
    }
 
+    /**
+     * @see DatabaseSource#deleteBillboard
+     */
+    public void deleteBillboard(String billboardName) {
+       try {
+          deleteBillboard.setString(1, billboardName);
+          deleteBillboard.executeUpdate();
+       } catch (SQLException ex) {
+          ex.printStackTrace();
+       }
+    }
 
 
-   /**
+
+    /**
      * @see DatabaseSource#nameSet()
      */
     public Set<String> nameSet() {
@@ -369,6 +386,29 @@ public class JDBCDatabaseSource implements DatabaseSource {
       } catch (SQLException ex) {
          ex.printStackTrace();
       }
+   }
+
+   /**
+    * @see DatabaseSource#getUserPerms(String)
+    */
+   public Permissions getUserPerms(String username) {
+      Permissions p = new Permissions();
+      ResultSet rs = null;
+
+      try {
+         getUserPerms.setString(1, username);
+         rs = getUserPerms.executeQuery();
+         rs.next();
+         p.setUsername(rs.getString("Username"));
+         p.setCreateBillboard(rs.getString("Create Billboards?"));
+         p.setEditAllBillboards(rs.getString("Edit all Billboards?"));
+         p.setEditSchedule(rs.getString("Edit Scheduling?"));
+         p.setEditUsers(rs.getString("Edit Users?"));
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+
+      return p;
    }
 
    /**

@@ -52,7 +52,14 @@ public interface DatabaseSource {
      */
     Billboard getBillboard(String bName);
 
-    /**
+   /**
+    * Deletes a billboard from the database
+    *
+    * @param billboardName The name of the billboard to delete
+    */
+    void deleteBillboard(String billboardName);
+
+   /**
      * Gets the number of addresses in the address book.
      *
      * @return size of address book.
@@ -78,14 +85,21 @@ public interface DatabaseSource {
     /**
      * Deletes a permissions row from the database.
      *
-     * @param name The name of the user with permissions to be deleted to delete from the table.
+     * @param username The name of the user with permissions to be deleted to delete from the table.
      */
-    void deletePerms(String name);
+    void deletePerms(String username);
 
-   /**
-    * Returns all usernames in the table USERS
-    */
-   ArrayList<String> getUsernames();
+    /**
+     * Grabs permission object with username
+     *
+     * @param username The name of the user with permissions to get
+     */
+    Permissions getUserPerms(String username);
+
+    /**
+     * Returns all usernames in the table USERS
+     */
+    ArrayList<String> getUsernames();
 
    /**
      * Adds a schedule to a billboard
