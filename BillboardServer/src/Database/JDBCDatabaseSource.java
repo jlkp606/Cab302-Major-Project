@@ -93,7 +93,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
-                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                    + "createBillboard BOOLEAN,"
                    + "editAllBillboards BOOLEAN,"
                    + "editSchedule BOOLEAN,"
@@ -267,7 +267,6 @@ public class JDBCDatabaseSource implements DatabaseSource {
     * @see DatabaseSource#addUserPerms
     */
    public void addUserPerms(String username, ArrayList<String> permissionList) {
-
       try {
          addPerms.setString(1, username);
          addPerms.setString(2, permissionList.get(0));

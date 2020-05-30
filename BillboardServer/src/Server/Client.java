@@ -63,11 +63,13 @@ public class Client {
         permlist.add(false);
         permlist.add(false);
 
+        System.out.println(permlist);
+
         String token = "kjryiauznhrjgrxypymj";
         request.clear();
         request.put("type", "createUser");
         request.put("token", token);
-        request.put("username","itsmeMario");
+        request.put("username","itsmeMario6");
         request.put("password", "asd123");
         request.put("permissionList", permlist);
 
