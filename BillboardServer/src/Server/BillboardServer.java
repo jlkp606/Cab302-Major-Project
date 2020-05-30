@@ -42,7 +42,10 @@ public class BillboardServer {
         ServerSocket serverSocket = getServerSocket();
 
         //connect to database
+<<<<<<< HEAD
+=======
         JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
+>>>>>>> master
 
         for ( ; ; ) {
             Socket clientSocket = serverSocket.accept();
@@ -51,6 +54,31 @@ public class BillboardServer {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             HashMap<String, Object> request = (HashMap<String, Object>) objectInputStream.readObject();
 
+<<<<<<< HEAD
+            switch ((String) request.get("type")){
+                case "log in":
+                    System.out.println("hi");
+                    Token token = new Token();
+                    tokenStore.put(token, (String) request.get("username"));
+                    HashMap<String, Object> res = new HashMap<String, Object>();
+                    res.put("token", token.getToken());
+
+                    OutputStream out = clientSocket.getOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
+                    objectOutputStream.writeObject(res);
+                    objectOutputStream.flush();
+                    break;
+
+                case "log out":
+
+                    break;
+                case "create user":
+                    User user =
+                            new User((String) request.get("username"),
+                            (String) request.get("password"));
+                    break;
+=======
+>>>>>>> master
 
             HashMap<String, Object> response = new HashMap<>();
 

@@ -22,6 +22,14 @@ public interface DatabaseSource {
     User getUser(String username);
 
     /**
+     * Updates a USER's password
+     *
+     * @param name The user of the new password.
+     * @param newPassword The new password to replace the old one.
+     */
+    void setUserPassword(String name, String newPassword);
+
+    /**
      * Deletes a USER from the database.
      *
      * @param name The name to delete from the table.
@@ -66,6 +74,14 @@ public interface DatabaseSource {
      * @param permissionList An arraylist of strings that contain only true or false.
      */
     void addUserPerms(User u, ArrayList<String> permissionList);
+
+    /**
+     * Deletes a permissions row from the database.
+     *
+     * @param name The name of the user with permissions to be deleted to delete from the table.
+     */
+    void deletePerms(String name);
+
 }
 
 

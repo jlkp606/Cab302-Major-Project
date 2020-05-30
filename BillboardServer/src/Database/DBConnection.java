@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DBConnection {
@@ -17,10 +18,16 @@ public class DBConnection {
     private static Connection instance = null;
 
     /**
+     * Singleton instance of statement
+     */
+    private static Statement statement = null;
+
+    /**
      * Constructor intializes the connection.
      */
 
     private DBConnection() {
+
         Properties props = new Properties();
         FileInputStream in = null;
         try {
@@ -33,6 +40,22 @@ public class DBConnection {
             String username = props.getProperty("jdbc.username");
             String password = props.getProperty("jdbc.password");
             String schema = props.getProperty("jdbc.schema");
+
+            //Create the database if not already exists
+
+            try {
+                Connection conn = DriverManager.getConnection(url);
+
+                statement = conn.createStatement();
+                String sql = "CREATE DATABASE IF NOT EXISTS " + schema;
+
+                statement.executeUpdate(sql);
+                System.out.println("Database created!");
+
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
 
             // get a connection
             instance = DriverManager.getConnection(url + "/" + schema, username,
