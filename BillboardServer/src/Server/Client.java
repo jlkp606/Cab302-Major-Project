@@ -59,12 +59,12 @@ public class Client {
 
 //        //test Create User
 //        HashMap<String, Object> request = new HashMap<>();
-//        ArrayList<Boolean> permlist = new ArrayList<>();
-//        permlist.add(true);
-//        permlist.add(true);
-//        permlist.add(false);
-//        permlist.add(false);
-//
+//        Permissions permission = new Permissions(
+//                "itsmeMario6",
+//                "true",
+//                "false",
+//                "true",
+//                "true");
 //
 //        String token = "kjryiauznhrjgrxypymj";
 //        request.clear();
@@ -72,7 +72,7 @@ public class Client {
 //        request.put("token", token);
 //        request.put("username","itsmeMario6");
 //        request.put("password", "asd123");
-//        request.put("permissionList", permlist);
+//        request.put("permissionList", permission);
 //        sendRequest(socket, request);
 
         //getUserPermission Test
