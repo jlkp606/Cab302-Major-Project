@@ -128,7 +128,10 @@ public interface DatabaseSource {
      */
     Schedule getSchedule(String billboardName);
 
-
+   /**
+    * Returns all schedules in the table SCHEDULES
+    */
+    ArrayList<String> getAllSchedules();
 }
 
 
