@@ -89,6 +89,6 @@ public class CreateXMLFile {
         System.out.println("Done creating XML File");
     }
 
-    public static final String xmlFilePath = System.getProperty("user.dir")+"/xmlFile.xml";
+    public static final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
 
 }

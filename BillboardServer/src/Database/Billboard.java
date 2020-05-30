@@ -1,4 +1,4 @@
-package DataBase;
+package Database;
 
 import java.io.Serializable;
 
@@ -8,8 +8,13 @@ import java.io.Serializable;
 public class Billboard implements Comparable<Billboard>, Serializable {
 
     private String bName;
-    private String bRep;
-    private String bData;
+    private String username;
+    private String colour;
+    private String message;
+    private Byte pictureData;
+    private String pictureURL;
+    private String infoMessage;
+    private String infoColour;
 
     /**
      * No args constructor
@@ -19,15 +24,19 @@ public class Billboard implements Comparable<Billboard>, Serializable {
 
     /**
      * Constructor to set values for the billboard details
-     * @param bName
-     * @param bRep
-     * @param bData
+     * @param bName The name of the billboard
+     * @param username The name of the user who created the billboard
      */
 
-    public Billboard(String bName, String bRep, String bData) {
+    public Billboard(String bName, String username, String colour, String message, Byte pictureData, String pictureURL, String infoMessage, String infoColour) {
         this.bName = bName;
-        this.bRep = bRep;
-        this.bData = bData;
+        this.username = username;
+        this.colour = colour;
+        this.message = message;
+        this.pictureData = pictureData;
+        this.pictureURL = pictureURL;
+        this.infoMessage = infoMessage;
+        this.infoColour = infoColour;
     }
 
     /**
@@ -42,20 +51,30 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     /**
      * @return the name of the representative of the billboard (Company or individual)
      */
-    public String getbRep() {return bRep;}
+    public String getUsername() {return username;}
     /**
-     * @param bRep the name of the billboard representative to set
+     * @param username the name of the billboard creator to set
      */
-    public void setbRep(String bRep) {this.bRep = bRep;}
+    public void setUsername(String username) {this.username = username;}
 
-    /**
-     * @return the display data of the billboard
-     */
-    public String getbData() {return bData;}
-    /**
-     * @param bData the display information about the billboard
-     */
-    public void setbData(String bData) {this.bName = bData;}
+    public String getColour() {return colour;}
+    public void setColour(String colour) {this.colour = colour;}
+
+    public String getMessage() {return message;}
+    public void setMessage(String message) {this.message = message;}
+
+    public Byte getPictureData() {return pictureData;}
+    public void setPictureData(Byte pictureData) {this.pictureData = pictureData;}
+
+    public String getPictureURL() {return pictureURL;}
+    public void setPictureURL(String PictureURL) {this.pictureURL = PictureURL;}
+
+    public String getInfoMessage() {return infoMessage;}
+    public void setInfoMessage(String infoMessage) {this.infoMessage = infoMessage;}
+
+    public String getInfoColour() {return infoColour;}
+    public void setInfoColour(String infoColour) {this.infoColour = infoColour;}
+
 
     /**
      * Compares this object with the specified object for order. Returns a
@@ -70,13 +89,6 @@ public class Billboard implements Comparable<Billboard>, Serializable {
      */
     public int compareTo(Billboard other) {
         return this.bName.compareTo(other.bName);
-    }
-
-    /**
-     * @see Object#toString()
-     */
-    public String toString() {
-        return bName + " " + bRep + ", " + bName;
     }
 
 

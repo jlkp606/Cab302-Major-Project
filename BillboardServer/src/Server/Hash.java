@@ -2,6 +2,7 @@ package Server;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Hash {
@@ -28,5 +29,19 @@ public class Hash {
             hexChars[j * 2 +1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        ArrayList<Boolean> listBool = new ArrayList<Boolean>();
+        ArrayList<String> listString = new ArrayList<String>();
+
+        for (Boolean b : listBool)
+        {
+            String s = String.valueOf(b);
+            listString.add(s);
+        }
+
+        System.out.println(listBool);
+        System.out.println(listString);
+
     }
 }
