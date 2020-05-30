@@ -50,11 +50,12 @@ public class JDBCDatabaseSource implements DatabaseSource {
                     + "username VARCHAR(30) UNIQUE,"
                     + "colour VARCHAR(100),"
                     + "message VARCHAR(100),"
-                    + "picture VARCHAR(255),"
+                    + "pictureData BINARY(8),"
+                    + "pictureURL VARCHAR(255),"
                     + "infoMessage VARCHAR(100),"
                     + "infoColour VARCHAR(100)," + ");";
 
-   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, picture, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?);";
+   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
    private static final String GET_BILLBOARD_NAME = "SELECT bName FROM billboard";
 
@@ -226,9 +227,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addBillboard.setString(2, b.getUsername());
          addBillboard.setString(3, b.getColour());
          addBillboard.setString(4, b.getMessage());
-         addBillboard.setString(5, b.getPicture());
-         addBillboard.setString(6, b.getInfoMessage());
-         addBillboard.setString(7, b.getInfoColour());
+         addBillboard.setByte(5, b.getPictureData());
+         addBillboard.setString(6, b.getPictureURL());
+         addBillboard.setString(7, b.getInfoMessage());
+         addBillboard.setString(8, b.getInfoColour());
 
          addBillboard.execute();
       } catch (SQLException ex) {
@@ -272,7 +274,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
             b.setUsername(rs.getString("Username"));
             b.setColour(rs.getString("Colour"));
             b.setMessage(rs.getString("Message"));
-            b.setPicture(rs.getString("Picture"));
+            b.setPictureData(rs.getByte("Picture Data"));
+            b.setPictureURL(rs.getString("Picture Url"));
             b.setInfoMessage(rs.getString("InfoMessage"));
             b.setInfoColour(rs.getString("InfoColour"));
 
