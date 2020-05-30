@@ -94,7 +94,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String DELETE_SCHEDULE = "DELETE FROM schedule WHERE bName=?";
 
-   //private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
+   private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
 
    private PreparedStatement addSchedule;
 
@@ -102,7 +102,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private PreparedStatement deleteSchedule;
 
-   //private PreparedStatement getAllSchedules;
+   private PreparedStatement getAllSchedules;
 
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
@@ -161,6 +161,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
           addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
           getSchedule = connection.prepareStatement(GET_SCHEDULE);
           deleteSchedule = connection.prepareStatement(DELETE_SCHEDULE);
+          getAllSchedules = connection.prepareStatement(GET_ALL_SCHEDULES);
 
           st.execute(CREATE_PERMISSION_TABLE);
 
@@ -461,6 +462,32 @@ public class JDBCDatabaseSource implements DatabaseSource {
       } catch (SQLException ex) {
          ex.printStackTrace();
       }
+   }
+
+   /**
+    * @see DatabaseSource#getAllSchedules();
+    */
+   public ArrayList<String> getAllSchedules() {
+      ResultSet rs = null;
+      ResultSetMetaData rsmd = null;
+      ArrayList<String> scheduleList;
+      try {
+         rs = getAllSchedules.executeQuery();
+         rsmd = rs.getMetaData();
+         int columnCount = rsmd.getColumnCount();
+
+         scheduleList = new ArrayList<>(columnCount);
+         while (rs.next()) {
+            int i = 1;
+            while (i <= columnCount) {
+               scheduleList.add(rs.getString(i++));
+            }
+         }
+         return scheduleList;
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+      return null;
    }
 
 
