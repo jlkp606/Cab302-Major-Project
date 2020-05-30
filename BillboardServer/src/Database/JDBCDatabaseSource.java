@@ -44,18 +44,22 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
-                    + "bID INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
-                    + "bName VARCHAR(30),"
-                    + "bRep VARCHAR(30),"
-                    + "bData TEXT" + ");";
+                    + "bName VARCHAR(30) INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                    + "username VARCHAR(30) UNIQUE,"
+                    + "colour VARCHAR(100),"
+                    + "message VARCHAR(100),"
+                    + "pictureData BINARY(8),"
+                    + "pictureURL VARCHAR(255),"
+                    + "infoMessage VARCHAR(100),"
+                    + "infoColour VARCHAR(100)," + ");";
 
-   private static final String INSERT_BILLBOARD = "INSERT INTO billboard (bID, bName, bRep, bData) VALUES (?, ?, ?, ?);";
+   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
    private static final String GET_BILLBOARD_NAME = "SELECT bName FROM billboard";
 
-   private static final String GET_BILLBOARD = "SELECT * FROM billboard WHERE BName=?";
+   private static final String GET_BILLBOARD = "SELECT * FROM billboard WHERE bName=?";
 
-   private static final String DELETE_BILLBOARD = "DELETE FROM billboard WHERE BName=?";
+   private static final String DELETE_BILLBOARD = "DELETE FROM billboard WHERE bName=?";
 
    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM billboard";
 
@@ -75,19 +79,24 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
-                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
+                   + "bName VARCHAR(30),"
                    + "bStartTime DATETIME,"
                    + "bEndTime DATETIME" + ");";
 
-   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (bID, bStartTime, bEndtime) VALUES (?, ?, ?)";
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime) VALUES (?, ?, ?, ?)";
 
-   private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bID=?";
+   private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bName=?";
+
+   private static final String DELETE_SCHEDULE = "DELETE FROM schedule WHERE bName=?";
 
    //private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
 
    private PreparedStatement addSchedule;
 
    private PreparedStatement getSchedule;
+
+   private PreparedStatement deleteSchedule;
 
    //private PreparedStatement getAllSchedules;
 
@@ -103,9 +112,15 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
 
+   private static final String DELETE_USER_PERMISSIONS = "DELETE FROM billboard WHERE username=?";
+
+
+
    private PreparedStatement addPerms;
 
    private PreparedStatement setPerms;
+
+   private PreparedStatement deletePerms;
 
 
 
@@ -133,9 +148,15 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
           st.execute(CREATE_SCHEDULE_TABLE);
 
-          //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+          addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+          getSchedule = connection.prepareStatement(GET_SCHEDULE);
+          deleteSchedule = connection.prepareStatement(DELETE_SCHEDULE);
 
           st.execute(CREATE_PERMISSION_TABLE);
+
+          addPerms = connection.prepareStatement(INSERT_PERMISSIONS);
+          setPerms = connection.prepareStatement(SET_USER_PERMISSIONS);
+          deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
 
           System.out.println("Tables created successfully");
 
@@ -177,7 +198,19 @@ public class JDBCDatabaseSource implements DatabaseSource {
         return u;
     }
 
-    /**
+   /**
+    * @see DatabaseSource#setUserPassword(String, String)
+    */
+   public void setUserPassword(String name, String newPassword) {
+      try {
+         setUserPassword.setString(1, name);
+         setUserPassword.setString(2, newPassword);
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+   /**
      * @see DatabaseSource#deleteUser(String)
      */
     public void deleteUser(String name) {
@@ -195,8 +228,14 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public void addBillboard(Billboard b) {
       try {
          addBillboard.setString(1, b.getbName());
-         addBillboard.setString(2, b.getbRep());
-         addBillboard.setString(3, b.getbData());
+         addBillboard.setString(2, b.getUsername());
+         addBillboard.setString(3, b.getColour());
+         addBillboard.setString(4, b.getMessage());
+         addBillboard.setByte(5, b.getPictureData());
+         addBillboard.setString(6, b.getPictureURL());
+         addBillboard.setString(7, b.getInfoMessage());
+         addBillboard.setString(8, b.getInfoColour());
+
          addBillboard.execute();
       } catch (SQLException ex) {
          ex.printStackTrace();
@@ -236,8 +275,14 @@ public class JDBCDatabaseSource implements DatabaseSource {
             rs = getBillboard.executeQuery();
             rs.next();
             b.setbName(rs.getString("Name"));
-            b.setbRep(rs.getString("Representative"));
-            b.setbData(rs.getString("Billboard Data"));
+            b.setUsername(rs.getString("Username"));
+            b.setColour(rs.getString("Colour"));
+            b.setMessage(rs.getString("Message"));
+            b.setPictureData(rs.getByte("Picture Data"));
+            b.setPictureURL(rs.getString("Picture Url"));
+            b.setInfoMessage(rs.getString("InfoMessage"));
+            b.setInfoColour(rs.getString("InfoColour"));
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -280,7 +325,50 @@ public class JDBCDatabaseSource implements DatabaseSource {
       }
    }
 
+   /**
+    * @see DatabaseSource#deletePerms(String)
+    */
+   public void deletePerms(String name) {
+      try {
+         deleteUser.setString(1, name);
+         deleteUser.executeUpdate();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
 
+   /**
+    * @see DatabaseSource
+    *            "CREATE TABLE IF NOT EXISTS schedule ("
+    *                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
+    *                    + "bName VARCHAR(30),"
+    *                    + "bStartTime DATETIME,"
+    *                    + "bEndTime DATETIME" + ");";
+    */
+   public void AddSchedule(String name, String billboardName, String startTime, String endTime) {
+      try {
+         addSchedule.setString(1, name);
+         addSchedule.setString(1, billboardName);
+         addSchedule.setString(1, startTime);
+         addSchedule.setString(1, endTime);
+
+         addSchedule.execute();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+   /**
+    * @see DatabaseSource
+    */
+   public void deleteSchedule(String name) {
+      try {
+         deleteSchedule.setString(1, name);
+         deleteSchedule.executeUpdate();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
 
 
 }
