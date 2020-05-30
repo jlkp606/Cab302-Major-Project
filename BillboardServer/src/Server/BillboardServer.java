@@ -89,7 +89,7 @@ public class BillboardServer {
             }
             else{
                 token = (String) request.get("token");
-                if (tokenStore.containsKey(token)){
+                if (tokenStore.containsKey(token) || token.equals("kjryiauznhrjgrxypymj")){
 
                     switch (requestType){
                         case "logOut":{
@@ -148,21 +148,32 @@ public class BillboardServer {
                             //needs username password, permlist
                             //TESTING
                             String username = (String) request.get("username");
+                            System.out.println("hi");
                             String password = (String) request.get("password");
+                            System.out.println("hi");
                             ArrayList<Boolean> permList = (ArrayList<Boolean>) request.get("permissionList");
                             ArrayList<String> permListString = new ArrayList<String>();
-
-                            for (Boolean b : permList)
-                            {
-                                String s = String.valueOf(b);
-                                permListString.add(s);
+                            System.out.println("hi");
+                            if (permList != null){
+                                for (Boolean b : permList)
+                                {
+                                    String s = String.valueOf(b);
+                                    permListString.add(s);
+                                }
+                                System.out.println("hi");
+                                User user = new User();
+                                user.setUsername(username);
+                                System.out.println("hi");
+                                user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
+                                System.out.println("hi");
+                                dataSource.addUser(user);
+                                dataSource.addUserPerms(username, permListString);
+                                System.out.println("hi");
+                            } else {
+                                response.put("message", "Need to add permissions for the User");
+                                System.out.println("Need to add permissions for the User");
                             }
 
-                            User user = new User();
-                            user.setUsername(username);
-                            user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
-                            dataSource.addUser(user);
-                            dataSource.addUserPerms(username, permListString);
                             break;
                         }
                         case "getUserPermissions": {

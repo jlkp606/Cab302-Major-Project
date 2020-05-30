@@ -99,7 +99,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
                    + "editSchedule BOOLEAN,"
                    + "editUsers BOOLEAN" + ");";
 
-   private static final String INSERT_PERMISSIONS = "INSERT INTO schedule (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?)";
+   private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?, ?)";
 
    private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
 

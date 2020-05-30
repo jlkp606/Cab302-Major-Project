@@ -2,6 +2,7 @@
 package Server;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.net.Socket;
@@ -56,12 +57,19 @@ public class Client {
 
         //test Create User
         HashMap<String, Object> request = new HashMap<>();
-        String token = "whsnfuavwpulwydlmjtg";
+        ArrayList<Boolean> permlist = new ArrayList<>();
+        permlist.add(true);
+        permlist.add(true);
+        permlist.add(false);
+        permlist.add(false);
+
+        String token = "kjryiauznhrjgrxypymj";
         request.clear();
         request.put("type", "createUser");
         request.put("token", token);
         request.put("username","itsmeMario");
         request.put("password", "asd123");
+        request.put("permissionList", permlist);
 
         sendRequest(socket, request);
 
