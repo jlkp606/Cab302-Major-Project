@@ -11,7 +11,8 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     private String username;
     private String colour;
     private String message;
-    private String picture;
+    private Byte pictureData;
+    private String pictureURL;
     private String infoMessage;
     private String infoColour;
 
@@ -27,12 +28,13 @@ public class Billboard implements Comparable<Billboard>, Serializable {
      * @param username The name of the user who created the billboard
      */
 
-    public Billboard(String bName, String username, String colour, String message, String picture, String infoMessage, String infoColour) {
+    public Billboard(String bName, String username, String colour, String message, Byte pictureData, String pictureURL, String infoMessage, String infoColour) {
         this.bName = bName;
         this.username = username;
         this.colour = colour;
         this.message = message;
-        this.picture = picture;
+        this.pictureData = pictureData;
+        this.pictureURL = pictureURL;
         this.infoMessage = infoMessage;
         this.infoColour = infoColour;
     }
@@ -61,14 +63,18 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     public String getMessage() {return message;}
     public void setMessage(String message) {this.message = message;}
 
-    public String getPicture() {return picture;}
-    public void setPicture(String picture) {this.picture = picture;}
+    public Byte getPictureData() {return pictureData;}
+    public void setPictureData(Byte pictureData) {this.pictureData = pictureData;}
+
+    public String getPictureURL() {return pictureURL;}
+    public void setPictureURL(String PictureURL) {this.pictureURL = PictureURL;}
 
     public String getInfoMessage() {return infoMessage;}
     public void setInfoMessage(String infoMessage) {this.infoMessage = infoMessage;}
 
     public String getInfoColour() {return infoColour;}
     public void setInfoColour(String infoColour) {this.infoColour = infoColour;}
+
 
     /**
      * Compares this object with the specified object for order. Returns a
