@@ -1,12 +1,15 @@
 package Server;
 
-import DataBase.User;
+import Database.JDBCDatabaseSource;
+import Database.User;
+import Database.Billboard;
 import Token.Token;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -33,13 +36,17 @@ public class BillboardServer {
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
 
         //Stores users that have logged in
-        HashMap<Token, String> tokenStore = new HashMap<Token, String>();
-
+        HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();
+        //current token
+        String token;
         //get Socket
         ServerSocket serverSocket = getServerSocket();
 
         //connect to database
-        Database.JDBCDatabaseSource dataSource = new Database.JDBCDatabaseSource();
+<<<<<<< HEAD
+=======
+        JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
+>>>>>>> master
 
         for ( ; ; ) {
             Socket clientSocket = serverSocket.accept();
@@ -48,100 +55,197 @@ public class BillboardServer {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             HashMap<String, Object> request = (HashMap<String, Object>) objectInputStream.readObject();
 
+<<<<<<< HEAD
             switch ((String) request.get("type")){
-                case "logIn": {
-                    String username = (String) request.get("username");
-                    //hashed
-                    String password = (String) request.get("password");
-
-                    //Authenticate (query to check if user exists and has this password)
-                    //query- getSalt for user
-                    String salt = "asdasdasd";
-                    String dbPassword = Hash.getHash(password + salt);
-
-                    //query check dbPass is same as password in Db for username
-                    Boolean query = true;
-                    if (query == true){
-
-                    }
-
-                    //Create Token and Store it
+                case "log in":
+                    System.out.println("hi");
                     Token token = new Token();
-                    tokenStore.put(token, username);
+                    tokenStore.put(token, (String) request.get("username"));
                     HashMap<String, Object> res = new HashMap<String, Object>();
                     res.put("token", token.getToken());
-                    sendResponse(clientSocket, res);
+
+                    OutputStream out = clientSocket.getOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
+                    objectOutputStream.writeObject(res);
+                    objectOutputStream.flush();
                     break;
-                }
-                case "logOut":{
-                    Token token = (Token) request.get("token");
-                    if (tokenStore.containsKey(token)){
-                        tokenStore.remove(token);
-                    }
-                    break;
-                }
-                case "listBillboard":{
+
+                case "log out":
 
                     break;
-                }
-                case "getBillboardInfo":{
+                case "create user":
+                    User user =
+                            new User((String) request.get("username"),
+                            (String) request.get("password"));
                     break;
+=======
+>>>>>>> master
+
+            HashMap<String, Object> response = new HashMap<>();
+
+            String requestType = (String) request.get("type");
+
+            if (requestType.equals("logIn")){
+
+                String username = (String) request.get("username");
+                //hashed
+                String password = (String) request.get("password");
+
+                //Authenticate (query to check if user exists and has this password)
+                User user = dataSource.getUser(username);
+                String salt = user.getPasswordSalt();
+                String HashSaltedPassword = password;
+                //String HashSaltedPassword = Hash.getHash(password + salt);
+                String dbPassword = user.getPassword();
+
+                //query check hashSaltedPass is same as password in Db for username
+                if (HashSaltedPassword.equals(dbPassword)){
+                    Token newToken = new Token();
+                    ArrayList<Object> tokenInfo =  new ArrayList<Object>();
+                    tokenInfo.add(username);
+                    tokenInfo.add(newToken.getExpiry());
+
+                    tokenStore.put(newToken.getToken(), tokenInfo);
+                    response.put("token", newToken.getToken());
+                    sendResponse(clientSocket, response);
                 }
-                case "createBillboard":{
-                    break;
+                else{
+                    response.put("message", "Incorrect password");
+                    System.out.println("Incorrect password");
                 }
-                case "deleteBillboard":{
-                    break;
-                }
-                case "viewSchedule":{
-                    break;
-                }
-                case "scheduleBillboard":{
-                    break;
-                }
-                case "removeBillboardFromSchedule":{
-                    break;
-                }
-                case "listUsers":{
-//                    ArrayList<String> userlist= dataSource.listUsers();
-//                    HashMap<String, Object> response = new HashMap<>();
-//                    response.put("userList", userlist);
-//                    sendResponse(clientSocket, reponse);
-                    break;
-                }
-                case "createUser": {
-//                    String username = (String) request.get("username");
-//                    String password = (String) request.get("password");
-//
-//                    Token token = (Token) request.get("token");
-//                    if (tokenStore.containsKey(token)){
-//                        User user = new User(username);
-//                        user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
-//                        dataSource.addUser(user);
-//                    }
-                    break;
-                }
-                case "getUserPermissions": {
-                    break;
-                }
-                case "setUserPermissions": {
-                    break;
-                }
-                case "setUserPassword":{
-//                    String username = (String) request.get("username");
-//                    String password = (String) request.get("password");
-//                    String salt = dataSource.getSalt(username);
-//                    String dbPassword = Hash.getHash(password + salt);
-//                    dataSource.setUserPassword(username, dbPassword);
-//                    break;
-                }
-                case "deleteUser": {
-//                    String username = (String) request.get("username");
-//                    dataSource.deleteUser(username);
-//                    break;
+
+            }
+            else{
+                token = (String) request.get("token");
+                if (tokenStore.containsKey(token) || token.equals("kjryiauznhrjgrxypymj")){
+
+                    switch (requestType){
+                        case "logOut":{
+                            tokenStore.remove(token);
+                            break;
+                        }
+                        case "listBillboard":{
+//                            ArrayList<Billboard> billboardList = dataSource.getBillboardList();
+//                            response.put("billboardList", billboardList);
+//                            sendResponse(clientSocket, response);
+                            break;
+                        }
+                        case "getBillboardInfo":{
+                            String billboardName = (String) request.get("billboardName");
+                            Billboard billboard = dataSource.getBillboard(billboardName);
+                            response.put("billboard", billboard);
+                            sendResponse(clientSocket, response);
+                            break;
+                        }
+                        case "createBillboard":{
+                            Billboard billboard = (Billboard) request.get("billboard");
+                            dataSource.addBillboard(billboard);
+                            break;
+                        }
+                        case "deleteBillboard":{
+//                            String billboardName = (String) request.get("billboardName");
+//                            dataSource.deleteBillboard(billboardName);
+                            break;
+                        }
+                        case "viewSchedule":{
+//                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
+//                            response.put("scheduleList", scheduleList);
+//                            sendResponse(clientSocket, response);
+                            break;
+                        }
+                        case "scheduleBillboard":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.addSchedule(schedule);
+                            break;
+                        }
+                        case "removeBillboardFromSchedule":{
+//                            Schedule schedule = request.get("schedule");
+//                            dataSource.deleteSchedule(schedule);
+                            break;
+                        }
+                        case "listUsers":{
+                            //YES
+        //                    ArrayList<String> userlist= dataSource.listUsers();
+        //                    HashMap<String, Object> response = new HashMap<>();
+        //                    response.put("userList", userlist);
+        //                    sendResponse(clientSocket, reponse);
+                            break;
+                        }
+                        case "createUser": {
+                            System.out.println("hi");
+                            //needs username password, permlist
+                            //TESTING
+                            String username = (String) request.get("username");
+                            System.out.println("hi");
+                            String password = (String) request.get("password");
+                            System.out.println("hi");
+                            ArrayList<Boolean> permList = (ArrayList<Boolean>) request.get("permissionList");
+                            ArrayList<String> permListString = new ArrayList<>();
+                            System.out.println("hi");
+                            if (permList != null){
+                                for (Boolean b : permList)
+                                {
+                                    String s = String.valueOf(b);
+                                    permListString.add(s);
+                                }
+                                User user = new User();
+                                user.setUsername(username);
+                                System.out.println(username);
+                                user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
+                                System.out.println("hi");
+                                dataSource.addUser(user);
+
+                                System.out.println(permListString);
+                                try
+                                {
+                                    dataSource.addUserPerms(username, permListString);
+                                    System.out.println("hi");
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                response.put("message", "Need to add permissions for the User");
+                                System.out.println("Need to add permissions for the User");
+                            }
+
+                            break;
+                        }
+                        case "getUserPermissions": {
+//                            String username = (String) request.get("username");
+//                            ArrayList<Boolean> permList =  dataSource.getUserPermission(username);
+//                            response.put("permissionList", permList);
+//                            sendResponse(clientSocket, response);
+                            break;
+                        }
+                        case "setUserPermissions": {
+//                            String username = (String) request.get("username");
+//                            ArrayList<Boolean> permList =  (ArrayList<Boolean>) request.get("permissionList");
+//                            dataSource.setUserPermissions(username, permList);
+                            break;
+                        }
+                        case "setUserPassword":{
+        //                    String username = (String) request.get("username");
+        //                    String password = (String) request.get("password");
+        //                    String salt = dataSource.getSalt(username);
+        //                    String dbPassword = Hash.getHash(password + salt);
+        //                    dataSource.setUserPassword(username, dbPassword);
+        //                    break;
+                        }
+                        case "modifyUser": {
+                            String username = (String) request.get("username");
+//                            dataSource.updatePermList();
+//                            maybe - dataSource.updatePassword();
+                        }
+                        case "deleteUser": {
+                            String username = (String) request.get("username");
+                            dataSource.deleteUser(username);
+                            break;
+                        }
+                    }
+                } else {
+                    System.out.println("Invalid Token");
                 }
             }
-
             clientSocket.close();
         }
     }
