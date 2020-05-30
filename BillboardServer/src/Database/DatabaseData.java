@@ -1,6 +1,7 @@
 package Database;
 
 import javax.swing.*;
+import java.security.Permission;
 import java.util.ArrayList;
 
 public class DatabaseData {
@@ -81,16 +82,16 @@ public class DatabaseData {
         return databaseData.getSize();
     }
 
-    /**
-     * Adds permissions with a username attached to the table.
-     *
-     * @param username A User to add perms to.
-     * @param permissionList
-     */
-    public void addUserPerms(String username, ArrayList<String> permissionList) {
-
-            databaseData.addUserPerms(username, permissionList);
-    }
+//    /**
+//     * Adds permissions with a username attached to the table.
+//     *
+//     * @param username A User to add perms to.
+//     * @param permission
+//     */
+//    public void addUserPerms(String username, Permission permission) {
+//
+//            databaseData.addUserPerms(username, permission);
+//    }
 
     /**
      * Deletes a permissions row from the database.

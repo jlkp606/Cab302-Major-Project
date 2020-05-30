@@ -1,5 +1,6 @@
 package Database;
 
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -52,7 +53,14 @@ public interface DatabaseSource {
      */
     Billboard getBillboard(String bName);
 
-    /**
+   /**
+    * Deletes a billboard from the database
+    *
+    * @param billboardName The name of the billboard to delete
+    */
+    void deleteBillboard(String billboardName);
+
+   /**
      * Gets the number of addresses in the address book.
      *
      * @return size of address book.
@@ -67,38 +75,54 @@ public interface DatabaseSource {
      */
     Set<String> nameSet();
 
+//    /**
+//     * Adds permissions to a specific user
+//     *
+//     * @param username User to add permissions to.
+//     * @param permission Permissions Object.
+//     */
+//    void addUserPerms(String username, Permission permission);
+
     /**
-     * Adds permissions to a specific user
+     * updates User permissions
      *
-     * @param username User to add permissions to.
-     * @param permissionList An arraylist of strings that contain only true or false.
-     */
-    void addUserPerms(String username, ArrayList<String> permissionList);
+     * @param username Uer to change permissions to
+     * @param permission PermissionObject
+     * */
+    void updateUserPerms(String username, Permissions permission);
 
     /**
      * Deletes a permissions row from the database.
      *
-     * @param name The name of the user with permissions to be deleted to delete from the table.
+     * @param username The name of the user with permissions to be deleted to delete from the table.
      */
-    void deletePerms(String name);
+    void deletePerms(String username);
 
     /**
+     * Grabs permission object with username
+     *
+     * @param username The name of the user with permissions to get
+     */
+    Permissions getUserPerms(String username);
+
+    /**
+     * Returns all usernames in the table USERS
+     */
+    ArrayList<String> getUsernames();
+
+   /**
      * Adds a schedule to a billboard
      *
-     * @param name The name of the user who scheduled the billboard.
-     * @param billboardName The name of the billboard that is scheduled.
-     * @param startTime The starting time of the billboard display schedule. Format: YYYY-MM-DD HH:MM:SS
-     * @param endTime The ending time of the billboard display schedule. Format: YYYY-MM-DD HH:MM:SS
-     * @param repeat Whether or not the display schedule repeats daily, weekly or not at all.
+     * @param schedule Schedule Object;
      */
-    void addSchedule(String name, String billboardName, String startTime, String endTime, String repeat);
+    void addSchedule(Schedule schedule);
 
     /**
      * Deletes a schedule from the database
      *
      * @param name The name of the billboard display schedule that would be deleted.
      */
-    void deleteSchedule(String name);
+    void deleteSchedule(Schedule schedule);
 
     /**
      * Extracts all the details of a Schedule from the table based on the
@@ -109,7 +133,10 @@ public interface DatabaseSource {
      */
     Schedule getSchedule(String billboardName);
 
-
+   /**
+    * Returns all schedules in the table SCHEDULES
+    */
+    ArrayList<Schedule> getAllSchedules();
 }
 
 
