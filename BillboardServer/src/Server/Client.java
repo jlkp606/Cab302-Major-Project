@@ -59,12 +59,12 @@ public class Client {
 
 //        //test Create User
 //        HashMap<String, Object> request = new HashMap<>();
-//        ArrayList<Boolean> permlist = new ArrayList<>();
-//        permlist.add(true);
-//        permlist.add(true);
-//        permlist.add(false);
-//        permlist.add(false);
-//
+//        Permissions permission = new Permissions(
+//                "itsmeMario6",
+//                "true",
+//                "false",
+//                "true",
+//                "true");
 //
 //        String token = "kjryiauznhrjgrxypymj";
 //        request.clear();
@@ -72,24 +72,24 @@ public class Client {
 //        request.put("token", token);
 //        request.put("username","itsmeMario6");
 //        request.put("password", "asd123");
-//        request.put("permissionList", permlist);
+//        request.put("permissionList", permission);
 //        sendRequest(socket, request);
 
-        //PermissionLIst Test
+        //getUserPermission Test
 
-        String token = "kjryiauznhrjgrxypymj";
-        HashMap<String, Object> request = new HashMap<>();
-        request.put("token", token);
-        request.put("type", "getUserPermissions");
-        request.put("username", "itsmeMario6");
-
-        sendRequest(socket, request);
-
-        HashMap<String, Object> response = getResponse(socket);
-        Permissions permissions = (Permissions) response.get("permissions");
-        System.out.println(permissions.getCreateBillboard());
-
-        socket.close();
+//        String token = "kjryiauznhrjgrxypymj";
+//        HashMap<String, Object> request = new HashMap<>();
+//        request.put("token", token);
+//        request.put("type", "getUserPermissions");
+//        request.put("username", "itsmeMario6");
+//
+//        sendRequest(socket, request);
+//
+//        HashMap<String, Object> response = getResponse(socket);
+//        Permissions permissions = (Permissions) response.get("permissions");
+//        System.out.println(permissions.getCreateBillboard());
+//
+//        socket.close();
 
 
         //send something first
