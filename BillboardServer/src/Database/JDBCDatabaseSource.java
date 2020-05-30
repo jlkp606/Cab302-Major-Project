@@ -29,6 +29,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String SET_USER_PASSWORD = "UPDATE users SET password=? WHERE username=?";
 
+   private static final String GET_USERNAMES = "SELECT username FROM users";
+
    //private static final String GET_ALL_USERS = "SELECT * FROM users";
 
    private PreparedStatement addUser;
@@ -38,6 +40,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
    private PreparedStatement setUserPassword;
 
    private PreparedStatement deleteUser;
+
+   private PreparedStatement getUsernames;
 
    //private PreparedStatement getAllUsers;
 
@@ -104,10 +108,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
-                   + "createBillboard BOOLEAN,"
-                   + "editAllBillboards BOOLEAN,"
-                   + "editSchedule BOOLEAN,"
-                   + "editUsers BOOLEAN" + ");";
+                   + "createBillboard VARCHAR(4),"
+                   + "editAllBillboards VARCHAR(4),"
+                   + "editSchedule VARCHAR(4),"
+                   + "editUsers VARCHAR(4)" + ");";
 
    private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?, ?)";
 
@@ -137,6 +141,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
           getUser = connection.prepareStatement(GET_USER);
           setUserPassword = connection.prepareStatement(SET_USER_PASSWORD);
           deleteUser = connection.prepareStatement(DELETE_USER);
+          getUsernames = connection.prepareStatement(GET_USERNAMES);
+
 
           st.execute(CREATE_BILLBOARD_TABLE);
 
@@ -198,6 +204,33 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
         return u;
     }
+
+   /**
+    * @see DatabaseSource#getUsernames();
+    */
+   public ArrayList<String> getUsernames() {
+      ResultSet rs = null;
+      ResultSetMetaData rsmd = null;
+      ArrayList<String> usernameList;
+      try {
+         rs = getUsernames.executeQuery();
+         rsmd = rs.getMetaData();
+         int columnCount = rsmd.getColumnCount();
+
+         usernameList = new ArrayList<>(columnCount);
+         while (rs.next()) {
+            int i = 1;
+            while (i <= columnCount) {
+               usernameList.add(rs.getString(i++));
+            }
+         }
+         return usernameList;
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+      return null;
+   }
+
 
    /**
     * @see DatabaseSource#setUserPassword(String, String)

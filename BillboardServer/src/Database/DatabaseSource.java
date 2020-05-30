@@ -82,7 +82,12 @@ public interface DatabaseSource {
      */
     void deletePerms(String name);
 
-    /**
+   /**
+    * Returns all usernames in the table USERS
+    */
+   ArrayList<String> getUsernames();
+
+   /**
      * Adds a schedule to a billboard
      *
      * @param name The name of the user who scheduled the billboard.
