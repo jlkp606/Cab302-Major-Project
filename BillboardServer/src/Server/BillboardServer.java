@@ -102,6 +102,10 @@ public class BillboardServer {
 //                            sendResponse(clientSocket, response);
                             break;
                         }
+                        case "getCurrentBillboard": {
+//                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
+//
+                        }
                         case "getBillboardInfo":{
                             String billboardName = (String) request.get("billboardName");
                             Billboard billboard = dataSource.getBillboard(billboardName);
@@ -170,6 +174,7 @@ public class BillboardServer {
                             break;
                         }
                         case "getUserPermissions": {
+                            //TESTED
                             String username = (String) request.get("username");
                             Permissions permissions = dataSource.getUserPerms(username);
                             response.put("permissions", permissions);
