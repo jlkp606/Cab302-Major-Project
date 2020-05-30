@@ -44,7 +44,8 @@ public class DBConnection {
             //Create the database if not already exists
 
             try {
-                Connection conn = DriverManager.getConnection(url);
+                Connection conn = DriverManager.getConnection(url+ "/", username,
+                        password);
 
                 statement = conn.createStatement();
                 String sql = "CREATE DATABASE IF NOT EXISTS " + schema;

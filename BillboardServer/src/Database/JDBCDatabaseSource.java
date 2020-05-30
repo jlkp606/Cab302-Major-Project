@@ -43,14 +43,14 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
-                    + "bName VARCHAR(30) INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                    + "bName VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                     + "username VARCHAR(30) UNIQUE,"
                     + "colour VARCHAR(100),"
                     + "message VARCHAR(100),"
-                    + "pictureData BINARY(8),"
+                    + "pictureData BINARY(100),"
                     + "pictureURL VARCHAR(255),"
                     + "infoMessage VARCHAR(100),"
-                    + "infoColour VARCHAR(100)," + ");";
+                    + "infoColour VARCHAR(100)" + ");";
 
    private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -102,10 +102,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
-                   + "createBillboard BOOLEAN,"
-                   + "editAllBillboards BOOLEAN,"
-                   + "editSchedule BOOLEAN,"
-                   + "editUsers BOOLEAN" + ");";
+                   + "createBillboard VARCHAR(30),"
+                   + "editAllBillboards VARCHAR(30),"
+                   + "editSchedule VARCHAR(30),"
+                   + "editUsers VARCHAR(30)" + ");";
 
    private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?, ?)";
 

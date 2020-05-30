@@ -115,8 +115,8 @@ public class BillboardServer {
                         }
                         case "deleteBillboard":{
 //                            String billboardName = (String) request.get("billboardName");
-//                            dataSource.deleteBillboard(billboardName);
-                            break;
+//                            dataSource.delete(billboardName);
+//                            break;
                         }
                         case "viewSchedule":{
 //                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
@@ -147,12 +147,11 @@ public class BillboardServer {
                             //needs username password, permlist
                             //TESTING
                             String username = (String) request.get("username");
-                            System.out.println("hi");
                             String password = (String) request.get("password");
-                            System.out.println("hi");
+
                             ArrayList<Boolean> permList = (ArrayList<Boolean>) request.get("permissionList");
                             ArrayList<String> permListString = new ArrayList<>();
-                            System.out.println("hi");
+
                             if (permList != null){
                                 for (Boolean b : permList)
                                 {
@@ -161,19 +160,9 @@ public class BillboardServer {
                                 }
                                 User user = new User();
                                 user.setUsername(username);
-                                System.out.println(username);
                                 user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
-                                System.out.println("hi");
                                 dataSource.addUser(user);
-
-                                System.out.println(permListString);
-                                try
-                                {
-                                    dataSource.addUserPerms(username, permListString);
-                                    System.out.println("hi");
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                }
+                                dataSource.addUserPerms(username, permListString);
                             } else {
                                 response.put("message", "Need to add permissions for the User");
                                 System.out.println("Need to add permissions for the User");
