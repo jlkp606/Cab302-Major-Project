@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <billboard background="Black">
-    <message colour="Blue">Billboard 2</message>
+    <message colour="Blue">Billboard 1</message>
     <picture data="ansfllansflf"/>
-    <information colour="Green">Hello World 2</information>
+    <information colour="Green">Hello World</information>
 </billboard>
