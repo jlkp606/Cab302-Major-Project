@@ -61,7 +61,7 @@ public class MyGui extends Component implements ActionListener {
             System.out.println(System.getProperty("user.dir")+"/xmlFile.xml");
         } else {
             JOptionPane.showMessageDialog(this,"Username or Password incorrect",
-                    "Wiring Class: Warning", JOptionPane.WARNING_MESSAGE);
+                    "MyGui Class: Warning", JOptionPane.WARNING_MESSAGE);
 
         }
     }
