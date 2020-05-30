@@ -51,8 +51,7 @@ public class ReadXMLFile {
             if (node_1.getNodeType() == Node.ELEMENT_NODE) {
                 Element element_1 = (Element) node_1;
                 String colour_message = element_1.getAttribute("colour");
-//                System.out.println(colour_message);
-                //return colour_message;
+
                 arr[4] = colour_message;
 
             }
@@ -67,8 +66,7 @@ public class ReadXMLFile {
             if (node_2.getNodeType() == Node.ELEMENT_NODE) {
                 Element element_2 = (Element) node_2;
                 String colour_info = element_2.getAttribute("colour");
-//                System.out.println(colour_info);
-                //return colour_info;
+
                 arr[5] = colour_info;
             }
         }
@@ -83,10 +81,6 @@ public class ReadXMLFile {
                 String image_data = element_3.getAttribute("data");
                 String image_url = element_3.getAttribute("url");
 
-//                System.out.println(image_data);
-//                System.out.println(image_url);
-                //return image_data;
-                //return  image_url;
                 arr[6] = image_data;
                 arr[7] = image_url;
 

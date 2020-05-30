@@ -5,6 +5,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 
 public class Edit_billboard extends JFrame {
@@ -70,17 +72,34 @@ public class Edit_billboard extends JFrame {
             }
         });
 
-
-        Data.addActionListener(new ActionListener() {
+        Data.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    URL.setEnabled(false);
+                    image_url.setEnabled(false);
 
+                }
+
+                else{
+                    URL.setEnabled(true);
+                    image_url.setEnabled(true);
+                }
             }
         });
-        URL.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
+        URL.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    Data.setEnabled(false);
+                    image_data.setEnabled(false);
+                }
+
+                else{
+                    Data.setEnabled(true);
+                    image_data.setEnabled(true);
+                }
             }
         });
     }
