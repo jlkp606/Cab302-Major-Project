@@ -1,101 +1,133 @@
 import org.xml.sax.SAXException;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.awt.*;
+
+import java.awt.event.*;
 import java.io.IOException;
+
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+
+import javax.swing.table.*;
 import javax.xml.parsers.ParserConfigurationException;
 
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+class List_billboard extends JFrame {
 
-public class List_billboard {
+    private JTable table;
+    private String[] columnNames;
 
-    public List_billboard() throws IOException, SAXException, ParserConfigurationException {
-        String arr[]=new String[3];
-        arr[0] = "billboard.xml";
-        arr[1] = "xmlFile.xml";
-        arr[2] = "newxmlfile.xml";
+    private String curr_billboard;
 
-        String [][] arr_2=new String[arr.length][10];
-        for (int i = 0 ; i<arr.length; i++) {
-            String xmlFilePath = System.getProperty("user.dir") + "/" + arr[i];
-            ReadXMLFile file = new ReadXMLFile();
-            arr_2[i] = file.read(xmlFilePath);
 
+    int width = 2;
+    int height = 3;
+    //int[][] array = new int[height][width];
+
+
+    String[][] dataValues = new String[height][width];
+
+    public List_billboard(String Token) throws IOException, SAXException, ParserConfigurationException {
+        //Send Server a valid session token
+        //Server response name arr billboards
+        Billboard billboard = new Billboard("Sidd's Billboard", "Sid", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+        Billboard billboard2 = new Billboard("Jack's Billboard", "Jack", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+        Billboard billboard3 = new Billboard("John's Billboard", "John", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+
+        String user[] = new String[3];
+
+        user[0] = billboard.getUsername();
+        user[1] = billboard2.getUsername();
+        user[2] = billboard3.getUsername();
+
+        String data[] = new String[3];
+
+        data[0] = billboard.getbName();
+        data[1] = billboard2.getbName();
+        data[2] = billboard3.getbName();
+
+
+        columnNames = new String[]{" User ", " Billboard "};
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == 0) {
+                    dataValues[i][j] = user[i];
+                }
+
+                if (j == 1) {
+                    dataValues[i][j] = data[i];
+                }
+            }
         }
 
 
-        Object[][] data
-                = {{"Sid",arr_2[0][1] },
-                {"John", arr_2[1][1] },
-                {"Jack", arr_2[2][1] }};
-        String[] cols = {"User", "Billboard"};
+        TableModel model = new myTableModel();
 
-        JTable table = new JTable(data, cols);
-        table.setCellSelectionEnabled(true);
-        ListSelectionModel select= table.getSelectionModel();
-        select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        final String[] Data = {null};
-        select.addListSelectionListener(new ListSelectionListener() {
+        table = new JTable();
 
-            public void valueChanged(ListSelectionEvent e) {
-                int[] row = table.getSelectedRows();
-                int[] columns = table.getSelectedColumns();
-                for (int i = 0; i < row.length; i++) {
-                    for (int j = 0; j < columns.length; j++) {
-                        Data[0] = (String) table.getValueAt(row[i], columns[j]);
-                        //System.out.println("Table element selected is: " + Data);
-                    }
-                }
-            }
+        table.setRowHeight(50);
 
-
-        });
-        System.out.println("Table element selected is: " + Data[0]);
-        //System.out.println("Table element selected is: " + Data);
-        JLabel label = new JLabel("Choose any billboard");
-        JPanel panel = new JPanel();
-        panel.add(label);
-
-        JButton Edit = new JButton();
-        Edit.setText("Edit");
-        Edit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
-
-                ReadXMLFile file = new ReadXMLFile();
-                String arr1[]=new String[10];
-                try {
-                    arr1 = file.read(xmlFilePath);
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (SAXException ex) {
-                    ex.printStackTrace();
-                }
-                //public Edit_billboard(String title, String billboard_title, String billboard_title_colour, String billboard_bg_colour, String billboard_message, String billboard_message_colour, String billboard_image_data, String billboard_image_url, String s){
-
-                JFrame frame = new Edit_billboard("Edit " + arr1[1] + " Billboard",arr1[1],arr1[4],arr1[0],arr1[2],arr1[5],arr1[6],arr1[7]);
-                frame.setLocation(500,300);
-                frame.setSize(550,550);
-                frame.setVisible(true);
-
-            }
-        });
-        JButton Preview = new JButton();
-        Preview.setText("Preview");
+        table.setModel(model);
 
         JButton Delete = new JButton();
         Delete.setText("Delete");
 
+        JButton Edit = new JButton();
+        Edit.setText("Edit");
+
+        JButton Preview = new JButton();
+        Preview.setText("Preview");
+
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                                   public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                                       int row = table.rowAtPoint(e.getPoint());
+
+
+                                       int col = table.columnAtPoint(e.getPoint());
+
+                                       curr_billboard = table.getValueAt(row, col).toString();
+                                       System.out.println(curr_billboard);
+
+                                       Delete.addActionListener(new ActionListener() {
+                                           @Override
+                                           public void actionPerformed(ActionEvent e) {
+//                                              if the user has permission to delete
+                                               JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
+                                               ((DefaultTableModel) table.getModel()).removeRow(row);
+//                                             Send server billboard_name and token
+                                           }
+                                       });
+
+                                       Edit.addActionListener(new ActionListener() {
+                                           @Override
+                                           public void actionPerformed(ActionEvent e) {
+//                                      Send server billboard_name and token
+//                                      response will be a billboard
+
+                                               String token = Token;
+                                               JFrame frame = new Edit_billboard("Edit Billboard",token,billboard);
+                                               frame.setLocation(500,300);
+                                               frame.setSize(550,550);
+                                               frame.setVisible(true);
+                                           }
+                                       });
+
+
+                                   }
+
+                               }
+
+        );
+
+
+        JLabel label = new JLabel("Choose any billboard");
+        JPanel panel = new JPanel();
+        panel.add(label);
+
         JPanel panel_2 = new JPanel();
-        panel_2.add(Edit,BorderLayout.LINE_START);
-        panel_2.add(Preview,BorderLayout.CENTER);
-        panel_2.add(Delete,BorderLayout.LINE_END);
+        panel_2.add(Edit, BorderLayout.LINE_START);
+        panel_2.add(Preview, BorderLayout.CENTER);
+        panel_2.add(Delete, BorderLayout.LINE_END);
 
         JFrame frame = new JFrame();
         frame.add(panel, BorderLayout.NORTH);
@@ -105,24 +137,32 @@ public class List_billboard {
         frame.setLocationRelativeTo(null);
         frame.pack();
         frame.setVisible(true);
+
+
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new List_billboard();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public class myTableModel extends DefaultTableModel {
+
+        myTableModel() {
+
+            super(dataValues, columnNames);
+
+
+        }
+
+        public boolean isCellEditable(int row, int cols) {
+
+            return false;
+
+        }
+
     }
+
+    public static void main(String args[]) throws ParserConfigurationException, SAXException, IOException {
+
+        String token= "1342141";
+        new List_billboard(token);
+
+    }
+
 }
-
-
-

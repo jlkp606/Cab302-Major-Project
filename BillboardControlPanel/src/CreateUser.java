@@ -35,10 +35,6 @@ public class CreateUser extends JFrame{
 
             }
 
-
-
-
-
         });
 
         editUsers.addActionListener(new ActionListener() {
@@ -57,17 +53,9 @@ public class CreateUser extends JFrame{
             }
         });
 
-
-
-
-
-
     }
 
-
-
     public static void main(String[] args) {
-
 
         JFrame frame = new CreateUser("Create User");
         frame.setLocation(500, 300);

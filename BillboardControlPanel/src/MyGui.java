@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchAlgorithmException;
+
+//import Server.BillboardServer.*;
+//
+//import static Server.Hash.getHash;
 
 public class MyGui extends Component implements ActionListener {
 
@@ -10,6 +15,7 @@ public class MyGui extends Component implements ActionListener {
     JTextField t1,t2;
     JLabel l1,l2;
 
+    String token;
     MyGui(){
 
         f=new JFrame("LOG IN FORM");
@@ -40,7 +46,6 @@ public class MyGui extends Component implements ActionListener {
         f.add(t1);
         f.add(t2);
         f.add(bt1);
-//        f.add(bt2);
 
         f.setVisible(true);
 
@@ -52,16 +57,26 @@ public class MyGui extends Component implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String userName = t1.getText();
         String password = t2.getText();
+//        try {
+//            String Hashed_password = getHash(password);
+//            System.out.println(Hashed_password);
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+
+        token = "123456789";
+
+//        send username and password to server
+//        recieve its response as token or error
         if (userName.trim().equals("admin") && password.trim().equals("admin")) {
 
-            JFrame frame = new Createbillboard("Create Billboard");
+            JFrame frame = new Createbillboard("Create Billboard",token,userName);
             frame.setLocation(500,300);
             frame.setSize(550,550);
             frame.setVisible(true);
-            System.out.println(System.getProperty("user.dir")+"/xmlFile.xml");
+            //System.out.println(System.getProperty("user.dir")+"/xmlFile.xml");
         } else {
-            JOptionPane.showMessageDialog(this,"Username or Password incorrect",
-                    "MyGui Class: Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Username or Password incorrect" );
 
         }
     }
