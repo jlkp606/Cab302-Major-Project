@@ -3,14 +3,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import java.awt.*;
-
 import java.awt.event.*;
 import java.io.IOException;
-
 import javax.swing.*;
-
 import javax.swing.table.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,27 +28,30 @@ class SimpleTableTest extends JFrame {
     String[][] dataValues = new String[height][width];
 
     public SimpleTableTest() throws IOException, SAXException, ParserConfigurationException {
+//        replace this with the server response
+//        -------------------------------------------------------------------------------------------------------------
         String arr[] = new String[3];
+
         arr[0] = "billboard.xml";
         arr[1] = "xmlFile.xml";
         arr[2] = "newxmlfile.xml";
 
         String user[] = new String[3];
+
         user[0] = "Sid";
         user[1] = "John";
         user[2] = "Jack";
 
 
-
+//arr_2 is path of the xml file
         String[][] arr_2 = new String[arr.length][10];
         for (int i = 0; i < arr.length; i++) {
             String xmlFilePath = System.getProperty("user.dir") + "/" + arr[i];
             ReadXMLFile file = new ReadXMLFile();
             arr_2[i] = file.read(xmlFilePath);
-
         }
 
-
+//----------------------------------------------------------------------------------------------------
 
 
         columnNames = new String[]{" User ", " Billboard "};
@@ -87,8 +86,6 @@ class SimpleTableTest extends JFrame {
                    public void mouseClicked(java.awt.event.MouseEvent e) {
 
                        int row = table.rowAtPoint(e.getPoint());
-
-
 
                        int col = table.columnAtPoint(e.getPoint());
 
@@ -142,11 +139,9 @@ class SimpleTableTest extends JFrame {
                            }
                        }
 
-
                    }
 
                }
-
         );
 
 

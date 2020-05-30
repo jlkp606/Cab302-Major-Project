@@ -1,6 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<billboard background="Black">
-    <message colour="Blue">Billboard 1</message>
-    <picture data="ansfllansflf"/>
-    <information colour="Green">Hello World</information>
-</billboard>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><billboard background=""><message colour=""/><picture data="" url=""/><information colour=""/></billboard>

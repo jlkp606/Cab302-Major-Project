@@ -19,6 +19,8 @@ public class Createbillboard extends JFrame {
     private JTextField image_data;
     private JTextField image_url;
     private JCheckBox URL;
+    private JLabel Name_bb;
+    private JTextField name_billboard;
 
 
     public Createbillboard(String title){
@@ -44,6 +46,7 @@ public class Createbillboard extends JFrame {
                 String billboard_message_colour = message_colour.getText();
                 String billboard_image_data = image_data.getText();
                 String billboard_image_url = image_url.getText();
+                String billboard_name = name_billboard.getText();
 //
 //
 //                System.out.println(billboard_title);
@@ -53,17 +56,23 @@ public class Createbillboard extends JFrame {
 //                System.out.println(billboard_message_colour);
 //                System.out.println(billboard_image_data);
 //                System.out.println(billboard_image_url);
-
-                //make an xml file
-                CreateXMLFile file = new CreateXMLFile(billboard_title,billboard_title_colour,billboard_bg_colour,billboard_message,billboard_message_colour,billboard_image_data,billboard_image_url);
-                try {
-                    file.start();
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (TransformerException ex) {
-                    ex.printStackTrace();
-                }
-
+                System.out.println(billboard_name);
+//                if(billboard_name == ""){
+//                    JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
+//                    System.out.println("null");
+//                }
+//                else {
+//                    //make an xml file
+//                    System.out.println("not null");
+//                    CreateXMLFile file = new CreateXMLFile(billboard_title, billboard_title_colour, billboard_bg_colour, billboard_message, billboard_message_colour, billboard_image_data, billboard_image_url);
+//                    try {
+//                        file.start();
+//                    } catch (ParserConfigurationException ex) {
+//                        ex.printStackTrace();
+//                    } catch (TransformerException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
                 //send it to server
 
 
