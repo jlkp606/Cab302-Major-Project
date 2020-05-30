@@ -11,7 +11,6 @@ import java.lang.*;
  */
 public class JDBCDatabaseSource implements DatabaseSource {
 
-
    private Connection connection;
 
    public static final String CREATE_USER_TABLE =
