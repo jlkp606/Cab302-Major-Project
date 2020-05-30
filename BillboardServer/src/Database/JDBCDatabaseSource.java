@@ -84,11 +84,11 @@ public class JDBCDatabaseSource implements DatabaseSource {
            "CREATE TABLE IF NOT EXISTS schedule ("
                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                    + "bName VARCHAR(30),"
-                   + "bStartTime DATETIME,"
-                   + "bEndTime DATETIME"
-                   + "repeat VARCHAR(30)" + ");";
+                   + "bStartTime VARCHAR(30),"
+                   + "bEndTime VARCHAR(30),"
+                   + "repeats VARCHAR(30)" + ");";
 
-   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime, repeat) VALUES (?, ?, ?, ?, ?)";
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime, repeats) VALUES (?, ?, ?, ?, ?)";
 
    private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bName=?";
 
@@ -399,10 +399,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
          rs = getUserPerms.executeQuery();
          rs.next();
          p.setUsername(rs.getString("Username"));
-         p.setCreateBillboard(rs.getString("Create Billboards?"));
-         p.setEditAllBillboards(rs.getString("Edit all Billboards?"));
-         p.setEditSchedule(rs.getString("Edit Scheduling?"));
-         p.setEditUsers(rs.getString("Edit Users?"));
+         p.setCreateBillboard(rs.getString("CreateBillboard"));
+         p.setEditAllBillboards(rs.getString("EditAllBillboard"));
+         p.setEditSchedule(rs.getString("EditSchedule"));
+         p.setEditUsers(rs.getString("EditUsers"));
       } catch (SQLException ex) {
          ex.printStackTrace();
       }
@@ -442,7 +442,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
          s.setUsername(rs.getString("Username"));
          s.setStartTime(rs.getString("Start Time"));
          s.setEndTime(rs.getString("End Time"));
-         s.setRepeat(rs.getString("Repeat"));
+         s.setRepeat(rs.getString("Repeats"));
 
       } catch (SQLException ex) {
          ex.printStackTrace();

@@ -1,6 +1,8 @@
 
 package Server;
 
+import Database.Permissions;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +65,6 @@ public class Client {
 //        permlist.add(false);
 //        permlist.add(false);
 //
-//        System.out.println(permlist);
 //
 //        String token = "kjryiauznhrjgrxypymj";
 //        request.clear();
@@ -74,7 +75,19 @@ public class Client {
 //        request.put("permissionList", permlist);
 //        sendRequest(socket, request);
 
+        //PermissionLIst Test
+
+        String token = "kjryiauznhrjgrxypymj";
         HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "getUserPermissions");
+        request.put("username", "itsmeMario6");
+
+        sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        Permissions permissions = (Permissions) response.get("permissions");
+        System.out.println(permissions.getCreateBillboard());
 
         socket.close();
 
