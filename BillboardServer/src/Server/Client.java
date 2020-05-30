@@ -55,25 +55,26 @@ public class Client {
 //
 //        System.out.println(res.get("token"));
 
-        //test Create User
+//        //test Create User
+//        HashMap<String, Object> request = new HashMap<>();
+//        ArrayList<Boolean> permlist = new ArrayList<>();
+//        permlist.add(true);
+//        permlist.add(true);
+//        permlist.add(false);
+//        permlist.add(false);
+//
+//        System.out.println(permlist);
+//
+//        String token = "kjryiauznhrjgrxypymj";
+//        request.clear();
+//        request.put("type", "createUser");
+//        request.put("token", token);
+//        request.put("username","itsmeMario6");
+//        request.put("password", "asd123");
+//        request.put("permissionList", permlist);
+//        sendRequest(socket, request);
+
         HashMap<String, Object> request = new HashMap<>();
-        ArrayList<Boolean> permlist = new ArrayList<>();
-        permlist.add(true);
-        permlist.add(true);
-        permlist.add(false);
-        permlist.add(false);
-
-        System.out.println(permlist);
-
-        String token = "kjryiauznhrjgrxypymj";
-        request.clear();
-        request.put("type", "createUser");
-        request.put("token", token);
-        request.put("username","itsmeMario6");
-        request.put("password", "asd123");
-        request.put("permissionList", permlist);
-
-        sendRequest(socket, request);
 
         socket.close();
 
