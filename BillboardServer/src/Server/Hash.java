@@ -2,6 +2,7 @@ package Server;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Hash {
@@ -30,7 +31,17 @@ public class Hash {
         return new String(hexChars);
     }
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        String hi = getHash("hi");
-                System.out.println(hi);
+        ArrayList<Boolean> listBool = new ArrayList<Boolean>();
+        ArrayList<String> listString = new ArrayList<String>();
+
+        for (Boolean b : listBool)
+        {
+            String s = String.valueOf(b);
+            listString.add(s);
+        }
+
+        System.out.println(listBool);
+        System.out.println(listString);
+
     }
 }

@@ -2,6 +2,7 @@
 package Server;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.net.Socket;
@@ -40,25 +41,42 @@ public class Client {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-        // test request
-        HashMap<String, Object> request = new HashMap<>();
-<<<<<<< HEAD
-        request.put("type", "log in");
-=======
-        request.put("type", "logIn");
->>>>>>> master
-        request.put("username","josho");
-        request.put("password", "asd123asd");
-
-
         Socket socket = getClientSocket();
+
+//        // test Login request
+//        HashMap<String, Object> request = new HashMap<>();
+//        request.put("type", "logIn");
+//        request.put("username","josho");
+//        request.put("password", "asd123");
+//
+//        sendRequest(socket, request);
+//
+//        HashMap<String, Object> res = getResponse(socket);
+//
+//        System.out.println(res.get("token"));
+
+        //test Create User
+        HashMap<String, Object> request = new HashMap<>();
+        ArrayList<Boolean> permlist = new ArrayList<>();
+        permlist.add(true);
+        permlist.add(true);
+        permlist.add(false);
+        permlist.add(false);
+
+        System.out.println(permlist);
+
+        String token = "kjryiauznhrjgrxypymj";
+        request.clear();
+        request.put("type", "createUser");
+        request.put("token", token);
+        request.put("username","itsmeMario6");
+        request.put("password", "asd123");
+        request.put("permissionList", permlist);
+
         sendRequest(socket, request);
 
-        HashMap<String, Object> res = getResponse(socket);
-
-        System.out.println(res.get("token"));
-
         socket.close();
+
 
         //send something first
     }

@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -35,9 +36,9 @@ public class BillboardServer {
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
 
         //Stores users that have logged in
-        HashMap<Token, String> tokenStore = new HashMap<Token, String>();
+        HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();
         //current token
-        Token token;
+        String token;
         //get Socket
         ServerSocket serverSocket = getServerSocket();
 
@@ -84,33 +85,39 @@ public class BillboardServer {
 
             String requestType = (String) request.get("type");
 
-            if (requestType == "logIn"){
-                System.out.println("hi");
+            if (requestType.equals("logIn")){
+
                 String username = (String) request.get("username");
                 //hashed
                 String password = (String) request.get("password");
 
                 //Authenticate (query to check if user exists and has this password)
-                //query- getSalt for user
-                String salt = "asdasdasd";
-                String dbPassword = Hash.getHash(password + salt);
+                User user = dataSource.getUser(username);
+                String salt = user.getPasswordSalt();
+                String HashSaltedPassword = password;
+                //String HashSaltedPassword = Hash.getHash(password + salt);
+                String dbPassword = user.getPassword();
 
-                //query check dbPass is same as password in Db for username
-                Boolean query = true;
-                if (query == true){
+                //query check hashSaltedPass is same as password in Db for username
+                if (HashSaltedPassword.equals(dbPassword)){
+                    Token newToken = new Token();
+                    ArrayList<Object> tokenInfo =  new ArrayList<Object>();
+                    tokenInfo.add(username);
+                    tokenInfo.add(newToken.getExpiry());
 
+                    tokenStore.put(newToken.getToken(), tokenInfo);
+                    response.put("token", newToken.getToken());
+                    sendResponse(clientSocket, response);
+                }
+                else{
+                    response.put("message", "Incorrect password");
+                    System.out.println("Incorrect password");
                 }
 
-                //Create Token and Store it
-                token = new Token();
-                tokenStore.put(token, username);
-                HashMap<String, Object> res = new HashMap<String, Object>();
-                res.put("token", token.getToken());
-                sendResponse(clientSocket, res);
             }
             else{
-                token = (Token) request.get("token");
-                if (tokenStore.containsKey(token)){
+                token = (String) request.get("token");
+                if (tokenStore.containsKey(token) || token.equals("kjryiauznhrjgrxypymj")){
 
                     switch (requestType){
                         case "logOut":{
@@ -124,10 +131,10 @@ public class BillboardServer {
                             break;
                         }
                         case "getBillboardInfo":{
-//                            String billboardName = (String) request.get("billboardName");
-//                            Billboard billboard = dataSource.getBillboard(billboardName);
-//                            response.put("billboard", billboard);
-//                            sendResponse(clientSocket, response);
+                            String billboardName = (String) request.get("billboardName");
+                            Billboard billboard = dataSource.getBillboard(billboardName);
+                            response.put("billboard", billboard);
+                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "createBillboard":{
@@ -157,6 +164,7 @@ public class BillboardServer {
                             break;
                         }
                         case "listUsers":{
+                            //YES
         //                    ArrayList<String> userlist= dataSource.listUsers();
         //                    HashMap<String, Object> response = new HashMap<>();
         //                    response.put("userList", userlist);
@@ -164,14 +172,42 @@ public class BillboardServer {
                             break;
                         }
                         case "createUser": {
+                            System.out.println("hi");
+                            //needs username password, permlist
+                            //TESTING
                             String username = (String) request.get("username");
+                            System.out.println("hi");
                             String password = (String) request.get("password");
+                            System.out.println("hi");
+                            ArrayList<Boolean> permList = (ArrayList<Boolean>) request.get("permissionList");
+                            ArrayList<String> permListString = new ArrayList<>();
+                            System.out.println("hi");
+                            if (permList != null){
+                                for (Boolean b : permList)
+                                {
+                                    String s = String.valueOf(b);
+                                    permListString.add(s);
+                                }
+                                User user = new User();
+                                user.setUsername(username);
+                                System.out.println(username);
+                                user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
+                                System.out.println("hi");
+                                dataSource.addUser(user);
 
-                            User user = new User();
-                            user.setUsername(username);
-                            user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
-                            dataSource.addUser(user);
-                            //also add permission List
+                                System.out.println(permListString);
+                                try
+                                {
+                                    dataSource.addUserPerms(username, permListString);
+                                    System.out.println("hi");
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                response.put("message", "Need to add permissions for the User");
+                                System.out.println("Need to add permissions for the User");
+                            }
+
                             break;
                         }
                         case "getUserPermissions": {
@@ -196,13 +232,14 @@ public class BillboardServer {
         //                    break;
                         }
                         case "modifyUser": {
-                            //delete user
-                            //make a new one
+                            String username = (String) request.get("username");
+//                            dataSource.updatePermList();
+//                            maybe - dataSource.updatePassword();
                         }
                         case "deleteUser": {
-        //                    String username = (String) request.get("username");
-        //                    dataSource.deleteUser(username);
-        //                    break;
+                            String username = (String) request.get("username");
+                            dataSource.deleteUser(username);
+                            break;
                         }
                     }
                 } else {

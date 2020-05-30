@@ -84,12 +84,12 @@ public class DatabaseData {
     /**
      * Adds permissions with a username attached to the table.
      *
-     * @param u A User to add perms to.
+     * @param username A User to add perms to.
      * @param permissionList
      */
-    public void addUserPerms(User u, ArrayList<String> permissionList) {
+    public void addUserPerms(String username, ArrayList<String> permissionList) {
 
-            databaseData.addUserPerms(u, permissionList);
+            databaseData.addUserPerms(username, permissionList);
     }
 
     /**
