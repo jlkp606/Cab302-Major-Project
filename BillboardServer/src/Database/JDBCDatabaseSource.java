@@ -14,8 +14,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private Connection connection;
 
-   public static final String CREATE_DATABASE =
-           "CREATE DATABASE IF NOT EXISTS billboard_database";
+
 
    public static final String CREATE_USER_TABLE =
            "CREATE TABLE IF NOT EXISTS users ("
@@ -79,7 +78,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
                    + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
-                   + "bStartTime DATETIME"
+                   + "bName VARCHAR(30),"
+                   + "bStartTime DATETIME,"
                    + "bEndTime DATETIME" + ");";
 
    private static final String INSERT_SCHEDULE = "INSERT INTO schedule (bID, bStartTime, bEndtime) VALUES (?, ?, ?)";
@@ -97,12 +97,12 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
                    + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
-                   + "createBillboard BOOLEAN"
-                   + "editAllBillboards BOOLEAN"
-                   + "editSchedule BOOLEAN"
+                   + "createBillboard BOOLEAN,"
+                   + "editAllBillboards BOOLEAN,"
+                   + "editSchedule BOOLEAN,"
                    + "editUsers BOOLEAN" + ");";
 
-   private static final String INSERT_PERMISSIONS = "INSERT INTO schedule (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?)";
+   private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?)";
 
    private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
 
@@ -119,12 +119,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
 
    public JDBCDatabaseSource() {
-      connection = DataBase.DBConnection.getInstance();
+      connection = Database.DBConnection.getInstance();
       try {
 
           Statement st = connection.createStatement();
-
-          st.execute(CREATE_DATABASE);
 
           st.execute(CREATE_USER_TABLE);
 
@@ -192,7 +190,19 @@ public class JDBCDatabaseSource implements DatabaseSource {
         return u;
     }
 
-    /**
+   /**
+    * @see DatabaseSource#setUserPassword(String, String)
+    */
+   public void setUserPassword(String name, String newPassword) {
+      try {
+         setUserPassword.setString(1, name);
+         setUserPassword.setString(2, newPassword);
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+   /**
      * @see DatabaseSource#deleteUser(String)
      */
     public void deleteUser(String name) {
