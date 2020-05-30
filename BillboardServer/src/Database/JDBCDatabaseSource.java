@@ -46,12 +46,15 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
-                    + "bID INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
-                    + "bName VARCHAR(30),"
-                    + "bRep VARCHAR(30),"
-                    + "bData TEXT" + ");";
+                    + "bName VARCHAR(30) INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                    + "username VARCHAR(30) UNIQUE,"
+                    + "colour VARCHAR(100),"
+                    + "message VARCHAR(100),"
+                    + "picture VARCHAR(255),"
+                    + "infoMessage VARCHAR(100),"
+                    + "infoColour VARCHAR(100)," + ");";
 
-   private static final String INSERT_BILLBOARD = "INSERT INTO billboard (bID, bName, bRep, bData) VALUES (?, ?, ?, ?);";
+   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, picture, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
    private static final String GET_BILLBOARD_NAME = "SELECT bName FROM billboard";
 
@@ -77,7 +80,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
-                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                    + "bName VARCHAR(30),"
                    + "bStartTime DATETIME,"
                    + "bEndTime DATETIME" + ");";
@@ -96,7 +99,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
-                   + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
+                   + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                    + "createBillboard BOOLEAN,"
                    + "editAllBillboards BOOLEAN,"
                    + "editSchedule BOOLEAN,"
@@ -220,8 +223,13 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public void addBillboard(Billboard b) {
       try {
          addBillboard.setString(1, b.getbName());
-         addBillboard.setString(2, b.getbRep());
-         addBillboard.setString(3, b.getbData());
+         addBillboard.setString(2, b.getUsername());
+         addBillboard.setString(3, b.getColour());
+         addBillboard.setString(4, b.getMessage());
+         addBillboard.setString(5, b.getPicture());
+         addBillboard.setString(6, b.getInfoMessage());
+         addBillboard.setString(7, b.getInfoColour());
+
          addBillboard.execute();
       } catch (SQLException ex) {
          ex.printStackTrace();
@@ -261,8 +269,13 @@ public class JDBCDatabaseSource implements DatabaseSource {
             rs = getBillboard.executeQuery();
             rs.next();
             b.setbName(rs.getString("Name"));
-            b.setbRep(rs.getString("Representative"));
-            b.setbData(rs.getString("Billboard Data"));
+            b.setUsername(rs.getString("Username"));
+            b.setColour(rs.getString("Colour"));
+            b.setMessage(rs.getString("Message"));
+            b.setPicture(rs.getString("Picture"));
+            b.setInfoMessage(rs.getString("InfoMessage"));
+            b.setInfoColour(rs.getString("InfoColour"));
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
