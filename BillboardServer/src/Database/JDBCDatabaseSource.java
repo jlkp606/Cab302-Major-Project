@@ -1,7 +1,6 @@
 package Database;
 
 import java.sql.*;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -85,9 +84,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                    + "bName VARCHAR(30),"
                    + "bStartTime DATETIME,"
-                   + "bEndTime DATETIME" + ");";
+                   + "bEndTime DATETIME"
+                   + "repeat VARCHAR(30)" + ");";
 
-   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime) VALUES (?, ?, ?, ?)";
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime, repeat) VALUES (?, ?, ?, ?, ?)";
 
    private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bName=?";
 
@@ -342,19 +342,15 @@ public class JDBCDatabaseSource implements DatabaseSource {
    }
 
    /**
-    * @see DatabaseSource
-    *            "CREATE TABLE IF NOT EXISTS schedule ("
-    *                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
-    *                    + "bName VARCHAR(30),"
-    *                    + "bStartTime DATETIME,"
-    *                    + "bEndTime DATETIME" + ");";
+    * @see DatabaseSource#addSchedule(String, String, String, String, String)
     */
-   public void AddSchedule(String name, String billboardName, String startTime, String endTime) {
+   public void addSchedule(String name, String billboardName, String startTime, String endTime, String repeat) {
       try {
          addSchedule.setString(1, name);
-         addSchedule.setString(1, billboardName);
-         addSchedule.setString(1, startTime);
-         addSchedule.setString(1, endTime);
+         addSchedule.setString(2, billboardName);
+         addSchedule.setString(3, startTime);
+         addSchedule.setString(4, endTime);
+         addSchedule.setString(5, repeat);
 
          addSchedule.execute();
       } catch (SQLException ex) {
@@ -363,11 +359,35 @@ public class JDBCDatabaseSource implements DatabaseSource {
    }
 
    /**
-    * @see DatabaseSource
+    * @see DatabaseSource#getSchedule
     */
-   public void deleteSchedule(String name) {
+   public Schedule getSchedule(String billboardName) {
+      Schedule s = new Schedule();
+      ResultSet rs = null;
+
       try {
-         deleteSchedule.setString(1, name);
+         getSchedule.setString(1, billboardName);
+         rs = getSchedule.executeQuery();
+         rs.next();
+         s.setBillboardName(rs.getString("Billboard Name"));
+         s.setUsername(rs.getString("Username"));
+         s.setStartTime(rs.getString("Start Time"));
+         s.setEndTime(rs.getString("End Time"));
+         s.setRepeat(rs.getString("Repeat"));
+
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+
+      return s;
+   }
+
+   /**
+    * @see DatabaseSource#deleteSchedule(String)
+    */
+   public void deleteSchedule(String billboardName) {
+      try {
+         deleteSchedule.setString(2, billboardName);
          deleteSchedule.executeUpdate();
       } catch (SQLException ex) {
          ex.printStackTrace();
