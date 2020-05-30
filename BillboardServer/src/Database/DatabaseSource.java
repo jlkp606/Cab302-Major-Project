@@ -62,10 +62,10 @@ public interface DatabaseSource {
     /**
      * Adds permissions to a specific user
      *
-     * @param u User to add permissions to.
+     * @param username User to add permissions to.
      * @param permissionList An arraylist of strings that contain only true or false.
      */
-    void addUserPerms(User u, ArrayList<String> permissionList);
+    void addUserPerms(String username, ArrayList<String> permissionList);
 }
 
 

@@ -40,21 +40,33 @@ public class Client {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-        // test request
-        HashMap<String, Object> request = new HashMap<>();
-        request.put("type", "logIn");
-        request.put("username","josho");
-        request.put("password", "asd123asd");
-
-
         Socket socket = getClientSocket();
+
+//        // test Login request
+//        HashMap<String, Object> request = new HashMap<>();
+//        request.put("type", "logIn");
+//        request.put("username","josho");
+//        request.put("password", "asd123");
+//
+//        sendRequest(socket, request);
+//
+//        HashMap<String, Object> res = getResponse(socket);
+//
+//        System.out.println(res.get("token"));
+
+        //test Create User
+        HashMap<String, Object> request = new HashMap<>();
+        String token = "whsnfuavwpulwydlmjtg";
+        request.clear();
+        request.put("type", "createUser");
+        request.put("token", token);
+        request.put("username","itsmeMario");
+        request.put("password", "asd123");
+
         sendRequest(socket, request);
 
-        HashMap<String, Object> res = getResponse(socket);
-
-        System.out.println(res.get("token"));
-
         socket.close();
+
 
         //send something first
     }

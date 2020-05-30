@@ -25,7 +25,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String DELETE_USER = "DELETE FROM users WHERE username=?;";
 
-   private static final String GET_USER = "SELECT username FROM users WHERE username=?";
+   private static final String GET_USER = "SELECT * FROM users WHERE username=?";
 
    private static final String SET_USER_PASSWORD = "UPDATE users SET password=? WHERE username=?";
 
@@ -76,7 +76,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
                    + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
-                   + "bStartTime DATETIME"
+                   + "bStartTime DATETIME,"
                    + "bEndTime DATETIME" + ");";
 
    private static final String INSERT_SCHEDULE = "INSERT INTO schedule (bID, bStartTime, bEndtime) VALUES (?, ?, ?)";
@@ -94,9 +94,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_PERMISSION_TABLE =
            "CREATE TABLE IF NOT EXISTS permissions ("
                    + "username INTEGER PRIMARY KEY NOT NULL UNIQUE,"
-                   + "createBillboard BOOLEAN"
-                   + "editAllBillboards BOOLEAN"
-                   + "editSchedule BOOLEAN"
+                   + "createBillboard BOOLEAN,"
+                   + "editAllBillboards BOOLEAN,"
+                   + "editSchedule BOOLEAN,"
                    + "editUsers BOOLEAN" + ");";
 
    private static final String INSERT_PERMISSIONS = "INSERT INTO schedule (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?)";
@@ -266,10 +266,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
    /**
     * @see DatabaseSource#addUserPerms
     */
-   public void addUserPerms(User u, ArrayList<String> permissionList) {
+   public void addUserPerms(String username, ArrayList<String> permissionList) {
 
       try {
-         addPerms.setString(1, u.getUsername());
+         addPerms.setString(1, username);
          addPerms.setString(2, permissionList.get(0));
          addPerms.setString(3, permissionList.get(1));
          addPerms.setString(4, permissionList.get(2));
