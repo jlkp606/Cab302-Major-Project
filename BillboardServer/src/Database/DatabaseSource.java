@@ -66,6 +66,14 @@ public interface DatabaseSource {
      * @param permissionList An arraylist of strings that contain only true or false.
      */
     void addUserPerms(User u, ArrayList<String> permissionList);
+
+    /**
+     * Deletes a permissions row from the database.
+     *
+     * @param name The name of the user with permissions to be deleted to delete from the table.
+     */
+    void deletePerms(String name);
+
 }
 
 

@@ -14,6 +14,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private Connection connection;
 
+   public static final String CREATE_DATABASE =
+           "CREATE DATABASE IF NOT EXISTS billboard_database";
+
    public static final String CREATE_USER_TABLE =
            "CREATE TABLE IF NOT EXISTS users ("
                    + "userID INTEGER PRIMARY KEY NOT NULL /*!40101 AUTO_INCREMENT */ UNIQUE," // from https://stackoverflow.com/a/41028314
@@ -103,9 +106,15 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
 
+   private static final String DELETE_USER_PERMISSIONS = "DELETE FROM billboard WHERE username=?";
+
+
+
    private PreparedStatement addPerms;
 
    private PreparedStatement setPerms;
+
+   private PreparedStatement deletePerms;
 
 
 
@@ -114,6 +123,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
       try {
 
           Statement st = connection.createStatement();
+
+          st.execute(CREATE_DATABASE);
 
           st.execute(CREATE_USER_TABLE);
 
@@ -136,6 +147,10 @@ public class JDBCDatabaseSource implements DatabaseSource {
           //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
 
           st.execute(CREATE_PERMISSION_TABLE);
+
+          addPerms = connection.prepareStatement(INSERT_PERMISSIONS);
+          setPerms = connection.prepareStatement(SET_USER_PERMISSIONS);
+          deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
 
           System.out.println("Tables created successfully");
 
@@ -276,6 +291,18 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addPerms.setString(5, permissionList.get(3));
 
          addPerms.execute();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+   /**
+    * @see DatabaseSource#deletePerms(String)
+    */
+   public void deletePerms(String name) {
+      try {
+         deleteUser.setString(1, name);
+         deleteUser.executeUpdate();
       } catch (SQLException ex) {
          ex.printStackTrace();
       }

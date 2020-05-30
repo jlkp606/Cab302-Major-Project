@@ -1,4 +1,4 @@
-package DataBase;
+package Database;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -91,6 +91,13 @@ public class DatabaseData {
 
             databaseData.addUserPerms(u, permissionList);
     }
+
+    /**
+     * Deletes a permissions row from the database.
+     *
+     * @param name The name of the user with permissions to be deleted to delete from the table.
+     */
+    public void deletePerms(String name) {};
 
 }
 
