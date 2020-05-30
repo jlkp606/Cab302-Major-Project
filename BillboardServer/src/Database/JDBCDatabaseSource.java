@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.*;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,9 +60,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String GET_BILLBOARD_NAME = "SELECT bName FROM billboard";
 
-   private static final String GET_BILLBOARD = "SELECT * FROM billboard WHERE BName=?";
+   private static final String GET_BILLBOARD = "SELECT * FROM billboard WHERE bName=?";
 
-   private static final String DELETE_BILLBOARD = "DELETE FROM billboard WHERE BName=?";
+   private static final String DELETE_BILLBOARD = "DELETE FROM billboard WHERE bName=?";
 
    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM billboard";
 
@@ -86,15 +87,19 @@ public class JDBCDatabaseSource implements DatabaseSource {
                    + "bStartTime DATETIME,"
                    + "bEndTime DATETIME" + ");";
 
-   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (bID, bStartTime, bEndtime) VALUES (?, ?, ?)";
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime) VALUES (?, ?, ?, ?)";
 
-   private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bID=?";
+   private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bName=?";
+
+   private static final String DELETE_SCHEDULE = "DELETE FROM schedule WHERE bName=?";
 
    //private static final String GET_ALL_SCHEDULES = "SELECT * FROM schedule";
 
    private PreparedStatement addSchedule;
 
    private PreparedStatement getSchedule;
+
+   private PreparedStatement deleteSchedule;
 
    //private PreparedStatement getAllSchedules;
 
@@ -146,7 +151,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
           st.execute(CREATE_SCHEDULE_TABLE);
 
-          //addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+          addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+          getSchedule = connection.prepareStatement(GET_SCHEDULE);
+          deleteSchedule = connection.prepareStatement(DELETE_SCHEDULE);
 
           st.execute(CREATE_PERMISSION_TABLE);
 
@@ -334,7 +341,38 @@ public class JDBCDatabaseSource implements DatabaseSource {
       }
    }
 
+   /**
+    * @see DatabaseSource
+    *            "CREATE TABLE IF NOT EXISTS schedule ("
+    *                    + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
+    *                    + "bName VARCHAR(30),"
+    *                    + "bStartTime DATETIME,"
+    *                    + "bEndTime DATETIME" + ");";
+    */
+   public void AddSchedule(String name, String billboardName, String startTime, String endTime) {
+      try {
+         addSchedule.setString(1, name);
+         addSchedule.setString(1, billboardName);
+         addSchedule.setString(1, startTime);
+         addSchedule.setString(1, endTime);
 
+         addSchedule.execute();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+
+   /**
+    * @see DatabaseSource
+    */
+   public void deleteSchedule(String name) {
+      try {
+         deleteSchedule.setString(1, name);
+         deleteSchedule.executeUpdate();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
 
 
 }
