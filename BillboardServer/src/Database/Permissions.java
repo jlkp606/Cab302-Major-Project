@@ -1,6 +1,8 @@
 package Database;
 
-public class Permissions {
+import java.io.Serializable;
+
+public class Permissions implements Serializable {
 
    private String username;
    private String createBillboard;
@@ -29,7 +31,7 @@ public class Permissions {
    /**
     * @return the name of the billboard
     */
-   public String getCreateBillboard() {return createBillboard;}
+   public String getCreateBillboard() {return this.createBillboard;}
    /**
     * @param createBillboard Whether the user can create billboards or not. Format: 'TRUE' or 'FALSE'
     */
@@ -38,13 +40,13 @@ public class Permissions {
    /**
     * @return the name of the representative of the billboard (Company or individual)
     */
-   public String getUsername() {return username;}
+   public String getUsername() {return this.username;}
    /**
     * @param username the name of the billboard creator to set
     */
    public void setUsername(String username) {this.username = username;}
 
-   public String getEditAllBillboards() {return editAllBillboards;}
+   public String getEditAllBillboards() {return this.editAllBillboards;}
    public void setEditAllBillboards(String editAllBillboards) {this.editAllBillboards = editAllBillboards;}
 
    public String getEditSchedule() {return editSchedule;}

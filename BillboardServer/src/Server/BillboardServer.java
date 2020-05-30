@@ -1,6 +1,7 @@
 package Server;
 
 import Database.JDBCDatabaseSource;
+import Database.Permissions;
 import Database.User;
 import Database.Billboard;
 import Token.Token;
@@ -143,9 +144,7 @@ public class BillboardServer {
                             break;
                         }
                         case "createUser": {
-                            System.out.println("hi");
-                            //needs username password, permlist
-                            //TESTING
+                            //TESTED
                             String username = (String) request.get("username");
                             String password = (String) request.get("password");
 
@@ -171,10 +170,10 @@ public class BillboardServer {
                             break;
                         }
                         case "getUserPermissions": {
-//                            String username = (String) request.get("username");
-//                            ArrayList<Boolean> permList =  dataSource.getUserPermission(username);
-//                            response.put("permissionList", permList);
-//                            sendResponse(clientSocket, response);
+                            String username = (String) request.get("username");
+                            Permissions permissions = dataSource.getUserPerms(username);
+                            response.put("permissions", permissions);
+                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "setUserPermissions": {
