@@ -34,7 +34,6 @@ public class BillboardServer {
         ServerSocket serverSocket = getServerSocket();
 
         //connect to database
-        JDBCBillboardDataSource dataSource = new JDBCBillboardDataSource();
 
         for ( ; ; ) {
             Socket clientSocket = serverSocket.accept();
@@ -64,7 +63,6 @@ public class BillboardServer {
                     User user =
                             new User((String) request.get("username"),
                             (String) request.get("password"));
-                    dataSource.addUser(user);
                     break;
 
             }

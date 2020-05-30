@@ -22,7 +22,7 @@ public class BillboardViewer {
         JFrame frame = new JFrame("Billboard Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        MouseListener mouseexit = new MouseListener() {
+        MouseListener mouseExit = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 frame.dispose();
@@ -44,7 +44,7 @@ public class BillboardViewer {
             public void mouseExited(MouseEvent mouseEvent) {
             }
         };
-        KeyListener escapeexit = new KeyListener() {
+        KeyListener escapeExit = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
             }
@@ -61,13 +61,8 @@ public class BillboardViewer {
             }
         };
 
-        File file = new File("F:\\XMLFile.xml");
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new File("Employees.xml"));
-
-        frame.addMouseListener(mouseexit);
-        frame.addKeyListener(escapeexit);
+        frame.addMouseListener(mouseExit);
+        frame.addKeyListener(escapeExit);
         JLabel ErrorMessage = new JLabel("Error: No XML file found to display.");
         ErrorMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 48));
         ErrorMessage.setForeground(Color.WHITE);
