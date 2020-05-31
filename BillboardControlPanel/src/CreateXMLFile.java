@@ -61,15 +61,17 @@ public class CreateXMLFile {
 
         Element picture = document.createElement("picture");
         root.appendChild(picture);
+        if(image_url.equals("")) {
+            Attr attr_data = document.createAttribute("data");
+            attr_data.setValue(image_data);
+            picture.setAttributeNode(attr_data);
+        }
 
-        Attr attr_data = document.createAttribute("data");
-        attr_data.setValue(image_data);
-        picture.setAttributeNode(attr_data);
-
-
-        Attr attr_url = document.createAttribute("url");
-        attr_url.setValue(image_url);
-        picture.setAttributeNode(attr_url);
+        if(image_data.equals("")) {
+            Attr attr_url = document.createAttribute("url");
+            attr_url.setValue(image_url);
+            picture.setAttributeNode(attr_url);
+        }
 
         Element message = document.createElement("information");
         message.appendChild(document.createTextNode(message_bb));
