@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class EditUser extends JFrame {
     private JList ListOfExistingUser;
@@ -12,6 +14,25 @@ public class EditUser extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(Heading);
         this.pack();
+
+        modifyUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new ModifyUserDetails("Modify User Details");
+                frame.setLocation(500,300);
+                frame.setSize(550,550);
+                frame.setVisible(true);
+            }
+        });
+        createUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new CreateUser("Create User");
+                frame.setLocation(500,300);
+                frame.setSize(550,550);
+                frame.setVisible(true);
+            }
+        });
     }
 
     public static void main(String[] args) {

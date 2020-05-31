@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ControlPanel extends JFrame{
     private JPanel ControlPanel;
@@ -12,6 +14,34 @@ public class ControlPanel extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(ControlPanel);
         this.pack();
+
+        createNewBillboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new Createbillboard("Create Billboard");
+                frame.setLocation(500,300);
+                frame.setSize(550,550);
+                frame.setVisible(true);
+            }
+        });
+
+        modifyExistingBillboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+            }
+        });
+
+        editUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new EditUser("Edit User");
+                frame.setLocation(500,300);
+                frame.setSize(550,550);
+                frame.setVisible(true);
+            }
+        });
 
     }
 

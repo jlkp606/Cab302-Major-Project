@@ -54,7 +54,7 @@ public class MyGui extends Component implements ActionListener {
         String password = t2.getText();
         if (userName.trim().equals("admin") && password.trim().equals("admin")) {
 
-            JFrame frame = new Createbillboard("Create Billboard");
+            JFrame frame = new ControlPanel("Control Panel");
             frame.setLocation(500,300);
             frame.setSize(550,550);
             frame.setVisible(true);
