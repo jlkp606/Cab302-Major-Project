@@ -38,7 +38,7 @@ public class Edit_billboard extends JFrame {
         title_info.setText( billboard.getbName());
         background_colour.setText(billboard.getColour());
         message_colour.setText(billboard.getMessage());
-        title_colour.setText(billboard.getMessage_colour());
+        title_colour.setText(billboard.getMessageColour());
         image_data.setText(billboard.getPictureData());
         image_url.setText(billboard.getPictureURL());
         message.setText(billboard.getInfoMessage());

@@ -9,7 +9,7 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     private String username;
     private String colour;
     private String message;
-    private String message_colour;
+    private String messageColour;
     private String pictureData;
     private String pictureURL;
     private String infoMessage;
@@ -27,12 +27,12 @@ public class Billboard implements Comparable<Billboard>, Serializable {
      * @param username The name of the user who created the billboard
      */
 
-    public Billboard(String bName, String username, String colour, String message, String message_colour,String pictureData, String pictureURL, String infoMessage, String infoColour) {
+    public Billboard(String bName, String username, String colour, String message, String messageColour,String pictureData, String pictureURL, String infoMessage, String infoColour) {
         this.bName = bName;
         this.username = username;
         this.colour = colour;
         this.message = message;
-        this.message_colour = message_colour;
+        this.messageColour = messageColour;
         this.pictureData = pictureData;
         this.pictureURL = pictureURL;
         this.infoMessage = infoMessage;
@@ -60,8 +60,8 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     public String getColour() {return colour;}
     public void setColour(String colour) {this.colour = colour;}
 
-    public String getMessage_colour() {return message_colour;}
-    public void setMessage_colour(String message_colour) {this.colour = message_colour;}
+    public String getMessageColour() {return messageColour;}
+    public void setMessageColour(String messageColour) {this.colour = messageColour;}
 
     public String getMessage() {return message;}
     public void setMessage(String message) {this.message = message;}

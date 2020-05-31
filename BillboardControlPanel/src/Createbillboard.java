@@ -1,5 +1,4 @@
 import org.xml.sax.SAXException;
-
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -8,8 +7,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
+
+import Server.Client;
+
 
 public class Createbillboard extends JFrame {
+//    private final Object Billboard;
     private JPanel mainPanel;
     private JEditorPane message;
     private JButton previewButton;
@@ -29,7 +34,7 @@ public class Createbillboard extends JFrame {
     String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
 
 
-    public Createbillboard(String title,String token,String username){
+    public Createbillboard(String title, String token, String username) throws IOException {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -66,6 +71,8 @@ public class Createbillboard extends JFrame {
                 else {
                     Billboard billboard = new Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
 //                    send the  billboard info to server along with session token
+//                    createBillboardRequest(billboard);
+
                 }
 
 
@@ -160,9 +167,32 @@ public class Createbillboard extends JFrame {
         });
 
 
+//
+
+//        Socket socket = Client.getClientSocket();
+//
+//        HashMap<String , Object> request = new HashMap<String , Object>;
+//        request.put("type", "createBillboard");
+//        request.put("token", token);
+//        request.put("billboard", billboard);
+//        Client.sendRequest(socket , request);
+
+//
+        //        public  void createBillboardRequest(){
+//            Socket socket = Client.getClientSocket();
+//
+//            HashMap<String , Object> request = new HashMap<String , Object>;
+//            request.put("type", "createBillboard");
+//            request.put("token", token);
+////            request.put("billboard", billboard);
+//
+//            Client.sendRequest(socket , request);
+//
+//
+//        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String token = "12435642";
         String user = "Sid";

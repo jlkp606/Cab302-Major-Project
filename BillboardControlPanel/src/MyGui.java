@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.NoSuchAlgorithmException;
+import java.io.IOException;
 
 //import Server.BillboardServer.*;
 //
@@ -70,7 +70,12 @@ public class MyGui extends Component implements ActionListener {
 //        recieve its response as token or error
         if (userName.trim().equals("admin") && password.trim().equals("admin")) {
 
-            JFrame frame = new Createbillboard("Create Billboard",token,userName);
+            JFrame frame = null;
+            try {
+                frame = new Createbillboard("Create Billboard",token,userName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             frame.setLocation(500,300);
             frame.setSize(550,550);
             frame.setVisible(true);
