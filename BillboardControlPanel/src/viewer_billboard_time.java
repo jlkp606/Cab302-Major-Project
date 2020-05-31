@@ -3,52 +3,52 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class viewer_billboard_time extends JFrame{
-    private JTextField Friday_9;
-    private JTextField Monday_9;
-    private JTextField Monday_10;
-    private JTextField Monday_11;
-    private JTextField Monday_12;
+    private JTextArea Friday_9;
+    private JTextArea Monday_9;
+    private JTextArea Monday_10;
+    private JTextArea Monday_11;
+    private JTextArea Monday_12;
     private JPanel mainPanel;
-    private JTextField Friday_4;
-    private JTextField Friday_10;
-    private JTextField Friday_11;
-    private JTextField Friday_12;
-    private JTextField Friday_1;
-    private JTextField Friday_2;
-    private JTextField Friday_3;
-    private JTextField Friday_5;
-    private JTextField Thursday_9;
-    private JTextField Thursday_10;
-    private JTextField Thursday_11;
-    private JTextField Thursday_12;
-    private JTextField Thursday_1;
-    private JTextField Thursday_2;
-    private JTextField Thursday_3;
-    private JTextField Thursday_4;
-    private JTextField Thursday_5;
-    private JTextField Wednesday_9;
-    private JTextField Wednesday_10;
-    private JTextField Wednesday_11;
-    private JTextField Wednesday_12;
-    private JTextField Wednesday_1;
-    private JTextField Wednesday_2;
-    private JTextField Wednesday_3;
-    private JTextField Wednesday_4;
-    private JTextField Wednesday_5;
-    private JTextField Monday_1;
-    private JTextField Monday_2;
-    private JTextField Monday_3;
-    private JTextField Monday_4;
-    private JTextField Monday_5;
-    private JTextField Tuesday_9;
-    private JTextField Tuesday_10;
-    private JTextField Tuesday_11;
-    private JTextField Tuesday_12;
-    private JTextField Tuesday_1;
-    private JTextField Tuesday_2;
-    private JTextField Tuesday_3;
-    private JTextField Tuesday_4;
-    private JTextField Tuesday_5;
+    private JTextArea Friday_4;
+    private JTextArea Friday_10;
+    private JTextArea Friday_11;
+    private JTextArea Friday_12;
+    private JTextArea Friday_1;
+    private JTextArea Friday_2;
+    private JTextArea Friday_3;
+    private JTextArea Friday_5;
+    private JTextArea Thursday_9;
+    private JTextArea Thursday_10;
+    private JTextArea Thursday_11;
+    private JTextArea Thursday_12;
+    private JTextArea Thursday_1;
+    private JTextArea Thursday_2;
+    private JTextArea Thursday_3;
+    private JTextArea Thursday_4;
+    private JTextArea Thursday_5;
+    private JTextArea Wednesday_9;
+    private JTextArea Wednesday_10;
+    private JTextArea Wednesday_11;
+    private JTextArea Wednesday_12;
+    private JTextArea Wednesday_1;
+    private JTextArea Wednesday_2;
+    private JTextArea Wednesday_3;
+    private JTextArea Wednesday_4;
+    private JTextArea Wednesday_5;
+    private JTextArea Monday_1;
+    private JTextArea Monday_2;
+    private JTextArea Monday_4;
+    private JTextArea Monday_3;
+    private JTextArea Monday_5;
+    private JTextArea Tuesday_9;
+    private JTextArea Tuesday_10;
+    private JTextArea Tuesday_11;
+    private JTextArea Tuesday_12;
+    private JTextArea Tuesday_1;
+    private JTextArea Tuesday_2;
+    private JTextArea Tuesday_3;
+    private JTextArea Tuesday_4;
+    private JTextArea Tuesday_5;
     private JButton add;
     private JButton remove;
 
@@ -64,8 +64,8 @@ public class viewer_billboard_time extends JFrame{
         Monday_12.setEnabled(false);
         Monday_1.setEnabled(false);
         Monday_2.setEnabled(false);
-        Monday_3.setEnabled(false);
         Monday_4.setEnabled(false);
+        Monday_3.setEnabled(false);
         Monday_5.setEnabled(false);
 
         Tuesday_9.setEnabled(false);
@@ -109,10 +109,62 @@ public class viewer_billboard_time extends JFrame{
         Friday_5.setEnabled(false);
 
 
+
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+
+                Monday_9.setText("false");
+                Monday_10.setText("false");
+                Monday_11.setText("false");
+                Monday_12.setText("false");
+                Monday_1.setText("false");
+                Monday_2.setText("false");
+                Monday_4.setText("false");
+                Monday_3.setText("false");
+                Monday_5.setText("false");
+
+                Tuesday_9.setText("false");
+                Tuesday_10.setText("false");
+                Tuesday_11.setText("false");
+                Tuesday_12.setText("false");
+                Tuesday_1.setText("false");
+                Tuesday_2.setText("false");
+                Tuesday_3.setText("false");
+                Tuesday_4.setText("false");
+                Tuesday_5.setText("false");
+
+                Wednesday_9.setText("false");
+                Wednesday_10.setText("false");
+                Wednesday_11.setText("false");
+                Wednesday_12.setText("false");
+                Wednesday_1.setText("false");
+                Wednesday_2.setText("false");
+                Wednesday_3.setText("false");
+                Wednesday_4.setText("false");
+                Wednesday_5.setText("false");
+
+                Thursday_9.setText("false");
+                Thursday_10.setText("false");
+                Thursday_11.setText("false");
+                Thursday_12.setText("false");
+                Thursday_1.setText("false");
+                Thursday_2.setText("false");
+                Thursday_3.setText("false");
+                Thursday_4.setText("false");
+                Thursday_5.setText("false");
+
+
+                Friday_9.setText("false");
+                Friday_10.setText("false");
+                Friday_11.setText("false");
+                Friday_12.setText("false");
+                Friday_1.setText("false");
+                Friday_2.setText("false");
+                Friday_3.setText("false");
+                Friday_4.setText("false");
+                Friday_5.setText("false");
             }
         });
 
