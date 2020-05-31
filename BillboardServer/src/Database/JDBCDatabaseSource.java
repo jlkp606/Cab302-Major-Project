@@ -49,7 +49,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
                     + "bName VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
-                    + "username VARCHAR(30) UNIQUE,"
+                    + "username VARCHAR(30),"
                     + "colour VARCHAR(100),"
                     + "message VARCHAR(100),"
                     + "messageColour VARCHAR(100),"
@@ -118,7 +118,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?, ?)";
 
-   private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
+   private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE username=?";
 
    private static final String DELETE_USER_PERMISSIONS = "DELETE FROM permissions WHERE username=?";
 
@@ -207,6 +207,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
             rs.next();
             u.setUsername(rs.getString("Username"));
             u.setPassword(rs.getString("Password"));
+            u.setPasswordSalt(rs.getString("PasswordSalt"));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -297,20 +298,17 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
             billboardList = new ArrayList<>();
             while (rs.next()) {
-                int i = 1;
-                while (i <= columnCount) {
-                    Billboard billboard = new Billboard();
-                    billboard.setbName(rs.getString("bName"));
-                    billboard.setUsername(rs.getString("username"));
-                    billboard.setColour(rs.getString("colour"));
-                    billboard.setMessage(rs.getString("message"));
-                    billboard.setMessageColour(rs.getString("messageColour"));
-                    billboard.setPictureData(rs.getString("pictureData"));
-                    billboard.setPictureURL(rs.getString("pictureURL"));
-                    billboard.setInfoMessage(rs.getString("infoMessage"));
-                    billboard.setInfoColour(rs.getString("infoColour"));
-                    billboardList.add(billboard);
-                }
+                Billboard billboard = new Billboard();
+                billboard.setbName(rs.getString("bName"));
+                billboard.setUsername(rs.getString("username"));
+                billboard.setColour(rs.getString("colour"));
+                billboard.setMessage(rs.getString("message"));
+                billboard.setMessageColour(rs.getString("messageColour"));
+                billboard.setPictureData(rs.getString("pictureData"));
+                billboard.setPictureURL(rs.getString("pictureURL"));
+                billboard.setInfoMessage(rs.getString("infoMessage"));
+                billboard.setInfoColour(rs.getString("infoColour"));
+                billboardList.add(billboard);
             }
             return billboardList;
         } catch (SQLException ex) {
