@@ -28,6 +28,10 @@ public class Createbillboard extends JFrame {
     private JButton export_billboard;
     String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
 
+/**
+ *
+ *
+ */
 
     public Createbillboard(String title,String token,String username){
         super(title);
