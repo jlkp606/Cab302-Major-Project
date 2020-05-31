@@ -27,6 +27,8 @@ public class User implements Comparable<User>, Serializable {
     public String getPassword() {
         return this.password;
     }
+
+    public void setPasswordSalt(String salt) {this.passwordSalt = salt;}
     public String getPasswordSalt() {
         return this.passwordSalt;
     }
