@@ -20,6 +20,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.Base64.Decoder;
@@ -30,16 +32,30 @@ import java.net.Socket;
 import java.util.Base64;
 import java.util.HashMap;
 
-public class BillboardGenerator {
+import static Server.Client.getResponse;
+import static Server.Client.sendRequest;
 
-    //        Socket socket = Client.getClientSocket();
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("type", "getBillboard");
-//        Client.sendRequest(socket, request);
-//        HashMap<String, Object> response = Client.getResponse(socket);
-//        Billboard currentBillboard = (Billboard) response.get("billboard");
+public class BillboardGenerator{
 
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+    public static Billboard getCurrentBillboard() throws IOException, ClassNotFoundException{
+
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "getCurrentBillboard");
+        sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        Billboard billboard = (Billboard) response.get("billboard");
+
+
+        socket.close();
+        return billboard;
+
+    }
+
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, InterruptedException {
 
         /**Setting up the JFrame and JPanel*/
         JFrame BillboardFrame = new JFrame("Billboard Viewer");
@@ -92,7 +108,8 @@ public class BillboardGenerator {
         BillboardFrame.addMouseListener(mouseExit);
         BillboardFrame.addKeyListener(escapeExit);
         /**grabbing the billboard settings from the class grabbed from the server*/
-        Billboard Billboard = new Billboard();
+        Billboard Billboard = getCurrentBillboard();
+        System.out.println(Billboard.getbName());
         JLabel BillboardMessage = new JLabel(Billboard.getMessage());
         JLabel BillboardInformation = new JLabel("<html>" + Billboard.getInfoMessage() + "</html>");
         /** ErrorMessage in the case that the class has no background colour input and is invalid*/
@@ -135,7 +152,7 @@ public class BillboardGenerator {
         BillboardElements.setBackground(BillboardBackgroundColour);
 
         /**Show all elements present, Base64 image*/
-        if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != null){
+        if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != ""){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -157,7 +174,7 @@ public class BillboardGenerator {
         }
 
         /**Show message and Base64 image, no information*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != null){
+        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != ""){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -176,7 +193,7 @@ public class BillboardGenerator {
         }
 
         /**Show information and Base64 image, no message*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != null){
+        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != ""){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -252,7 +269,7 @@ public class BillboardGenerator {
         }
 
         /**Show information and message, no image*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == ""|| Billboard.getPictureURL() == "")){
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -267,7 +284,7 @@ public class BillboardGenerator {
         }
 
         /**Show only message*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && (Billboard.getPictureData() == ""|| Billboard.getPictureURL() == "")){
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -279,7 +296,7 @@ public class BillboardGenerator {
         }
 
         /**Show only information*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == ""|| Billboard.getPictureURL() == "")){
 
             //set Element alignments
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -291,7 +308,7 @@ public class BillboardGenerator {
         }
 
         /**Show only Base64 Image*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != null){
+        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != ""){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -334,5 +351,9 @@ public class BillboardGenerator {
         BillboardFrame.setUndecorated(true);
         BillboardFrame.setVisible(true);
         BillboardFrame.setFocusable(true);
+//        while (true) {
+//            Billboard = getCurrentBillboard();
+//            Thread.sleep(15000);
+//        }
     }
 }
