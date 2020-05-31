@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+//Modify user Class
 public class ModifyUserDetails extends JFrame{
     private JPanel ModifyDetails;
     private JCheckBox createBillboardsCheckBox;
@@ -13,13 +15,17 @@ public class ModifyUserDetails extends JFrame{
     private JLabel enterUserName;
     private JFormattedTextField formattedTextField1;
 
-
+    //Modify User Constructor
     public ModifyUserDetails(String title) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(ModifyDetails);
         this.pack();
         String[] permissions = {"No","No","No","No"};
+
+        // Adding action listeners to the following buttons:
+
+        //1. Clicking on create billboard checkbox, will change the user create permission
 
         createBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -42,6 +48,7 @@ public class ModifyUserDetails extends JFrame{
 
 
         });
+        //2. Clicking on edit all billboard checkbox, will change the user Edit all billboard permission
 
         editAllBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -64,6 +71,7 @@ public class ModifyUserDetails extends JFrame{
             }
 
         });
+        //3. Clicking on schedule billboard checkbox, will change the user schedule billboard permission
 
         scheduleBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -85,6 +93,7 @@ public class ModifyUserDetails extends JFrame{
                 });
             }
         });
+        //4. Clicking on edit user checkbox, will change the user Edit user permission
 
         editUsersCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -104,6 +113,7 @@ public class ModifyUserDetails extends JFrame{
                 });
             }
         });
+        // Clicking on the Apply changes button will change all the details provided and will be stored in a db
 
         applyChangesButton.addActionListener(new ActionListener() {
             @Override
