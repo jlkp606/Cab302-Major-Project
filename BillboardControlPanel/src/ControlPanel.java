@@ -12,12 +12,9 @@ public class ControlPanel extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(ControlPanel);
         this.pack();
-
     }
 
     public static void main(String[] args) {
-
-
         JFrame frame = new ControlPanel("Control Panel");
         frame.setLocation(500,300);
         frame.setSize(550,550);
