@@ -34,7 +34,7 @@ public class Schedule implements Serializable {
    /**
     * @return the name of the billboard
     */
-   public String getBillboardName() {return billboardName;}
+   public String getBillboardName() {return this.billboardName;}
    /**
     * @param billboardName the name of the billboard to set
     */
@@ -43,19 +43,19 @@ public class Schedule implements Serializable {
    /**
     * @return the name of the representative of the billboard (Company or individual)
     */
-   public String getUsername() {return username;}
+   public String getUsername() {return this.username;}
    /**
     * @param username the name of the billboard creator to set
     */
    public void setUsername(String username) {this.username = username;}
 
-   public String getStartTime() {return startTime;}
+   public String getStartTime() {return this.startTime;}
    public void setStartTime(String startTime) {this.startTime = startTime;}
 
-   public String getEndTime() {return endTime;}
+   public String getEndTime() {return this.endTime;}
    public void setEndTime(String endTime) {this.endTime = endTime;}
 
-   public String getRepeat() {return repeat;}
+   public String getRepeat() {return this.repeat;}
    public void setRepeat(String repeat) {this.repeat = repeat;}
 
 }

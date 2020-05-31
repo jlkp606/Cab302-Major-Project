@@ -3,11 +3,13 @@ package Server;
 import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import Database.Billboard;
 import Database.Permissions;
+import Database.Schedule;
 import Server.Client;
 
 import static Server.Client.getResponse;
@@ -37,7 +39,7 @@ public class TestBillboardServer {
 
         HashMap<String, Object> request = new HashMap<>();
         Permissions permission = new Permissions(
-                "itsmeMario8",
+                "itsmeMario9",
                 "true",
                 "false",
                 "true",
@@ -49,7 +51,7 @@ public class TestBillboardServer {
         String hashedPassword = getHash("asd123");
         request.put("type", "createUser");
         request.put("token", token);
-        request.put("username","itsmeMario8");
+        request.put("username","itsmeMario9");
         request.put("password", hashedPassword);
         request.put("permission", permission);
         sendRequest(socket, request);
@@ -82,9 +84,16 @@ public class TestBillboardServer {
 
         request.put("type", "createBillboard");
         Billboard billboard = new Billboard(
-                "3rdBIllboard", "123", "ssd",
-                "qwe", "Black", "asd",
-                "a7d","a1d","a4d");
+                "1stBillboard",
+                "itsmeMario8",
+                "#0000FF",
+                "Welcome to the ____ Corporation's Annual",
+                "#FFFF00",
+                "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC",
+                "https://example.com/fundraiser_image.jpg",
+                "Be sure to check out https://example.com/ for\n" +
+                        "more information.",
+                "#00FFFF");
         request.put("billboard", billboard);
         sendRequest(socket, request);
         socket.close();
@@ -124,6 +133,7 @@ public class TestBillboardServer {
         HashMap<String, Object> request = new HashMap<>();
         request.put("token", token);
         request.put("type", "setUserPermissions");
+        request.put("username", "itsmeMario8");
         Permissions permission = new Permissions(
                 "itsmeMario8",
                 "false",
@@ -134,8 +144,143 @@ public class TestBillboardServer {
         sendRequest(socket, request);
         socket.close();
     }
+
+    public static void TestSetUserPassword() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+        //not working
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "setUserPassword");
+        request.put("username", "itsmeMario7");
+
+        String hashedPassword = getHash("aasda231");
+        request.put("password", hashedPassword);
+
+        sendRequest(socket, request);
+
+
+        socket.close();
+    }
+
+    public static void TestScheduleBillboard() throws IOException, ClassNotFoundException, NoSuchAlgorithmException{
+
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "scheduleBillboard");
+
+        String username = "itsmeMario8";
+        String billboardName = "3rdBIllboard";
+        String startTime = LocalDateTime.now().toString();
+        String endTime = LocalDateTime.now().plusMinutes(15).toString();
+        String repeat = "daily";
+        Schedule schedule = new Schedule(username,billboardName,startTime,endTime,repeat);
+
+        request.put("schedule", schedule);
+
+        sendRequest(socket, request);
+        socket.close();
+    }
+
+    public static void TestGetCurrentBillboard() throws IOException, ClassNotFoundException{
+
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "getCurrentBillboard");
+        sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        Billboard billboard = (Billboard) response.get("billboard");
+
+        System.out.println(billboard.getMessageColour());
+        socket.close();
+
+    }
+    public static void TestGetBillboardInfo() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "getBillboardInfo");
+        request.put("billboardName", "1stBillboard");
+        sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        Billboard billboard = (Billboard) response.get("billboard");
+        System.out.println(billboard.getMessageColour());
+        socket.close();
+    }
+
+    public static void TestViewSchedule() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "viewSchedule");
+
+        sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        ArrayList<Schedule> scheduleList = (ArrayList<Schedule>) response.get("scheduleList");
+
+        System.out.println(scheduleList.get(0).getBillboardName());
+        socket.close();
+    }
+
+    public static void TestListUser() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "listUsers");
+
+        sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        ArrayList<String> userList = (ArrayList<String>) response.get("userList");
+
+        System.out.println(userList);
+        socket.close();
+    }
+    public static void TestDeleteUser() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "deleteUser");
+        request.put("username", "itsmeMario9");
+        sendRequest(socket, request);
+        socket.close();
+    }
+    public static void TestRemoveBillboardFromSchedule() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+
+        request.put("token", token);
+        request.put("type", "removeBillboardFromSchedule");
+
+        Schedule schedule = new Schedule();
+        schedule.setBillboardName("3rdBIllboard");
+        schedule.setStartTime("2020-05-31T20:28:47.289059300");
+
+        request.put("schedule", schedule);
+
+        sendRequest(socket, request);
+        socket.close();
+    }
+
     public static void main(String[] Args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        TestSetUserPermission();
+        TestRemoveBillboardFromSchedule();
     }
 
 }

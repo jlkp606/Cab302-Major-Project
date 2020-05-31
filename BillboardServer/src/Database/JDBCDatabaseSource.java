@@ -86,7 +86,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
-                   + "username VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
+                   + "username VARCHAR(30) NOT NULL,"
                    + "bName VARCHAR(30),"
                    + "bStartTime VARCHAR(30),"
                    + "bEndTime VARCHAR(30),"
@@ -205,9 +205,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
             getUser.setString(1, name);
             rs = getUser.executeQuery();
             rs.next();
-            u.setUsername(rs.getString("Username"));
-            u.setPassword(rs.getString("Password"));
-            u.setPasswordSalt(rs.getString("PasswordSalt"));
+            u.setUsername(rs.getString("username"));
+            u.setPassword(rs.getString("password"));
+            u.setPasswordSalt(rs.getString("passwordSalt"));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -247,8 +247,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
     */
    public void setUserPassword(String name, String newPassword) {
       try {
-         setUserPassword.setString(1, name);
-         setUserPassword.setString(2, newPassword);
+         setUserPassword.setString(1, newPassword);
+         setUserPassword.setString(2, name);
+         setUserPassword.executeUpdate();
       } catch (SQLException ex) {
          ex.printStackTrace();
       }
@@ -361,11 +362,11 @@ public class JDBCDatabaseSource implements DatabaseSource {
             getBillboard.setString(1, name);
             rs = getBillboard.executeQuery();
             rs.next();
-            b.setbName(rs.getString("name"));
+            b.setbName(rs.getString("bname"));
             b.setUsername(rs.getString("username"));
             b.setColour(rs.getString("colour"));
             b.setMessage(rs.getString("message"));
-            b.setMessage(rs.getString("messageColour"));
+            b.setMessageColour(rs.getString("messageColour"));
             b.setPictureData(rs.getString("pictureData"));
             b.setPictureURL(rs.getString("pictureUrl"));
             b.setInfoMessage(rs.getString("infoMessage"));
@@ -526,19 +527,14 @@ public class JDBCDatabaseSource implements DatabaseSource {
         try {
             rs = getAllSchedules.executeQuery();
             rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-
             scheduleList = new ArrayList<>();
             while (rs.next()) {
-                int i = 1;
-                while (i <= columnCount) {
-                    Schedule schedule = new Schedule();
-                    schedule.setBillboardName(rs.getString("bName"));
-                    schedule.setStartTime(rs.getString("bStartTime"));
-                    schedule.setEndTime(rs.getString("bEndTime"));
-                    schedule.setRepeat(rs.getString("repeats"));
-                    scheduleList.add(schedule);
-                }
+                Schedule schedule = new Schedule();
+                schedule.setBillboardName(rs.getString("bName"));
+                schedule.setStartTime(rs.getString("bStartTime"));
+                schedule.setEndTime(rs.getString("bEndTime"));
+                schedule.setRepeat(rs.getString("repeats"));
+                scheduleList.add(schedule);
             }
             return scheduleList;
         } catch (SQLException ex) {
