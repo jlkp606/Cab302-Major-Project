@@ -100,8 +100,9 @@ public class MyGui extends Component implements ActionListener {
 
         if (token.equals(null)){
 
-        }else{
-            JFrame frame = new ControlPanel("Control Panel", token);
+        }
+        else{
+            JFrame frame = new ControlPanel("Control Panel");
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
@@ -112,7 +113,7 @@ public class MyGui extends Component implements ActionListener {
 //        receive its response as token or error
         if (userName.trim().equals("admin") && password.trim().equals("admin")) {
 
-            JFrame frame = new ControlPanel("Control Panel", token);
+            JFrame frame = new ControlPanel("Control Panel");
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);

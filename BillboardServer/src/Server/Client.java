@@ -91,6 +91,7 @@ public class Client {
 //
 //        socket.close();
 
+        //LogOut Test
 
         //send something first
     }

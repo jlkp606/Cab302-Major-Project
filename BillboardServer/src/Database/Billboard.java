@@ -11,7 +11,8 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     private String username;
     private String colour;
     private String message;
-    private byte[] pictureData;
+    private String messageColour;
+    private String pictureData;
     private String pictureURL;
     private String infoMessage;
     private String infoColour;
@@ -28,11 +29,12 @@ public class Billboard implements Comparable<Billboard>, Serializable {
      * @param username The name of the user who created the billboard
      */
 
-    public Billboard(String bName, String username, String colour, String message, byte[] pictureData, String pictureURL, String infoMessage, String infoColour) {
+    public Billboard(String bName, String username, String colour, String message,String messageColour, String pictureData, String pictureURL, String infoMessage, String infoColour) {
         this.bName = bName;
         this.username = username;
         this.colour = colour;
         this.message = message;
+        this.messageColour = messageColour;
         this.pictureData = pictureData;
         this.pictureURL = pictureURL;
         this.infoMessage = infoMessage;
@@ -63,8 +65,11 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     public String getMessage() {return this.message;}
     public void setMessage(String message) {this.message = message;}
 
-    public byte[] getPictureData() {return this.pictureData;}
-    public void setPictureData(byte[] pictureData) {this.pictureData = pictureData;}
+    public String getMessageColour() {return this.messageColour;}
+    public void setMessageColour(String messageColour) {this.messageColour = messageColour;}
+
+    public String getPictureData() {return this.pictureData;}
+    public void setPictureData(String pictureData) {this.pictureData = pictureData;}
 
     public String getPictureURL() {return this.pictureURL;}
     public void setPictureURL(String PictureURL) {this.pictureURL = PictureURL;}
