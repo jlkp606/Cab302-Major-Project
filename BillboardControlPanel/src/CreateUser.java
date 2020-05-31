@@ -22,6 +22,7 @@ public class CreateUser extends JFrame {
     private JCheckBox editUsers;
     private JPasswordField EnterPassword;
     private JButton OKButton;
+    private JFormattedTextField formattedTextField1;
     private JFormattedTextField EnterName;
 
     public CreateUser(String title) {
