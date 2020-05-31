@@ -84,13 +84,13 @@ public class TestBillboardServer {
 
         request.put("type", "createBillboard");
         Billboard billboard = new Billboard(
-                "1stBillboard",
+                "4tdBIllboard",
                 "itsmeMario8",
                 "#0000FF",
                 "Welcome to the ____ Corporation's Annual",
                 "#FFFF00",
-                "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC",
-                "https://example.com/fundraiser_image.jpg",
+                "",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/SNice.svg/800px-SNice.svg.png",
                 "Be sure to check out https://example.com/ for\n" +
                         "more information.",
                 "#00FFFF");
@@ -172,7 +172,7 @@ public class TestBillboardServer {
         request.put("type", "scheduleBillboard");
 
         String username = "itsmeMario8";
-        String billboardName = "3rdBIllboard";
+        String billboardName = "4tdBIllboard";
         String startTime = LocalDateTime.now().toString();
         String endTime = LocalDateTime.now().plusMinutes(15).toString();
         String repeat = "daily";
@@ -270,7 +270,7 @@ public class TestBillboardServer {
         request.put("type", "removeBillboardFromSchedule");
 
         Schedule schedule = new Schedule();
-        schedule.setBillboardName("3rdBIllboard");
+        schedule.setBillboardName("1stBillboard");
         schedule.setStartTime("2020-05-31T20:28:47.289059300");
 
         request.put("schedule", schedule);
@@ -281,6 +281,7 @@ public class TestBillboardServer {
 
     public static void main(String[] Args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
         TestRemoveBillboardFromSchedule();
+
     }
 
 }
