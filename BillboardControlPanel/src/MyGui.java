@@ -3,10 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
-//import Server.BillboardServer.*;
-//
-//import static Server.Hash.getHash;
+import Server.BillboardServer.*;
+
+import static Server.Hash.getHash;
 
 public class MyGui extends Component implements ActionListener {
 
@@ -57,12 +58,12 @@ public class MyGui extends Component implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String userName = t1.getText();
         String password = t2.getText();
-//        try {
-//            String Hashed_password = getHash(password);
-//            System.out.println(Hashed_password);
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String Hashed_password = getHash(password);
+            System.out.println(Hashed_password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         token = "123456789";
 
