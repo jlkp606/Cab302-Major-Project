@@ -52,7 +52,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
                     + "username VARCHAR(30) UNIQUE,"
                     + "colour VARCHAR(100),"
                     + "message VARCHAR(100),"
-                    + "pictureData BINARY(100),"
+                    + "pictureData VARCHAR(1000),"
                     + "pictureURL VARCHAR(255),"
                     + "infoMessage VARCHAR(100),"
                     + "infoColour VARCHAR(100)" + ");";
@@ -273,7 +273,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addBillboard.setString(2, b.getUsername());
          addBillboard.setString(3, b.getColour());
          addBillboard.setString(4, b.getMessage());
-         addBillboard.setBytes(5, b.getPictureData());
+         addBillboard.setString(5, b.getPictureData());
          addBillboard.setString(6, b.getPictureURL());
          addBillboard.setString(7, b.getInfoMessage());
          addBillboard.setString(8, b.getInfoColour());
@@ -302,7 +302,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
                     billboard.setUsername(rs.getString("username"));
                     billboard.setColour(rs.getString("colour"));
                     billboard.setMessage(rs.getString("message"));
-                    billboard.setPictureData(rs.getBytes("pictureData"));
+                    billboard.setPictureData(rs.getString("pictureData"));
                     billboard.setPictureURL(rs.getString("pictureURL"));
                     billboard.setInfoMessage(rs.getString("infoMessage"));
                     billboard.setInfoColour(rs.getString("infoColour"));
@@ -364,7 +364,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
             b.setUsername(rs.getString("username"));
             b.setColour(rs.getString("colour"));
             b.setMessage(rs.getString("message"));
-            b.setPictureData(rs.getBytes("pictureData"));
+            b.setPictureData(rs.getString("pictureData"));
             b.setPictureURL(rs.getString("pictureUrl"));
             b.setInfoMessage(rs.getString("infoMessage"));
             b.setInfoColour(rs.getString("infoColour"));
