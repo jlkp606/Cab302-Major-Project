@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import Server.Client;
+//import Server.Client;
 
 
 public class CreateUser extends JFrame {
@@ -53,6 +53,7 @@ public class CreateUser extends JFrame {
                 });
             }
 
+
         });
 
         editAllBillboards.addActionListener(new ActionListener() {
@@ -74,6 +75,7 @@ public class CreateUser extends JFrame {
                 });
 
             }
+
         });
 
         scheduleBillboards.addActionListener(new ActionListener() {
@@ -131,22 +133,22 @@ public class CreateUser extends JFrame {
                 }
 
 
-                HashMap<String, Object> request = new HashMap<>();
-                request.put( "type","createUser");
-                request.put("username", User_Name);
-                request.put("password", User_Password);
-                request.put("permissions", permissions);
-//                request.put("permissionList", Permission);
-                try {
-                    Socket socket = Client.getClientSocket();
-                    Client.sendRequest(socket, request);
-
-                    HashMap<String, Object> response = Client.getResponse(socket);
-                    response.get("message");
-                    String message =  (String) response.get("message");
-                } catch (IOException | ClassNotFoundException ioException) {
-                    ioException.printStackTrace();
-                }
+//                HashMap<String, Object> request = new HashMap<>();
+//                request.put( "type","createUser");
+//                request.put("username", User_Name);
+//                request.put("password", User_Password);
+//                request.put("permissions", permissions);
+////                request.put("permissionList", Permission);
+//                try {
+//                    Socket socket = Client.getClientSocket();
+//                    Client.sendRequest(socket, request);
+//
+//                    HashMap<String, Object> response = Client.getResponse(socket);
+//                    response.get("message");
+//                    String message =  (String) response.get("message");
+//                } catch (IOException | ClassNotFoundException ioException) {
+//                    ioException.printStackTrace();
+//                }
 
 
             }
@@ -158,7 +160,6 @@ public class CreateUser extends JFrame {
 
 
     public static void main(String[] args) {
-
 
         JFrame frame = new CreateUser("Create User");
         frame.setLocation(500, 300);

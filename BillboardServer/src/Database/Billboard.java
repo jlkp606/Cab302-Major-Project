@@ -11,7 +11,7 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     private String username;
     private String colour;
     private String message;
-    private Byte pictureData;
+    private byte[] pictureData;
     private String pictureURL;
     private String infoMessage;
     private String infoColour;
@@ -28,7 +28,7 @@ public class Billboard implements Comparable<Billboard>, Serializable {
      * @param username The name of the user who created the billboard
      */
 
-    public Billboard(String bName, String username, String colour, String message, Byte pictureData, String pictureURL, String infoMessage, String infoColour) {
+    public Billboard(String bName, String username, String colour, String message, byte[] pictureData, String pictureURL, String infoMessage, String infoColour) {
         this.bName = bName;
         this.username = username;
         this.colour = colour;
@@ -42,7 +42,7 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     /**
      * @return the name of the billboard
      */
-    public String getbName() {return bName;}
+    public String getbName() {return this.bName;}
     /**
      * @param bName the name of the billboard to set
      */
@@ -51,28 +51,28 @@ public class Billboard implements Comparable<Billboard>, Serializable {
     /**
      * @return the name of the representative of the billboard (Company or individual)
      */
-    public String getUsername() {return username;}
+    public String getUsername() {return this.username;}
     /**
      * @param username the name of the billboard creator to set
      */
     public void setUsername(String username) {this.username = username;}
 
-    public String getColour() {return colour;}
+    public String getColour() {return this.colour;}
     public void setColour(String colour) {this.colour = colour;}
 
-    public String getMessage() {return message;}
+    public String getMessage() {return this.message;}
     public void setMessage(String message) {this.message = message;}
 
-    public Byte getPictureData() {return pictureData;}
-    public void setPictureData(Byte pictureData) {this.pictureData = pictureData;}
+    public byte[] getPictureData() {return this.pictureData;}
+    public void setPictureData(byte[] pictureData) {this.pictureData = pictureData;}
 
-    public String getPictureURL() {return pictureURL;}
+    public String getPictureURL() {return this.pictureURL;}
     public void setPictureURL(String PictureURL) {this.pictureURL = PictureURL;}
 
-    public String getInfoMessage() {return infoMessage;}
+    public String getInfoMessage() {return this.infoMessage;}
     public void setInfoMessage(String infoMessage) {this.infoMessage = infoMessage;}
 
-    public String getInfoColour() {return infoColour;}
+    public String getInfoColour() {return this.infoColour;}
     public void setInfoColour(String infoColour) {this.infoColour = infoColour;}
 
 

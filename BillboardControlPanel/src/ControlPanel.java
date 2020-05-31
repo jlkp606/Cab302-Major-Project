@@ -8,9 +8,11 @@ public class ControlPanel extends JFrame{
     private JButton scheduleBillboardButton;
     private JButton editUserButton;
     private JButton modifyExistingBillboardButton;
+    private String token;
 
-    public ControlPanel(String title) {
+    public ControlPanel(String title, String token) {
         super(title);
+        this.token = token;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(ControlPanel);
         this.pack();
@@ -18,7 +20,7 @@ public class ControlPanel extends JFrame{
         createNewBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new Createbillboard("Create Billboard");
+                JFrame frame = new Createbillboard("Create Billboard", "token", "Username");
                 frame.setLocation(500,300);
                 frame.setSize(550,550);
                 frame.setVisible(true);
@@ -45,10 +47,12 @@ public class ControlPanel extends JFrame{
 
     }
 
-    public static void main(String[] args) {
 
 
-        JFrame frame = new ControlPanel("Control Panel");
+    public void main(String[] args) {
+
+
+        JFrame frame = new ControlPanel("Control Panel", this.token);
         frame.setLocation(500,300);
         frame.setSize(550,550);
         frame.setVisible(true);

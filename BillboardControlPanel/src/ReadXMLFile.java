@@ -32,9 +32,6 @@ public class ReadXMLFile {
                 String message = element.getElementsByTagName("message").item(0).getTextContent();
                 String info = element.getElementsByTagName("information").item(0).getTextContent();
 
-//                System.out.println(background);
-//                System.out.println(message);
-//                System.out.println(info);
                 arr[0] = background;
                 arr[1] = message;
                 arr[2] = info;

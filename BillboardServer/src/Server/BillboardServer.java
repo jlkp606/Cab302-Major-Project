@@ -1,15 +1,13 @@
 package Server;
 
-import Database.JDBCDatabaseSource;
-import Database.Permissions;
-import Database.User;
-import Database.Billboard;
+import Database.*;
 import Token.Token;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.security.Permission;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,14 +91,38 @@ public class BillboardServer {
 
                     switch (requestType){
                         case "logOut":{
+                            //not tested
                             tokenStore.remove(token);
                             break;
                         }
                         case "listBillboard":{
-//                            ArrayList<Billboard> billboardList = dataSource.getBillboardList();
-//                            response.put("billboardList", billboardList);
-//                            sendResponse(clientSocket, response);
+                            //not tested
+                            ArrayList<Billboard> billboardList = dataSource.getAllBillboards();
+                            response.put("billboardList", billboardList);
+                            sendResponse(clientSocket, response);
                             break;
+                        }
+                        case "getCurrentBillboard": {
+                            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
+                            for (Schedule s : scheduleList){
+                                LocalDateTime ldt = null;
+                                LocalDateTime startTime = ldt.parse(s.getStartTime());
+                                LocalDateTime endTime = ldt.parse(s.getEndTime());
+                                //repeat if hour - check whole hours, what minute we are on
+                                //repeat if days - check what hours,
+                                //repeat week - check day
+                                Boolean isOn =
+                                        (LocalDateTime.now().isAfter(startTime) &&
+                                        LocalDateTime.now().isBefore(endTime));
+
+                                if (isOn) {
+                                    Billboard billboard = dataSource.getBillboard(s.getBillboardName());
+                                    response.put("billboard", billboard);
+                                    sendResponse(clientSocket, response);
+                                    break;
+                                }
+                            }
+
                         }
                         case "getBillboardInfo":{
                             String billboardName = (String) request.get("billboardName");
@@ -115,53 +137,50 @@ public class BillboardServer {
                             break;
                         }
                         case "deleteBillboard":{
-//                            String billboardName = (String) request.get("billboardName");
-//                            dataSource.delete(billboardName);
-//                            break;
+                            // not tested
+                            String billboardName = (String) request.get("billboardName");
+                            dataSource.deleteBillboard(billboardName);
+                            break;
                         }
                         case "viewSchedule":{
-//                            ArrayList<Schedule> scheduleList = dataSource.getScheduleList();
-//                            response.put("scheduleList", scheduleList);
-//                            sendResponse(clientSocket, response);
+                            //not tested
+                            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
+                            response.put("scheduleList", scheduleList);
+                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "scheduleBillboard":{
-//                            Schedule schedule = request.get("schedule");
-//                            dataSource.addSchedule(schedule);
+                            //not tested
+                            Schedule schedule = (Schedule) request.get("schedule");
+                            dataSource.addSchedule(schedule);
                             break;
                         }
                         case "removeBillboardFromSchedule":{
-//                            Schedule schedule = request.get("schedule");
-//                            dataSource.deleteSchedule(schedule);
+                            //not tested
+                            Schedule schedule = (Schedule) request.get("schedule");
+                            dataSource.deleteSchedule(schedule);
                             break;
                         }
                         case "listUsers":{
-                            //YES
-        //                    ArrayList<String> userlist= dataSource.listUsers();
-        //                    HashMap<String, Object> response = new HashMap<>();
-        //                    response.put("userList", userlist);
-        //                    sendResponse(clientSocket, reponse);
+                            //not tested
+                            ArrayList<String> userList = dataSource.getUsernames();
+                            response.put("userList", userList);
+                            sendResponse(clientSocket, response);
                             break;
                         }
                         case "createUser": {
-                            //TESTED
+                            //TESTED// test again
                             String username = (String) request.get("username");
                             String password = (String) request.get("password");
 
-                            ArrayList<Boolean> permList = (ArrayList<Boolean>) request.get("permissionList");
-                            ArrayList<String> permListString = new ArrayList<>();
+                            Permissions permList = (Permissions) request.get("permission");
 
                             if (permList != null){
-                                for (Boolean b : permList)
-                                {
-                                    String s = String.valueOf(b);
-                                    permListString.add(s);
-                                }
                                 User user = new User();
                                 user.setUsername(username);
                                 user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
                                 dataSource.addUser(user);
-                                dataSource.addUserPerms(username, permListString);
+                                dataSource.addUserPerms(username, permList);
                             } else {
                                 response.put("message", "Need to add permissions for the User");
                                 System.out.println("Need to add permissions for the User");
@@ -170,6 +189,7 @@ public class BillboardServer {
                             break;
                         }
                         case "getUserPermissions": {
+                            //TESTED
                             String username = (String) request.get("username");
                             Permissions permissions = dataSource.getUserPerms(username);
                             response.put("permissions", permissions);
@@ -177,25 +197,34 @@ public class BillboardServer {
                             break;
                         }
                         case "setUserPermissions": {
-//                            String username = (String) request.get("username");
-//                            ArrayList<Boolean> permList =  (ArrayList<Boolean>) request.get("permissionList");
-//                            dataSource.setUserPermissions(username, permList);
+                            //Not tested
+                            String username = (String) request.get("username");
+                            Permissions userPermissions = (Permissions) request.get("permission");
+                            dataSource.updateUserPerms(username, userPermissions);
                             break;
                         }
                         case "setUserPassword":{
-        //                    String username = (String) request.get("username");
-        //                    String password = (String) request.get("password");
-        //                    String salt = dataSource.getSalt(username);
-        //                    String dbPassword = Hash.getHash(password + salt);
-        //                    dataSource.setUserPassword(username, dbPassword);
-        //                    break;
+                            //Not tested
+                            String username = (String) request.get("username");
+                            String password = (String) request.get("password");
+
+                            User user = dataSource.getUser(username);
+                            String salt = user.getPasswordSalt();
+                            String dbPassword = Hash.getHash(password + salt);
+                            dataSource.setUserPassword(username, dbPassword);
+                            break;
                         }
                         case "modifyUser": {
-                            String username = (String) request.get("username");
-//                            dataSource.updatePermList();
-//                            maybe - dataSource.updatePassword();
+                            //same as user and perm update
+//                            String username = (String) request.get("username");
+//                            String password = (String) request.get("password");
+//                            Permissions userPermissions = (Permissions) request.get("permission");
+//
+//                            dataSource.updateUserPerms(username, userPermissions);
+//                            dataSource.setUserPassword(username, password);
                         }
                         case "deleteUser": {
+                            //untested
                             String username = (String) request.get("username");
                             dataSource.deleteUser(username);
                             break;
