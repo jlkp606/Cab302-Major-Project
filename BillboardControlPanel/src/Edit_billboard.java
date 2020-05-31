@@ -1,3 +1,4 @@
+import Server.Client;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
@@ -8,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
 
 public class Edit_billboard extends JFrame {
     private JPanel mainPanel;
@@ -38,7 +41,7 @@ public class Edit_billboard extends JFrame {
         title_info.setText( billboard.getbName());
         background_colour.setText(billboard.getColour());
         message_colour.setText(billboard.getMessage());
-        title_colour.setText(billboard.getMessage_colour());
+        title_colour.setText(billboard.getMessageColour());
         image_data.setText(billboard.getPictureData());
         image_url.setText(billboard.getPictureURL());
         message.setText(billboard.getInfoMessage());
@@ -72,6 +75,11 @@ public class Edit_billboard extends JFrame {
                 else {
                     Billboard billboard = new Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
 //                    send the  billboard info to server along with session token
+                    try {
+                        createBillboardRequest( token, billboard);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
             }
@@ -171,12 +179,6 @@ public class Edit_billboard extends JFrame {
 
 
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-//        final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
-//
-//        ReadXMLFile file = new ReadXMLFile();
-//        String arr1[]=new String[10];
-//        arr1 = file.read(xmlFilePath);
-    //public Edit_billboard(String title, String billboard_title, String billboard_title_colour, String billboard_bg_colour, String billboard_message, String billboard_message_colour, String billboard_image_data, String billboard_image_url, String s){
         String token = "12435642";
         Billboard billboard = new Billboard("Sidd's Billboard" ,"Sid" ,"Blue","hard work",  "10",null,"hdgjfhgdlfaldgsfl","jhefhwldjfggfgwiuefgif","Black");
 
@@ -188,4 +190,12 @@ public class Edit_billboard extends JFrame {
     }
 
 
+    public static void createBillboardRequest(String token,Billboard billboard) throws IOException {
+        Socket socket = Client.getClientSocket();
+        HashMap<String , Object> request = new HashMap<String , Object>();
+        request.put("type", "createBillboard");
+        request.put("token", token);
+        request.put("billboard", billboard);
+        Client.sendRequest(socket , request);
+    }
 }
