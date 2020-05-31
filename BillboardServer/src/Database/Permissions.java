@@ -49,10 +49,10 @@ public class Permissions implements Serializable {
    public String getEditAllBillboards() {return this.editAllBillboards;}
    public void setEditAllBillboards(String editAllBillboards) {this.editAllBillboards = editAllBillboards;}
 
-   public String getEditSchedule() {return editSchedule;}
+   public String getEditSchedule() {return this.editSchedule;}
    public void setEditSchedule(String editSchedule) {this.editSchedule = editSchedule;}
 
-   public String getEditUsers() {return editUsers;}
+   public String getEditUsers() {return this.editUsers;}
    public void setEditUsers(String editUsers) {this.editUsers = editUsers;}
 
 }
