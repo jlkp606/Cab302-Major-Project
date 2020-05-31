@@ -71,7 +71,11 @@ public class Createbillboard extends JFrame {
                 else {
                     Billboard billboard = new Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
 //                    send the  billboard info to server along with session token
-//                    createBillboardRequest(billboard);
+                    try {
+                        createBillboardRequest(token,billboard);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
 
                 }
 
@@ -166,30 +170,6 @@ public class Createbillboard extends JFrame {
             }
         });
 
-
-//
-
-//        Socket socket = Client.getClientSocket();
-//
-//        HashMap<String , Object> request = new HashMap<String , Object>;
-//        request.put("type", "createBillboard");
-//        request.put("token", token);
-//        request.put("billboard", billboard);
-//        Client.sendRequest(socket , request);
-
-//
-        //        public  void createBillboardRequest(){
-//            Socket socket = Client.getClientSocket();
-//
-//            HashMap<String , Object> request = new HashMap<String , Object>;
-//            request.put("type", "createBillboard");
-//            request.put("token", token);
-////            request.put("billboard", billboard);
-//
-//            Client.sendRequest(socket , request);
-//
-//
-//        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -202,5 +182,13 @@ public class Createbillboard extends JFrame {
         frame.setVisible(true);
     }
 
+    public static void createBillboardRequest(String token,Billboard billboard) throws IOException {
+            Socket socket = Client.getClientSocket();
+            HashMap<String , Object> request = new HashMap<String , Object>();
+            request.put("type", "createBillboard");
+            request.put("token", token);
+            request.put("billboard", billboard);
+            Client.sendRequest(socket , request);
+    }
 
 }
