@@ -63,25 +63,32 @@ public class BillboardServer {
 
                 //Authenticate (query to check if user exists and has this password)
                 User user = dataSource.getUser(username);
-                String salt = user.getPasswordSalt();
-                String HashSaltedPassword = password;
-                //String HashSaltedPassword = Hash.getHash(password + salt);
-                String dbPassword = user.getPassword();
 
-                //query check hashSaltedPass is same as password in Db for username
-                if (HashSaltedPassword.equals(dbPassword)){
-                    Token newToken = new Token();
-                    ArrayList<Object> tokenInfo =  new ArrayList<Object>();
-                    tokenInfo.add(username);
-                    tokenInfo.add(newToken.getExpiry());
+                if(user.getUsername() != null){
 
-                    tokenStore.put(newToken.getToken(), tokenInfo);
-                    response.put("token", newToken.getToken());
-                    sendResponse(clientSocket, response);
-                }
-                else{
-                    response.put("message", "Incorrect password");
-                    System.out.println("Incorrect password");
+                    String salt = user.getPasswordSalt();
+                    //String HashSaltedPassword = password;
+                    String HashSaltedPassword = Hash.getHash(password + salt);
+                    String dbPassword = user.getPassword();
+
+                    //query check hashSaltedPass is same as password in Db for username
+                    if (HashSaltedPassword.equals(dbPassword)){
+                        Token newToken = new Token();
+                        ArrayList<Object> tokenInfo =  new ArrayList<Object>();
+                        tokenInfo.add(username);
+                        tokenInfo.add(newToken.getExpiry());
+
+                        tokenStore.put(newToken.getToken(), tokenInfo);
+                        response.put("token", newToken.getToken());
+                        sendResponse(clientSocket, response);
+                    }
+                    else{
+                        response.put("message", "Incorrect password");
+                        System.out.println("Incorrect password");
+                    }
+                } else {
+                    response.put("message", "Username not found");
+                    System.out.println("Username not found");
                 }
 
             }
@@ -96,13 +103,14 @@ public class BillboardServer {
                             break;
                         }
                         case "listBillboard":{
-                            //not tested
+                            //tested
                             ArrayList<Billboard> billboardList = dataSource.getAllBillboards();
                             response.put("billboardList", billboardList);
                             sendResponse(clientSocket, response);
                             break;
                         }
                         case "getCurrentBillboard": {
+                            //not tested
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             for (Schedule s : scheduleList){
                                 LocalDateTime ldt = null;
@@ -125,6 +133,7 @@ public class BillboardServer {
 
                         }
                         case "getBillboardInfo":{
+                            //not tested
                             String billboardName = (String) request.get("billboardName");
                             Billboard billboard = dataSource.getBillboard(billboardName);
                             response.put("billboard", billboard);
@@ -132,12 +141,13 @@ public class BillboardServer {
                             break;
                         }
                         case "createBillboard":{
+                            //tested
                             Billboard billboard = (Billboard) request.get("billboard");
                             dataSource.addBillboard(billboard);
                             break;
                         }
                         case "deleteBillboard":{
-                            // not tested
+                            //tested
                             String billboardName = (String) request.get("billboardName");
                             dataSource.deleteBillboard(billboardName);
                             break;
@@ -169,13 +179,12 @@ public class BillboardServer {
                             break;
                         }
                         case "createUser": {
-                            //TESTED// test again
+                            //TESTED//
                             String username = (String) request.get("username");
                             String password = (String) request.get("password");
 
                             Permissions permList = (Permissions) request.get("permission");
-
-                            if (permList != null){
+                            if (permList.getCreateBillboard() != null){
                                 User user = new User();
                                 user.setUsername(username);
                                 user.setPassword(Hash.getHash(password + user.getPasswordSalt()));
@@ -197,7 +206,7 @@ public class BillboardServer {
                             break;
                         }
                         case "setUserPermissions": {
-                            //Not tested
+                            //tested
                             String username = (String) request.get("username");
                             Permissions userPermissions = (Permissions) request.get("permission");
                             dataSource.updateUserPerms(username, userPermissions);

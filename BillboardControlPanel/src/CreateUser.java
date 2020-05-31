@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import Server.Client;
 
 
+//create user class
 public class CreateUser extends JFrame {
     private JPanel SignUp;
     private JCheckBox editAllBillboards;
@@ -13,8 +13,10 @@ public class CreateUser extends JFrame {
     private JCheckBox editUsers;
     private JPasswordField EnterPassword;
     private JButton OKButton;
+    private JFormattedTextField formattedTextField1;
     private JFormattedTextField EnterName;
 
+    //create user constructor
     public CreateUser(String title) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +25,9 @@ public class CreateUser extends JFrame {
         String[] permissions = {"No","No","No","No"};
 
 
+        // Adding action listeners to the following buttons:
 
+        //1. Clicking on create billboard checkbox, will give the user create permission
         createBillboards.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,7 +49,7 @@ public class CreateUser extends JFrame {
 
 
         });
-
+        //2. Clicking on edit all billboard checkbox, will give the user Edit all billboard permission
         editAllBillboards.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +72,7 @@ public class CreateUser extends JFrame {
 
         });
 
+        //3. Clicking on schedule billboard checkbox, will give the user schedule billboard permission
         scheduleBillboards.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,6 +94,7 @@ public class CreateUser extends JFrame {
             }
         });
 
+        //4. Clicking on edit user checkbox, will give the user Edit user permission
         editUsers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,7 +114,7 @@ public class CreateUser extends JFrame {
             }
         });
 
-
+        // Clicking on the Ok button will take all the details provided and will be stored in a db
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

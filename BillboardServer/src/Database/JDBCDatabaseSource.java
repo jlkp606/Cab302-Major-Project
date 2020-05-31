@@ -49,15 +49,16 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_BILLBOARD_TABLE =
             "CREATE TABLE IF NOT EXISTS billboard ("
                     + "bName VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
-                    + "username VARCHAR(30) UNIQUE,"
+                    + "username VARCHAR(30),"
                     + "colour VARCHAR(100),"
                     + "message VARCHAR(100),"
-                    + "pictureData BINARY(100),"
+                    + "messageColour VARCHAR(100),"
+                    + "pictureData VARCHAR(1000),"
                     + "pictureURL VARCHAR(255),"
                     + "infoMessage VARCHAR(100),"
                     + "infoColour VARCHAR(100)" + ");";
 
-   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+   private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, messageColour, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
    private static final String GET_ALL_BILLBOARD = "SELECT * FROM billboard";
 
@@ -117,7 +118,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String INSERT_PERMISSIONS = "INSERT INTO permissions (username, createBillboard, editAllBillboards, editSchedule, editUsers ) VALUES (?, ?, ?, ?, ?)";
 
-   private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE userID=?";
+   private static final String SET_USER_PERMISSIONS = "UPDATE permissions SET createBillboard = ?, editAllBillboards = ?, editSchedule = ?, editUsers = ? WHERE username=?";
 
    private static final String DELETE_USER_PERMISSIONS = "DELETE FROM permissions WHERE username=?";
 
@@ -206,6 +207,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
             rs.next();
             u.setUsername(rs.getString("Username"));
             u.setPassword(rs.getString("Password"));
+            u.setPasswordSalt(rs.getString("PasswordSalt"));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -273,10 +275,11 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addBillboard.setString(2, b.getUsername());
          addBillboard.setString(3, b.getColour());
          addBillboard.setString(4, b.getMessage());
-         addBillboard.setBytes(5, b.getPictureData());
-         addBillboard.setString(6, b.getPictureURL());
-         addBillboard.setString(7, b.getInfoMessage());
-         addBillboard.setString(8, b.getInfoColour());
+         addBillboard.setString(5, b.getMessageColour());
+         addBillboard.setString(6, b.getPictureData());
+         addBillboard.setString(7, b.getPictureURL());
+         addBillboard.setString(8, b.getInfoMessage());
+         addBillboard.setString(9, b.getInfoColour());
 
          addBillboard.execute();
       } catch (SQLException ex) {
@@ -295,19 +298,17 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
             billboardList = new ArrayList<>();
             while (rs.next()) {
-                int i = 1;
-                while (i <= columnCount) {
-                    Billboard billboard = new Billboard();
-                    billboard.setbName(rs.getString("bName"));
-                    billboard.setUsername(rs.getString("username"));
-                    billboard.setColour(rs.getString("colour"));
-                    billboard.setMessage(rs.getString("message"));
-                    billboard.setPictureData(rs.getBytes("pictureData"));
-                    billboard.setPictureURL(rs.getString("pictureURL"));
-                    billboard.setInfoMessage(rs.getString("infoMessage"));
-                    billboard.setInfoColour(rs.getString("infoColour"));
-                    billboardList.add(billboard);
-                }
+                Billboard billboard = new Billboard();
+                billboard.setbName(rs.getString("bName"));
+                billboard.setUsername(rs.getString("username"));
+                billboard.setColour(rs.getString("colour"));
+                billboard.setMessage(rs.getString("message"));
+                billboard.setMessageColour(rs.getString("messageColour"));
+                billboard.setPictureData(rs.getString("pictureData"));
+                billboard.setPictureURL(rs.getString("pictureURL"));
+                billboard.setInfoMessage(rs.getString("infoMessage"));
+                billboard.setInfoColour(rs.getString("infoColour"));
+                billboardList.add(billboard);
             }
             return billboardList;
         } catch (SQLException ex) {
@@ -364,7 +365,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
             b.setUsername(rs.getString("username"));
             b.setColour(rs.getString("colour"));
             b.setMessage(rs.getString("message"));
-            b.setPictureData(rs.getBytes("pictureData"));
+            b.setMessage(rs.getString("messageColour"));
+            b.setPictureData(rs.getString("pictureData"));
             b.setPictureURL(rs.getString("pictureUrl"));
             b.setInfoMessage(rs.getString("infoMessage"));
             b.setInfoColour(rs.getString("infoColour"));
@@ -488,11 +490,11 @@ public class JDBCDatabaseSource implements DatabaseSource {
          getSchedule.setString(1, billboardName);
          rs = getSchedule.executeQuery();
          rs.next();
-         s.setBillboardName(rs.getString("Billboard Name"));
-         s.setUsername(rs.getString("Username"));
-         s.setStartTime(rs.getString("Start Time"));
-         s.setEndTime(rs.getString("End Time"));
-         s.setRepeat(rs.getString("Repeats"));
+         s.setBillboardName(rs.getString("bName"));
+         s.setUsername(rs.getString("username"));
+         s.setStartTime(rs.getString("bstartTime"));
+         s.setEndTime(rs.getString("endTime"));
+         s.setRepeat(rs.getString("repeats"));
 
       } catch (SQLException ex) {
          ex.printStackTrace();
