@@ -83,7 +83,6 @@ public class BillboardServer {
                     response.put("message", "Incorrect password");
                     System.out.println("Incorrect password");
                 }
-
             }
             else{
                 token = (String) request.get("token");
@@ -103,6 +102,7 @@ public class BillboardServer {
                             break;
                         }
                         case "getCurrentBillboard": {
+                            //not tested
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             for (Schedule s : scheduleList){
                                 LocalDateTime ldt = null;
@@ -125,6 +125,7 @@ public class BillboardServer {
 
                         }
                         case "getBillboardInfo":{
+                            //not tested
                             String billboardName = (String) request.get("billboardName");
                             Billboard billboard = dataSource.getBillboard(billboardName);
                             response.put("billboard", billboard);
@@ -132,6 +133,7 @@ public class BillboardServer {
                             break;
                         }
                         case "createBillboard":{
+                            //not tested
                             Billboard billboard = (Billboard) request.get("billboard");
                             dataSource.addBillboard(billboard);
                             break;
