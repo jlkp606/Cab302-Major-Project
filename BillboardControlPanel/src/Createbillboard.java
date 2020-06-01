@@ -13,6 +13,7 @@ import java.util.HashMap;
 import Server.Client;
 
 
+
 public class Createbillboard extends JFrame {
 //    private final Object Billboard;
     private JPanel mainPanel;
@@ -73,7 +74,7 @@ public class Createbillboard extends JFrame {
 //                    System.out.println("null");
                 }
                 else {
-                    Billboard billboard = new Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
+                    Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
 //                    send the  billboard info to server along with session token
                     try {
                         createBillboardRequest(token,billboard);
@@ -186,13 +187,14 @@ public class Createbillboard extends JFrame {
         frame.setVisible(true);
     }
 
-    public static void createBillboardRequest(String token,Billboard billboard) throws IOException {
+    public static void createBillboardRequest(String token, Database.Billboard billboard) throws IOException {
             Socket socket = Client.getClientSocket();
             HashMap<String , Object> request = new HashMap<String , Object>();
             request.put("type", "createBillboard");
             request.put("token", token);
             request.put("billboard", billboard);
             Client.sendRequest(socket , request);
+            socket.close();
     }
 
 }

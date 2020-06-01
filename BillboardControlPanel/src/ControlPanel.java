@@ -1,6 +1,10 @@
+import org.xml.sax.SAXException;
+
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 // Control Panel class
 
@@ -26,7 +30,14 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JFrame frame = new CreateUser("Create User");
+                String token = "12435642";
+                String user = "Sid";
+                JFrame frame = null;
+                try {
+                    frame = new Createbillboard("Create Billboard",token,user);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 frame.setLocation(500, 300);
                 frame.setSize(550, 550);
                 frame.setVisible(true);
@@ -62,10 +73,16 @@ public class ControlPanel extends JFrame{
         modifyExistingBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                JFrame frame = new Edit_billboard("Edit Billboard",  );
-//                frame.setLocation(500, 300);
-//                frame.setSize(550, 550);
-//                frame.setVisible(true);
+                String token= "1342141";
+                try {
+                    new List_billboard(token);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (SAXException ex) {
+                    ex.printStackTrace();
+                } catch (ParserConfigurationException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });

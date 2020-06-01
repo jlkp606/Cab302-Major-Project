@@ -10,6 +10,7 @@ import java.util.HashMap;
 import Server.Client;
 
 import static Server.Client.sendRequest;
+import static Server.Hash.getHash;
 import static sun.net.www.protocol.http.AuthCacheValue.Type.Server;
 
 //import Server.BillboardServer.*;
@@ -83,12 +84,12 @@ public class MyGui extends Component implements ActionListener {
         String userName = t1.getText();
         String password = t2.getText();
         String token = null;
-//        try {
-//            String Hashed_password = getHash(password);
-//            System.out.println(Hashed_password);
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String Hashed_password = getHash(password);
+            System.out.println(Hashed_password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         try {
             token = LoginRequest(userName, password);
@@ -98,16 +99,16 @@ public class MyGui extends Component implements ActionListener {
             e.printStackTrace();
         }
 
-        if (token.equals(null)){
-
-        }
-        else{
-            JFrame frame = new ControlPanel("Control Panel");
-            frame.setLocation(500, 300);
-            frame.setSize(550, 550);
-            frame.setVisible(true);
-
-        }
+//        if (token.equals(null)){
+//
+//        }
+//        else{
+//            JFrame frame = new ControlPanel("Control Panel",token);
+//            frame.setLocation(500, 300);
+//            frame.setSize(550, 550);
+//            frame.setVisible(true);
+//
+//        }
 
 //        send username and password to server
 //        receive its response as token or error
@@ -117,8 +118,9 @@ public class MyGui extends Component implements ActionListener {
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
-            //System.out.println(System.getProperty("user.dir")+"/xmlFile.xml");
-        } else {
+        }
+        else {
+
             JOptionPane.showMessageDialog(null, "Username or Password incorrect");
 
         }
