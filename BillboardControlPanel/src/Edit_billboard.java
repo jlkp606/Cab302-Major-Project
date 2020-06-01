@@ -1,3 +1,4 @@
+import Database.Billboard;
 import Server.Client;
 import org.xml.sax.SAXException;
 
@@ -13,6 +14,8 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Edit_billboard extends JFrame {
+    private String token;
+    private Billboard billboard;
     private JPanel mainPanel;
     private JTextField title_info;
     private JTextField background_colour;
@@ -29,9 +32,12 @@ public class Edit_billboard extends JFrame {
     private JButton importBillboardButton;
     private JButton export_billboard;
     String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
+//    private Database.Billboard billboard;
 
-    public Edit_billboard(String title,String token,Billboard billboard){
+    public Edit_billboard(String title, String token, Database.Billboard billboard){
         super(title);
+        this.token = token;
+        this.billboard = billboard;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
@@ -73,7 +79,7 @@ public class Edit_billboard extends JFrame {
                     JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
                 }
                 else {
-                    Billboard billboard = new Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
+                    Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
 //                    send the  billboard info to server along with session token
                     try {
                         createBillboardRequest( token, billboard);
@@ -176,21 +182,23 @@ public class Edit_billboard extends JFrame {
         });
 
     }
+//
+//    public Edit_billboard(String edit_billboard, String token, Database.Billboard billboard) {
+//    }
 
 
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
         String token = "12435642";
-        Billboard billboard = new Billboard("Sidd's Billboard" ,"Sid" ,"Blue","hard work",  "10",null,"hdgjfhgdlfaldgsfl","jhefhwldjfggfgwiuefgif","Black");
+        Database.Billboard billboard = new Database.Billboard("Sidd's Billboard" ,"Sid" ,"Blue","hard work",  "10",null,"hdgjfhgdlfaldgsfl","jhefhwldjfggfgwiuefgif","Black");
 
         JFrame frame = new Edit_billboard("Edit Billboard",token,billboard);
         frame.setLocation(500,300);
         frame.setSize(550,550);
         frame.setVisible(true);
-        //title_info.getText();
     }
 
 
-    public static void createBillboardRequest(String token,Billboard billboard) throws IOException {
+    public static void createBillboardRequest(String token,Database.Billboard billboard) throws IOException {
         Socket socket = Client.getClientSocket();
         HashMap<String , Object> request = new HashMap<String , Object>();
         request.put("type", "createBillboard");

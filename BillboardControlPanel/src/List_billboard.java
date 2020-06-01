@@ -1,14 +1,22 @@
+import Database.Billboard;
+import Server.Client;
 import org.xml.sax.SAXException;
 
 import java.awt.*;
 
 import java.awt.event.*;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
 
 import javax.swing.table.*;
 import javax.xml.parsers.ParserConfigurationException;
+
+import static Server.Client.getResponse;
+import static Server.Client.sendRequest;
 
 class List_billboard extends JFrame {
 
@@ -25,12 +33,28 @@ class List_billboard extends JFrame {
 
     String[][] dataValues = new String[height][width];
 
+    public static ArrayList<Billboard> receiveBillboardList(String token) throws IOException, ClassNotFoundException {
+        Socket socket = Client.getClientSocket();
+
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "listBillboard");
+        sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        ArrayList<Database.Billboard> billboards = (ArrayList<Database.Billboard>) response.get("billboardList");
+//        System.out.println(billboards.get(0).getbName());
+
+        socket.close();
+        return billboards;
+    }
+
     public List_billboard(String Token) throws IOException, SAXException, ParserConfigurationException {
         //Send Server a valid session token
         //Server response name arr billboards
-        Billboard billboard = new Billboard("Sidd's Billboard", "Sid", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
-        Billboard billboard2 = new Billboard("Jack's Billboard", "Jack", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
-        Billboard billboard3 = new Billboard("John's Billboard", "John", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+        Database.Billboard billboard = new Database.Billboard("Sidd's Billboard", "Sid", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+        Database.Billboard billboard2 = new Database.Billboard("Jack's Billboard", "Jack", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
+        Database.Billboard billboard3 = new Database.Billboard("John's Billboard", "John", "Blue", "hard work", "10", null, "hdgjfhgdlfaldgsfl", "jhefhwldjfggfgwiuefgif", "Black");
 
         String user[] = new String[3];
 

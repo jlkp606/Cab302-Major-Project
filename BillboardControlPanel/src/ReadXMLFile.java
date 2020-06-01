@@ -88,13 +88,13 @@ public class ReadXMLFile {
         return arr;
     }
 
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-        final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
-        ReadXMLFile file = new ReadXMLFile();
-        String arr1[]=new String[10];
-        arr1 = file.read(xmlFilePath);
-        for(int i =0;i<8;i++){
-            System.out.println(arr1[i]);
-        }
-    }
+//    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+//        final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
+//        ReadXMLFile file = new ReadXMLFile();
+//        String arr1[]=new String[10];
+//        arr1 = file.read(xmlFilePath);
+//        for(int i =0;i<8;i++){
+//            System.out.println(arr1[i]);
+//        }
+//    }
 }
