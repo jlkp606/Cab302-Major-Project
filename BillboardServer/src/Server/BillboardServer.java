@@ -110,7 +110,7 @@ public class BillboardServer {
                             break;
                         }
                         case "getCurrentBillboard": {
-                            //not tested
+                            //not fully implemented
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             for (Schedule s : scheduleList){
                                 LocalDateTime ldt = null;
@@ -129,11 +129,13 @@ public class BillboardServer {
                                     sendResponse(clientSocket, response);
                                     break;
                                 }
+
                             }
+                            break;
 
                         }
                         case "getBillboardInfo":{
-                            //not tested
+                            //Tested
                             String billboardName = (String) request.get("billboardName");
                             Billboard billboard = dataSource.getBillboard(billboardName);
                             response.put("billboard", billboard);
@@ -153,26 +155,26 @@ public class BillboardServer {
                             break;
                         }
                         case "viewSchedule":{
-                            //not tested
+                            //tested
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             response.put("scheduleList", scheduleList);
                             sendResponse(clientSocket, response);
                             break;
                         }
                         case "scheduleBillboard":{
-                            //not tested
+                            //Tested
                             Schedule schedule = (Schedule) request.get("schedule");
                             dataSource.addSchedule(schedule);
                             break;
                         }
                         case "removeBillboardFromSchedule":{
-                            //not tested
+                            //Tested
                             Schedule schedule = (Schedule) request.get("schedule");
                             dataSource.deleteSchedule(schedule);
                             break;
                         }
                         case "listUsers":{
-                            //not tested
+                            //Tested
                             ArrayList<String> userList = dataSource.getUsernames();
                             response.put("userList", userList);
                             sendResponse(clientSocket, response);
@@ -213,10 +215,9 @@ public class BillboardServer {
                             break;
                         }
                         case "setUserPassword":{
-                            //Not tested
+                            //tested
                             String username = (String) request.get("username");
                             String password = (String) request.get("password");
-
                             User user = dataSource.getUser(username);
                             String salt = user.getPasswordSalt();
                             String dbPassword = Hash.getHash(password + salt);
@@ -233,7 +234,7 @@ public class BillboardServer {
 //                            dataSource.setUserPassword(username, password);
                         }
                         case "deleteUser": {
-                            //untested
+                            //tested
                             String username = (String) request.get("username");
                             dataSource.deleteUser(username);
                             break;
