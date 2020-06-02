@@ -62,9 +62,9 @@ public class viewer_billboard_time extends JFrame{
     private JButton add;
     private JButton remove;
 
-    public viewer_billboard_time(String title, String token ,String user) {
+    public viewer_billboard_time(String title, String token ,String user) throws IOException, ClassNotFoundException {
         super(title);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
@@ -126,18 +126,19 @@ public class viewer_billboard_time extends JFrame{
             }
         }
 
-        Database.Schedule schedule1 = new Schedule(user,"Billboard1","2020-06-02T09:40","2020-06-02T10:25","Friday","repeat");
-        Database.Schedule schedule2 = new Schedule(user,"Billboard2","2020-06-02T12:16","2020-06-02T12:45","Tuesday","repeat");
-        Database.Schedule schedule3 = new Schedule(user,"Billboard3","2020-06-02T14:00","2020-06-02T14:05","Monday","repeat");
-        Database.Schedule schedule4 = new Schedule(user,"Billboard4","2020-06-02T15:25","2020-06-02T16:50","Thursday","repeat");
-        Database.Schedule schedule5 = new Schedule(user,"Billboard5","2020-06-02T13:25","2020-06-02T13:49","Thursday","repeat");
+//        Database.Schedule schedule1 = new Schedule(user,"Billboard1","2020-06-02T09:40","2020-06-02T10:25","Friday","repeat");
+//        Database.Schedule schedule2 = new Schedule(user,"Billboard2","2020-06-02T12:16","2020-06-02T12:45","Tuesday","repeat");
+//        Database.Schedule schedule3 = new Schedule(user,"Billboard3","2020-06-02T14:00","2020-06-02T14:05","Monday","repeat");
+//        Database.Schedule schedule4 = new Schedule(user,"Billboard4","2020-06-02T15:25","2020-06-02T16:50","Thursday","repeat");
+//        Database.Schedule schedule5 = new Schedule(user,"Billboard5","2020-06-02T13:25","2020-06-02T13:49","Thursday","repeat");
 
-        ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
-        scheduleList.add(schedule1);
-        scheduleList.add(schedule2);
-        scheduleList.add(schedule3);
-        scheduleList.add(schedule4);
-        scheduleList.add(schedule5);
+//        ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
+        ArrayList<Database.Schedule> scheduleList = ViewSchedule( token);
+//        scheduleList.add(schedule1);
+//        scheduleList.add(schedule2);
+//        scheduleList.add(schedule3);
+//        scheduleList.add(schedule4);
+//        scheduleList.add(schedule5);
 
         for(int i = 0 ; i<scheduleList.size();i++) {
 
@@ -338,9 +339,6 @@ public class viewer_billboard_time extends JFrame{
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-
                 JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
                 frame.setLocation(400,200);
                 frame.setSize(350,350);
@@ -351,7 +349,10 @@ public class viewer_billboard_time extends JFrame{
         remove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFrame frame = new  removeScheduledBillboard ("Remove Billboard", token, user);
+                frame.setLocation(300, 300);
+                frame.setSize(300, 250);
+                frame.setVisible(true);
             }
         });
     }

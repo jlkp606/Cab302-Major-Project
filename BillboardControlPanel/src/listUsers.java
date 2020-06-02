@@ -82,7 +82,7 @@ public class listUsers extends JFrame {
         frame.add(panel, BorderLayout.NORTH);
         frame.add(new JScrollPane(list), BorderLayout.CENTER);
         frame.add(panel_2, BorderLayout.SOUTH);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.setSize(550,550);
         frame.pack();
         frame.setVisible(true);
