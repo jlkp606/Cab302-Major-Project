@@ -146,7 +146,6 @@ public class TestBillboardServer {
     }
 
     public static void TestSetUserPassword() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        //not working
         Socket socket = Client.getClientSocket();
         String token = "kjryiauznhrjgrxypymj";
         HashMap<String, Object> request = new HashMap<>();
@@ -154,7 +153,7 @@ public class TestBillboardServer {
         request.put("type", "setUserPassword");
         request.put("username", "itsmeMario7");
 
-        String hashedPassword = getHash("aasda231");
+        String hashedPassword = getHash("123456789");
         request.put("password", hashedPassword);
 
         sendRequest(socket, request);
@@ -280,7 +279,7 @@ public class TestBillboardServer {
     }
 
     public static void main(String[] Args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        TestRemoveBillboardFromSchedule();
+        TestSetUserPassword();
     }
 
 }

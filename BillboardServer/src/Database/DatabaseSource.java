@@ -1,6 +1,7 @@
 package Database;
 
 import java.security.Permission;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public interface DatabaseSource {
      *
      * @param b  Billboard to add
      */
-    void addBillboard(Billboard b);
+    void addBillboard(Billboard b) throws SQLException;
 
     /**
      * Extracts all the details of a Billboard from the table based on the

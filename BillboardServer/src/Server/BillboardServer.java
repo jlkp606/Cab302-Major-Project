@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class BillboardServer {
         objectOutputStream.flush();
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, SQLException {
 
         //Stores users that have logged in
         HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();

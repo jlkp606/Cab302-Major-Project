@@ -1,11 +1,14 @@
 package Database;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.lang.*;
+
+import static Server.Hash.getHash;
 
 /**
  * Class for retrieving data from the XML file holding the billboard list.
@@ -60,6 +63,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
    private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, messageColour, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
+   private static final String UPDATE_BILLBOARD = "UPDATE billboard SET bName = ?, username = ?, colour = ?, message = ?, messageColour = ?, pictureData = ?, pictureURL = ?, infoMessage = ?, infoColour = ? WHERE bName= ?";
+
    private static final String GET_ALL_BILLBOARD = "SELECT * FROM billboard";
 
    private static final String GET_BILLBOARD = "SELECT * FROM billboard WHERE bName=?";
@@ -75,6 +80,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
    private PreparedStatement addBillboard;
 
    private PreparedStatement getAllBillboard;
+
+   private PreparedStatement updateBillboard;
 
    private PreparedStatement getBillboard;
 
@@ -150,10 +157,25 @@ public class JDBCDatabaseSource implements DatabaseSource {
           deleteUser = connection.prepareStatement(DELETE_USER);
           getUsernames = connection.prepareStatement(GET_USERNAMES);
 
+          User user = getUser("admin");
+          try {
+              user.getUsername();
+          }
+          catch (Exception e){
+              User admin = new User();
+              String salt = admin.getPasswordSalt();
+              String hPassword = getHash("admin");
+              String dbPassword = getHash(hPassword+salt);
+              admin.setPassword(dbPassword);
+              admin.setUsername("admin");
+              addUser(admin);
+          }
+
 
           st.execute(CREATE_BILLBOARD_TABLE);
 
           addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
+          updateBillboard = connection.prepareStatement(UPDATE_BILLBOARD);
           getAllBillboard = connection.prepareStatement(GET_ALL_BILLBOARD);
           getBillboard = connection.prepareStatement(GET_BILLBOARD);
           deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
@@ -176,7 +198,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
           System.out.println("Tables created successfully");
 
-      } catch (SQLException ex) {
+      } catch (SQLException | NoSuchAlgorithmException ex) {
          ex.printStackTrace();
       }
    }
@@ -270,7 +292,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
     /**
     * @see DatabaseSource#addBillboard(Billboard)
     */
-   public void addBillboard(Billboard b) {
+   public void addBillboard(Billboard b) throws SQLException {
       try {
          addBillboard.setString(1, b.getbName());
          addBillboard.setString(2, b.getUsername());
@@ -281,10 +303,19 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addBillboard.setString(7, b.getPictureURL());
          addBillboard.setString(8, b.getInfoMessage());
          addBillboard.setString(9, b.getInfoColour());
-
          addBillboard.execute();
       } catch (SQLException ex) {
-         ex.printStackTrace();
+          updateBillboard.setString(1, b.getbName());
+          updateBillboard.setString(2, b.getUsername());
+          updateBillboard.setString(3, b.getColour());
+          updateBillboard.setString(4, b.getMessage());
+          updateBillboard.setString(5, b.getMessageColour());
+          updateBillboard.setString(6, b.getPictureData());
+          updateBillboard.setString(7, b.getPictureURL());
+          updateBillboard.setString(8, b.getInfoMessage());
+          updateBillboard.setString(9, b.getInfoColour());
+          updateBillboard.setString(10, b.getbName());
+          updateBillboard.execute();
       }
    }
 
