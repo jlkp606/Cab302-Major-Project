@@ -130,6 +130,7 @@ public class CreateUser extends JFrame {
 
 
     }
+
     public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();

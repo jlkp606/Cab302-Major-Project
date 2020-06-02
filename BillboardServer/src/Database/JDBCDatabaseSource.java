@@ -24,6 +24,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
                    + "password VARCHAR(100),"
                    + "passwordSalt VARCHAR(100)" + ");";
 
+   private static final String COUNT_USER = "SELECT COUNT(*) FROM users;";
    private static final String INSERT_USER = "INSERT INTO users (username, password, passwordSalt) VALUES (?, ?, ?);";
 
    private static final String DELETE_USER = "DELETE FROM users WHERE username=?;";
@@ -37,6 +38,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
    //private static final String GET_ALL_USERS = "SELECT * FROM users";
 
    private PreparedStatement addUser;
+
+   private PreparedStatement countUsers;
 
    private PreparedStatement getUser;
 
@@ -156,22 +159,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
           setUserPassword = connection.prepareStatement(SET_USER_PASSWORD);
           deleteUser = connection.prepareStatement(DELETE_USER);
           getUsernames = connection.prepareStatement(GET_USERNAMES);
-
-          User user = getUser("admin");
-          try {
-              user.getUsername();
-          }
-          catch (Exception e){
-              User admin = new User();
-              String salt = admin.getPasswordSalt();
-              String hPassword = getHash("admin");
-              String dbPassword = getHash(hPassword+salt);
-              admin.setPassword(dbPassword);
-              admin.setUsername("admin");
-              addUser(admin);
-          }
-
-
+          countUsers = connection.prepareStatement(COUNT_USER);
           st.execute(CREATE_BILLBOARD_TABLE);
 
           addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
@@ -196,9 +184,23 @@ public class JDBCDatabaseSource implements DatabaseSource {
           deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
           getUserPerms = connection.prepareStatement(GET_USER_PERMISSIONS);
 
-          System.out.println("Tables created successfully");
+          try{
+              User admin = new User();
+              String salt = admin.getPasswordSalt();
+              String hPassword = getHash("admin");
+              String dbPassword = getHash(hPassword+salt);
+              admin.setPassword(dbPassword);
+              admin.setUsername("admin");
+              addUser(admin);
+              Permissions permissions = new Permissions("admin", "true", "true", "true", "true");
+              addUserPerms("admin", permissions);
+          } catch(Exception e) {
+            System.out.println("hi");
+          }
 
-      } catch (SQLException | NoSuchAlgorithmException ex) {
+
+
+      } catch (SQLException ex) {
          ex.printStackTrace();
       }
    }

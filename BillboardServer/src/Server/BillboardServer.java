@@ -9,7 +9,9 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -114,15 +116,20 @@ public class BillboardServer {
                             //not fully implemented
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             for (Schedule s : scheduleList){
-                                LocalDateTime ldt = null;
-                                LocalDateTime startTime = ldt.parse(s.getStartTime());
-                                LocalDateTime endTime = ldt.parse(s.getEndTime());
+                                LocalTime lt =  null;
+                                LocalTime startTime = lt.parse(s.getStartTime());
+                                LocalTime endTime = lt.parse(s.getEndTime());
+//                                LocalDateTime ldt = null;
+//                                LocalDateTime startTime = ldt.parse(s.getStartTime());
+//                                LocalDateTime endTime = ldt.parse(s.getEndTime());
                                 //repeat if hour - check whole hours, what minute we are on
                                 //repeat if days - check what hours,
                                 //repeat week - check day
-                                Boolean isOn =
-                                        (LocalDateTime.now().isAfter(startTime) &&
-                                        LocalDateTime.now().isBefore(endTime));
+                                Boolean isOn = false;
+                                if(s.getDay().equals(LocalDate.now().getDayOfWeek())){
+                                    isOn = (LocalTime.now().isAfter(startTime) &&
+                                            LocalTime.now().isBefore(endTime));
+                                };
 
                                 if (isOn) {
                                     Billboard billboard = dataSource.getBillboard(s.getBillboardName());
