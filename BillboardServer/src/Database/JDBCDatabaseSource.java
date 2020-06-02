@@ -484,7 +484,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
          rs.next();
          p.setUsername(rs.getString("Username"));
          p.setCreateBillboard(rs.getString("CreateBillboard"));
-         p.setEditAllBillboards(rs.getString("EditAllBillboard"));
+         p.setEditAllBillboards(rs.getString("editAllBillboards"));
          p.setEditSchedule(rs.getString("EditSchedule"));
          p.setEditUsers(rs.getString("EditUsers"));
       } catch (SQLException ex) {
