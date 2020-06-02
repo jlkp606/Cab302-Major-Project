@@ -68,21 +68,20 @@ public class Createbillboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
-                if(billboard_name.equals("")){
-                    JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
-//                    System.out.println("null");
-                }
-                else {
                     Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
-//                    send the  billboard info to server along with session token
                     try {
-                        createBillboardRequest(token,billboard);
+
+                        if(billboard_name.equals("")){
+                            JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
+                        }
+                        else {
+                            createBillboardRequest(token, billboard);
+                        }
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
 
-                }
+
 
 
             }

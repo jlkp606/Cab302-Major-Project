@@ -70,7 +70,13 @@ public class ControlPanel extends JFrame{
                 }
                 assert permissions != null;
                 if(permissions.getEditUsers().equals("true")) {
-                     new listUsers(" Users",token,user);
+                    try {
+                        new listUsers(" Users",token,user);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (ClassNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -116,11 +122,12 @@ public class ControlPanel extends JFrame{
                 }
                 assert permissions != null;
                 if(permissions.getEditAllBillboards().equals("true")) {
-                    JFrame frame = null;
-                    frame = new listUsers(" Users",token,user);
-                    frame.setLocation(500,300);
-                    frame.setSize(550,550);
-                    frame.setVisible(true);
+                    try {
+                        new List_billboard(token, user);
+                    } catch (IOException | ParserConfigurationException | ClassNotFoundException | SAXException ex) {
+                        ex.printStackTrace();
+                    }
+
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Permission required ");
