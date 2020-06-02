@@ -152,6 +152,7 @@ public class BillboardServer {
                         }
                         case "createBillboard":{
                             //tested
+                            System.out.println("in server");
                             Billboard billboard = (Billboard) request.get("billboard");
                             dataSource.addBillboard(billboard);
                             break;

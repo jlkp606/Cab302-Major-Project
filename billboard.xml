@@ -1,7 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<billboard>
-    <message>Billboard with message and info</message>
-    <information>
-        Billboard with a message tag, an information tag, but no picture tag. The message is centred within the top half of the screen while the information is centred within the bottom half.
-    </information>
-</billboard>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><billboard background="dasdasdas"><message colour="dasdasdas">dasdasdas</message><picture url="dasdasdasdasdasdas"/><information colour="dasdasdas">dasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdas</information></billboard>

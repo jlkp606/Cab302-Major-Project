@@ -57,11 +57,11 @@ public class JDBCDatabaseSource implements DatabaseSource {
                     + "bName VARCHAR(30) PRIMARY KEY NOT NULL UNIQUE,"
                     + "username VARCHAR(30),"
                     + "colour VARCHAR(100),"
-                    + "message VARCHAR(100),"
+                    + "message VARCHAR(10000),"
                     + "messageColour VARCHAR(100),"
                     + "pictureData VARCHAR(1000),"
                     + "pictureURL VARCHAR(255),"
-                    + "infoMessage VARCHAR(100),"
+                    + "infoMessage VARCHAR(10000),"
                     + "infoColour VARCHAR(100)" + ");";
 
    private static final String INSERT_BILLBOARD = "INSERT INTO billboard ( bName, username, colour, message, messageColour, pictureData, pictureURL, infoMessage, infoColour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -97,12 +97,13 @@ public class JDBCDatabaseSource implements DatabaseSource {
    public static final String CREATE_SCHEDULE_TABLE =
            "CREATE TABLE IF NOT EXISTS schedule ("
                    + "username VARCHAR(30) NOT NULL,"
-                   + "bName VARCHAR(30),"
+                   + "bName VARCHAR(100),"
                    + "bStartTime VARCHAR(30),"
                    + "bEndTime VARCHAR(30),"
+                   + "day VARCHAR(30),"
                    + "repeats VARCHAR(30)" + ");";
 
-   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime, repeats) VALUES (?, ?, ?, ?, ?)";
+   private static final String INSERT_SCHEDULE = "INSERT INTO schedule (username, bName, bStartTime, bEndtime, day, repeats) VALUES (?, ?, ?, ?, ?, ?)";
 
    private static final String GET_SCHEDULE = "SELECT * FROM schedule WHERE bName=?";
 
@@ -505,7 +506,8 @@ public class JDBCDatabaseSource implements DatabaseSource {
          addSchedule.setString(2, schedule.getBillboardName());
          addSchedule.setString(3, schedule.getStartTime());
          addSchedule.setString(4, schedule.getEndTime());
-         addSchedule.setString(5, schedule.getRepeat());
+         addSchedule.setString(5, schedule.getDay());
+         addSchedule.setString(6, schedule.getRepeat());
 
          addSchedule.execute();
       } catch (SQLException ex) {
@@ -528,6 +530,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
          s.setUsername(rs.getString("username"));
          s.setStartTime(rs.getString("bstartTime"));
          s.setEndTime(rs.getString("endTime"));
+         s.setDay(rs.getString("day"));
          s.setRepeat(rs.getString("repeats"));
 
       } catch (SQLException ex) {
@@ -566,6 +569,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
                 schedule.setBillboardName(rs.getString("bName"));
                 schedule.setStartTime(rs.getString("bStartTime"));
                 schedule.setEndTime(rs.getString("bEndTime"));
+                schedule.setDay(rs.getString("day"));
                 schedule.setRepeat(rs.getString("repeats"));
                 scheduleList.add(schedule);
             }

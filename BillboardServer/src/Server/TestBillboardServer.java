@@ -290,7 +290,7 @@ public class TestBillboardServer {
     }
 
     public static void main(String[] Args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        TestCreateUser();
+        TestCreateBillboard();
     }
 
 }

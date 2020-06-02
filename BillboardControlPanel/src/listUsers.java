@@ -107,7 +107,7 @@ public class listUsers extends JFrame {
                     assert permissions != null;
                     if (permissions.getEditUsers().equals("true")) {
                         try {
-                            DeleteUser(token, user);
+                            DeleteUser(token, s);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                         }

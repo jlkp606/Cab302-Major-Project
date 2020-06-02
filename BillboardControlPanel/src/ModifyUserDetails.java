@@ -35,29 +35,29 @@ public class ModifyUserDetails extends JFrame {
 
         formattedTextField1.setEnabled(false);
         formattedTextField1.setText(user);
-//        Database.Permissions initialPermision = List_billboard.GetUserPermission(token,admin);
+        Database.Permissions initialPermision = List_billboard.GetUserPermission(token,user);
 
-        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
+//        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
 //
-        permissions[0] = initialPermision.getCreateBillboard();
-        permissions[1] = initialPermision.getEditAllBillboards();
-        permissions[2] = initialPermision.getEditSchedule();
-        permissions[3] = initialPermision.getEditUsers();
+//        permissions[0] = initialPermision.getCreateBillboard();
+//        permissions[1] = initialPermision.getEditAllBillboards();
+//        permissions[2] = initialPermision.getEditSchedule();
+//        permissions[3] = initialPermision.getEditUsers();
 
-        if(permissions[0] == "true"){
-            createBillboardsCheckBox.setSelected(true);;
+        if(initialPermision.getCreateBillboard().equals("true")){
+            createBillboardsCheckBox.setSelected(true);
         }
 
-        if(permissions[1] == "true"){
-            editAllBillboardsCheckBox.setSelected(true);;
+        if(initialPermision.getEditAllBillboards().equals("true")){
+            editAllBillboardsCheckBox.setSelected(true);
         }
 
-        if(permissions[2] == "true"){
-            scheduleBillboardsCheckBox.setSelected(true);;
+        if(initialPermision.getEditSchedule().equals("true")){
+            scheduleBillboardsCheckBox.setSelected(true);
         }
 
-        if(permissions[3] == "true"){
-            editUsersCheckBox.setSelected(true);;
+        if(initialPermision.getEditUsers().equals("true")){
+            editUsersCheckBox.setSelected(true);
         }
 
 
@@ -69,11 +69,11 @@ public class ModifyUserDetails extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            if(permissions[0] == "true"){
-                                permissions[0] = "false";
+                            if(initialPermision.getCreateBillboard().equals("true")){
+                                initialPermision.setCreateBillboard("false");
                             }
                             else{
-                                permissions[0] = "true";
+                                initialPermision.setCreateBillboard("true");
                             }
                         }
 
@@ -86,11 +86,11 @@ public class ModifyUserDetails extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                    if(permissions[1] == "true"){
-                        permissions[1] = "false";
+                    if(initialPermision.getEditAllBillboards().equals("true")){
+                        initialPermision.setEditAllBillboards("false");
                     }
                     else{
-                        permissions[1] = "true";
+                        initialPermision.setEditAllBillboards("true");
                     }
                 }
             }
@@ -102,11 +102,11 @@ public class ModifyUserDetails extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                    if(permissions[2] == "true"){
-                        permissions[2] = "false";
+                    if(initialPermision.getEditSchedule().equals("true")){
+                        initialPermision.setEditSchedule("false");
                     }
                     else{
-                        permissions[2] = "true";
+                        initialPermision.setEditSchedule("true");
                     }
                 }
             }
@@ -119,17 +119,17 @@ public class ModifyUserDetails extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 if(admin.equals(user)){
-                    permissions[3] = "true";
+                    initialPermision.getEditUsers().equals("true");
                     JOptionPane.showMessageDialog(null, "Admin cannot remove his owm edit user permission");
                     editUsersCheckBox.setSelected(true);
                 }
 
                 if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                    if(permissions[3] == "true"){
-                        permissions[3] = "false";
+                    if(initialPermision.getEditUsers().equals("true")){
+                        initialPermision.setEditUsers("false");
                     }
                     else{
-                        permissions[3] = "true";
+                        initialPermision.setEditUsers("true");
                     }
                 }
 
@@ -150,37 +150,34 @@ public class ModifyUserDetails extends JFrame {
 //                    try {
                     try {
                         String Hashed_password = getHash(User_Password);
-                    } catch (NoSuchAlgorithmException ex) {
+                        Database.Permissions permission = new Database.Permissions(User_Name, initialPermision.getCreateBillboard(), initialPermision.getEditAllBillboards(), initialPermision.getEditSchedule(), initialPermision.getEditUsers());
+                        System.out.println(permission.getCreateBillboard());
+                        System.out.println(permission.getEditAllBillboards());
+                        System.out.println(permission.getEditSchedule());
+                        System.out.println(permission.getEditUsers());
+                        System.out.println("\n");
+                        SetUserPermission( token, user, permission);
+                        changePassword.SetUserPassword(token,user,Hashed_password);
+                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                         ex.printStackTrace();
                     }
-                    Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
-                    System.out.println(permission.getCreateBillboard());
-                    System.out.println(permission.getEditAllBillboards());
-                    System.out.println(permission.getEditSchedule());
-                    System.out.println(permission.getEditUsers());
-                    System.out.println("\n");
-//                        SetUserPermission( token, user, permission);
-//                        changePassword.SetUserPassword(token,user,Hashed_password);
-//                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
-//                        ex.printStackTrace();
-//                    }
 
                 }
             }
         });
 
     }
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-
-        String user = "Josh";
-        String admin = "Sid";
-        String token = "ihfoahfio";
-        JFrame frame = new ModifyUserDetails("Modify Details",token,admin,user);
-        frame.setLocation(500,300);
-        frame.setSize(550,550);
-        frame.setVisible(true);
-    }
+//
+//    public static void main(String[] args) throws IOException, ClassNotFoundException {
+//
+//        String user = "Josh";
+//        String admin = "Sid";
+//        String token = "ihfoahfio";
+//        JFrame frame = new ModifyUserDetails("Modify Details",token,admin,user);
+//        frame.setLocation(500,300);
+//        frame.setSize(550,550);
+//        frame.setVisible(true);
+//    }
 
 //    public static Database.Permissions GetUserPermission(String token, String user) throws IOException, ClassNotFoundException {
 //        Socket socket = Client.getClientSocket();

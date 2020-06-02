@@ -95,18 +95,18 @@ public class CreateUser extends JFrame {
 
                 else {
 
-//                    try {
-//                        String Hashed_password = getHash(User_Password);
+                    try {
+                        String Hashed_password = getHash(User_Password);
                         Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
                         System.out.println(permission.getCreateBillboard());
                         System.out.println(permission.getEditAllBillboards());
                         System.out.println(permission.getEditSchedule());
                         System.out.println(permission.getEditUsers());
-//                        CreateUser(token, User_Name, Hashed_password, permission);
-//
-//                    } catch (NoSuchAlgorithmException | IOException ex) {
-//                        ex.printStackTrace();
-//                    }
+                        CreateUser(token, User_Name, Hashed_password, permission);
+
+                    } catch (NoSuchAlgorithmException | IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
 
@@ -114,26 +114,26 @@ public class CreateUser extends JFrame {
 
 
     }
-
-    public static void main(String[] args) {
-        String token = "ijshfij";
-        JFrame frame = new CreateUser("Create User",token);
-        frame.setLocation(500,300);
-        frame.setSize(550,550);
-        frame.setVisible(true);
-    }
-//    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
-//        Socket socket = Client.getClientSocket();
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("type", "createUser");
-//        request.put("token", token);
-//        request.put("username",user);
-//        request.put("password", hashedPassword);
-//        request.put("permission", permission);
-//        sendRequest(socket, request);
-//        socket.close();
 //
+//    public static void main(String[] args) {
+//        String token = "ijshfij";
+//        JFrame frame = new CreateUser("Create User",token);
+//        frame.setLocation(500,300);
+//        frame.setSize(550,550);
+//        frame.setVisible(true);
 //    }
+    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("type", "createUser");
+        request.put("token", token);
+        request.put("username",user);
+        request.put("password", hashedPassword);
+        request.put("permission", permission);
+        sendRequest(socket, request);
+        socket.close();
+
+    }
 
 }
 
