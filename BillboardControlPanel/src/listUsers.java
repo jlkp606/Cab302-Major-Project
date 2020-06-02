@@ -47,12 +47,12 @@ public class listUsers extends JFrame {
 
     public listUsers(String title, String token,String user) throws IOException, ClassNotFoundException {
         super(title);
-//        ArrayList<String> users = ListUser( token);
-        ArrayList<String> users = new ArrayList<String>();
-        users.add("Volvo");
-        users.add("BMW");
-        users.add("Ford");
-        users.add("Mazda");
+        ArrayList<String> users = ListUser( token);
+//        ArrayList<String> users = new ArrayList<String>();
+//        users.add("Volvo");
+//        users.add("BMW");
+//        users.add("Ford");
+//        users.add("Mazda");
 //
         DefaultListModel model = new DefaultListModel();
         JList list= new JList(model) ;
@@ -178,10 +178,10 @@ public class listUsers extends JFrame {
 
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        String token = "hsgydfuyigs";
-        String user = "sdgfuiygs";
-        new listUsers(" Users",token,user);
-    }
+//    public static void main(String[] args) throws IOException, ClassNotFoundException {
+//        String token = "hsgydfuyigs";
+//        String user = "sdgfuiygs";
+//        new listUsers(" Users",token,user);
+//    }
 
 }

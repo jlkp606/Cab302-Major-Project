@@ -175,8 +175,9 @@ public class TestBillboardServer {
         String billboardName = "3rdBIllboard";
         String startTime = LocalDateTime.now().toString();
         String endTime = LocalDateTime.now().plusMinutes(15).toString();
+        String day = "Tuesday";
         String repeat = "daily";
-        Schedule schedule = new Schedule(username,billboardName,startTime,endTime,repeat);
+        Schedule schedule = new Schedule(username,billboardName,startTime,endTime,day,repeat);
 
         request.put("schedule", schedule);
 

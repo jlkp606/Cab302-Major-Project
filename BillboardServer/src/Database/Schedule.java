@@ -11,6 +11,7 @@ public class Schedule implements Serializable {
    private String billboardName;
    private String startTime;
    private String endTime;
+   private String day;
    private String repeat;
 
    /**
@@ -23,11 +24,12 @@ public class Schedule implements Serializable {
     * Constructor to set values for the schedule details
     */
 
-   public Schedule(String username, String billboardName, String startTime, String endTime, String repeat) {
+   public Schedule(String username, String billboardName, String startTime, String endTime, String day, String repeat) {
       this.username = username;
       this.billboardName = billboardName;
       this.startTime = startTime;
       this.endTime = endTime;
+      this.day = day;
       this.repeat = repeat;
    }
 
@@ -54,6 +56,9 @@ public class Schedule implements Serializable {
 
    public String getEndTime() {return this.endTime;}
    public void setEndTime(String endTime) {this.endTime = endTime;}
+
+   public String getDay() {return this.day;}
+   public void setDay(String day) {this.day = day;}
 
    public String getRepeat() {return this.repeat;}
    public void setRepeat(String repeat) {this.repeat = repeat;}

@@ -3,12 +3,12 @@
   <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="738" height="400"/>
+      <xy x="20" y="20" width="778" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="1aa4d" binding="mainPanel" layout-manager="GridLayoutManager" row-count="11" column-count="17" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="1aa4d" binding="mainPanel" layout-manager="GridLayoutManager" row-count="11" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -34,7 +34,7 @@
           </component>
           <component id="9acd" class="javax.swing.JTextField" binding="name_billboard">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="180" height="-1"/>
               </grid>
             </constraints>
@@ -44,19 +44,11 @@
           </component>
           <component id="54a75" class="javax.swing.JTextField" binding="background_colour">
             <constraints>
-              <grid row="8" column="1" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="8" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="180" height="-1"/>
               </grid>
             </constraints>
             <properties/>
-          </component>
-          <component id="4fa5" class="javax.swing.JButton" binding="uploadButton" default-binding="true">
-            <constraints>
-              <grid row="9" column="1" row-span="1" col-span="16" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Upload"/>
-            </properties>
           </component>
           <component id="5a1c7" class="javax.swing.JButton" binding="previewButton" default-binding="true">
             <constraints>
@@ -76,7 +68,7 @@
           </component>
           <component id="8c9c4" class="javax.swing.JCheckBox" binding="Data">
             <constraints>
-              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Data"/>
@@ -84,7 +76,7 @@
           </component>
           <component id="14bd3" class="javax.swing.JTextField" binding="message_colour">
             <constraints>
-              <grid row="4" column="1" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="4" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="180" height="-1"/>
               </grid>
             </constraints>
@@ -108,7 +100,7 @@
           </component>
           <component id="60a61" class="javax.swing.JTextField" binding="title_colour">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="2" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="180" height="-1"/>
               </grid>
             </constraints>
@@ -124,7 +116,7 @@
           </component>
           <component id="28e0a" class="javax.swing.JEditorPane" binding="message">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="16" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="3" column="2" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
@@ -134,7 +126,7 @@
           </component>
           <component id="8e33a" class="javax.swing.JCheckBox" binding="URL">
             <constraints>
-              <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="URL"/>
@@ -142,7 +134,7 @@
           </component>
           <component id="61e3" class="javax.swing.JTextField" binding="title_info">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="9" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="1" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="180" height="-1"/>
               </grid>
             </constraints>
@@ -158,37 +150,47 @@
               <text value="Title"/>
             </properties>
           </component>
-          <component id="5388d" class="javax.swing.JButton" binding="importBillboardButton" default-binding="true">
+          <component id="df0aa" class="javax.swing.JTextField" binding="image_url">
             <constraints>
-              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="180" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="ae2cf" class="javax.swing.JTextField" binding="image_data">
+            <constraints>
+              <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="180" height="-1"/>
+              </grid>
             </constraints>
             <properties>
-              <text value="Import  Billboard"/>
+              <text value=""/>
             </properties>
           </component>
-          <component id="81305" class="javax.swing.JButton" binding="export_billboard">
+          <component id="a99ec" class="javax.swing.JButton" binding="uploadButton" default-binding="true">
             <constraints>
-              <grid row="10" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Save to Server"/>
+            </properties>
+          </component>
+          <component id="b1296" class="javax.swing.JButton" binding="export_billboard">
+            <constraints>
+              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Export"/>
             </properties>
           </component>
-          <component id="ae2cf" class="javax.swing.JTextField" binding="image_data">
+          <component id="5d718" class="javax.swing.JButton" binding="importBillboardButton" default-binding="true">
             <constraints>
-              <grid row="5" column="3" row-span="1" col-span="6" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="180" height="-1"/>
-              </grid>
+              <grid row="9" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
-          </component>
-          <component id="df0aa" class="javax.swing.JTextField" binding="image_url">
-            <constraints>
-              <grid row="7" column="3" row-span="1" col-span="6" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="180" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
+            <properties>
+              <text value="Import  Billboard"/>
+            </properties>
           </component>
         </children>
       </grid>

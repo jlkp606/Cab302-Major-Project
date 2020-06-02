@@ -1,3 +1,4 @@
+import Server.Client;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
@@ -5,6 +6,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
+
+import static Server.Client.sendRequest;
 
 // Control Panel class
 
@@ -139,7 +144,13 @@ public class ControlPanel extends JFrame{
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    LogOut( token );
+                    JOptionPane.showMessageDialog(null, "Logged out");
+                    MyGui myGuo = new MyGui();
+                } catch (IOException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -161,13 +172,21 @@ public class ControlPanel extends JFrame{
         });
     }
 
-    public static void main(String[] args) {
-        String token = "htdyrd";
-        String userName = "htdyrd";
-        JFrame frame = new ControlPanel("Control Panel",token,userName);
-        frame.setLocation(500, 300);
-        frame.setSize(550, 550);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        String token = "htdyrd";
+//        String userName = "htdyrd";
+//        JFrame frame = new ControlPanel("Control Panel",token,userName);
+//        frame.setLocation(500, 300);
+//        frame.setSize(550, 550);
+//        frame.setVisible(true);
+//    }
 
+    public static void LogOut(String token) throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "logOut");
+        sendRequest(socket, request);
+        socket.close();
+    }
 }

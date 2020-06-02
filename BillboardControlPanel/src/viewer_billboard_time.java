@@ -1,6 +1,16 @@
+import Database.Schedule;
+import Server.Client;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static Server.Client.getResponse;
+import static Server.Client.sendRequest;
 
 public class viewer_billboard_time extends JFrame{
     private JTextArea Friday_9;
@@ -58,57 +68,272 @@ public class viewer_billboard_time extends JFrame{
         this.setContentPane(mainPanel);
         this.pack();
 
-        Monday_9.setEnabled(false);
-        Monday_10.setEnabled(false);
-        Monday_11.setEnabled(false);
-        Monday_12.setEnabled(false);
-        Monday_1.setEnabled(false);
-        Monday_2.setEnabled(false);
-        Monday_4.setEnabled(false);
-        Monday_3.setEnabled(false);
-        Monday_5.setEnabled(false);
+        JTextArea[][] textboxArray = new JTextArea[5][9];
 
-        Tuesday_9.setEnabled(false);
-        Tuesday_10.setEnabled(false);
-        Tuesday_11.setEnabled(false);
-        Tuesday_12.setEnabled(false);
-        Tuesday_1.setEnabled(false);
-        Tuesday_2.setEnabled(false);
-        Tuesday_3.setEnabled(false);
-        Tuesday_4.setEnabled(false);
-        Tuesday_5.setEnabled(false);
+        textboxArray[0][0] = Monday_9;
+        textboxArray[0][1] = Monday_10;
+        textboxArray[0][2] = Monday_11;
+        textboxArray[0][3] = Monday_12;
+        textboxArray[0][4] = Monday_1;
+        textboxArray[0][5] = Monday_2;
+        textboxArray[0][6] = Monday_3;
+        textboxArray[0][7] = Monday_4;
+        textboxArray[0][8] = Monday_5;
 
-        Wednesday_9.setEnabled(false);
-        Wednesday_10.setEnabled(false);
-        Wednesday_11.setEnabled(false);
-        Wednesday_12.setEnabled(false);
-        Wednesday_1.setEnabled(false);
-        Wednesday_2.setEnabled(false);
-        Wednesday_3.setEnabled(false);
-        Wednesday_4.setEnabled(false);
-        Wednesday_5.setEnabled(false);
+        textboxArray[1][0] = Tuesday_9;
+        textboxArray[1][1] = Tuesday_10;
+        textboxArray[1][2] = Tuesday_11;
+        textboxArray[1][3] = Tuesday_12;
+        textboxArray[1][4] = Tuesday_1;
+        textboxArray[1][5] = Tuesday_2;
+        textboxArray[1][6] = Tuesday_3;
+        textboxArray[1][7] = Tuesday_4;
+        textboxArray[1][8] = Tuesday_5;
 
-        Thursday_9.setEnabled(false);
-        Thursday_10.setEnabled(false);
-        Thursday_11.setEnabled(false);
-        Thursday_12.setEnabled(false);
-        Thursday_1.setEnabled(false);
-        Thursday_2.setEnabled(false);
-        Thursday_3.setEnabled(false);
-        Thursday_4.setEnabled(false);
-        Thursday_5.setEnabled(false);
+        textboxArray[2][0] = Wednesday_9;
+        textboxArray[2][1] = Wednesday_10;
+        textboxArray[2][2] = Wednesday_11;
+        textboxArray[2][3] = Wednesday_12;
+        textboxArray[2][4] = Wednesday_1;
+        textboxArray[2][5] = Wednesday_2;
+        textboxArray[2][6] = Wednesday_3;
+        textboxArray[2][7] = Wednesday_4;
+        textboxArray[2][8] = Wednesday_5;
 
-        Friday_9.setEnabled(false);
-        Friday_10.setEnabled(false);
-        Friday_11.setEnabled(false);
-        Friday_12.setEnabled(false);
-        Friday_1.setEnabled(false);
-        Friday_2.setEnabled(false);
-        Friday_3.setEnabled(false);
-        Friday_4.setEnabled(false);
-        Friday_5.setEnabled(false);
+        textboxArray[3][0] = Thursday_9;
+        textboxArray[3][1] = Thursday_10;
+        textboxArray[3][2] = Thursday_11;
+        textboxArray[3][3] = Thursday_12;
+        textboxArray[3][4] = Thursday_1;
+        textboxArray[3][5] = Thursday_2;
+        textboxArray[3][6] = Thursday_3;
+        textboxArray[3][7] = Thursday_4;
+        textboxArray[3][8] = Thursday_5;
+
+        textboxArray[4][0] = Friday_9;
+        textboxArray[4][1] = Friday_10;
+        textboxArray[4][2] = Friday_11;
+        textboxArray[4][3] = Friday_12;
+        textboxArray[4][4] = Friday_1;
+        textboxArray[4][5] = Friday_2;
+        textboxArray[4][6] = Friday_3;
+        textboxArray[4][7] = Friday_4;
+        textboxArray[4][8] = Friday_5;
+
+        for(int i = 0; i<5 ; i++){
+            for(int j=0 ; j<9 ; j++){
+                textboxArray[i][j].setEnabled(false);
+            }
+        }
+
+        Database.Schedule schedule1 = new Schedule(user,"Billboard1","2020-06-02T09:40","2020-06-02T10:25","Friday","repeat");
+        Database.Schedule schedule2 = new Schedule(user,"Billboard2","2020-06-02T12:16","2020-06-02T12:45","Tuesday","repeat");
+        Database.Schedule schedule3 = new Schedule(user,"Billboard3","2020-06-02T14:00","2020-06-02T14:05","Monday","repeat");
+        Database.Schedule schedule4 = new Schedule(user,"Billboard4","2020-06-02T15:25","2020-06-02T16:50","Thursday","repeat");
+        Database.Schedule schedule5 = new Schedule(user,"Billboard5","2020-06-02T13:25","2020-06-02T13:49","Thursday","repeat");
+
+        ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
+        scheduleList.add(schedule1);
+        scheduleList.add(schedule2);
+        scheduleList.add(schedule3);
+        scheduleList.add(schedule4);
+        scheduleList.add(schedule5);
+
+        for(int i = 0 ; i<scheduleList.size();i++) {
+
+            if (scheduleList.get(i).getDay().equals("Monday")) {
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("09"))){
+                    textboxArray[0][0].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("10"))){
+                    textboxArray[0][1].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("11"))){
+                    textboxArray[0][2].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("12"))){
+                    textboxArray[0][3].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("13"))){
+                    textboxArray[0][4].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("14"))){
+                    textboxArray[0][5].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("15"))){
+                    textboxArray[0][6].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("16"))){
+                    textboxArray[0][7].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("17"))){
+                    textboxArray[0][8].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+            }
+            if (scheduleList.get(i).getDay().equals("Tuesday")) {
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("09"))){
+                    textboxArray[1][0].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("10"))){
+                    textboxArray[1][1].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("11"))){
+                    textboxArray[1][2].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("12"))){
+                    textboxArray[1][3].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("13"))){
+                    textboxArray[1][4].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("14"))){
+                    textboxArray[1][5].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("15"))){
+                    textboxArray[1][6].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("16"))){
+                    textboxArray[1][7].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("17"))){
+                    textboxArray[1][8].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+            }
+            if (scheduleList.get(i).getDay().equals("Wednesday")) {
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("09"))){
+                    textboxArray[2][0].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("10"))){
+                    textboxArray[2][1].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("11"))){
+                    textboxArray[2][2].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("12"))){
+                    textboxArray[2][3].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("13"))){
+                    textboxArray[2][4].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("14"))){
+                    textboxArray[2][5].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("15"))){
+                    textboxArray[2][6].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("16"))){
+                    textboxArray[2][7].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("17"))){
+                    textboxArray[2][8].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+            }
+            if (scheduleList.get(i).getDay().equals("Thursday")) {
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("09"))){
+                    textboxArray[3][0].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("10"))){
+                    textboxArray[3][1].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("11"))){
+                    textboxArray[3][2].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("12"))){
+                    textboxArray[3][3].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("13"))){
+                    textboxArray[3][4].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("14"))){
+                    textboxArray[3][5].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("15"))){
+                    textboxArray[3][6].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("16"))){
+                    textboxArray[3][7].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("17"))){
+                    textboxArray[3][8].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+            }
+            if (scheduleList.get(i).getDay().equals("Friday")) {
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("09"))){
+                    textboxArray[4][0].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("10"))){
+                    textboxArray[4][1].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("11"))){
+                    textboxArray[4][2].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("12"))){
+                    textboxArray[4][3].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("13"))){
+                    textboxArray[4][4].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("14"))){
+                    textboxArray[4][5].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("15"))){
+                    textboxArray[4][6].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("16"))){
+                    textboxArray[4][7].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
+
+                if((scheduleList.get(i).getStartTime().substring(11,13).equals("17"))){
+                    textboxArray[4][8].setText(scheduleList.get(i).getBillboardName()+"\n"+scheduleList.get(i).getStartTime().substring(11,16)+"-"+scheduleList.get(i).getEndTime().substring(11,16)+"\n");
+                }
 
 
+            }
+        }
 
         add.addActionListener(new ActionListener() {
             @Override
@@ -131,13 +356,25 @@ public class viewer_billboard_time extends JFrame{
         });
     }
 
-    public static void main(String[] args) {
-        String user = "Sid";
-        String token = "092408240280";
-        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
-        frame.setLocation(400,200);
-        frame.setSize(850,550);
-        frame.setVisible(true);
+    public static ArrayList<Schedule> ViewSchedule(String token) throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "viewSchedule");
+        sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        ArrayList<Database.Schedule> scheduleList = (ArrayList<Database.Schedule>) response.get("scheduleList");
+        socket.close();
+        return scheduleList;
     }
+//
+//    public static void main(String[] args) {
+//        String user = "Sid";
+//        String token = "092408240280";
+//        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
+//        frame.setLocation(400,200);
+//        frame.setSize(850,550);
+//        frame.setVisible(true);
+//    }
 
 }

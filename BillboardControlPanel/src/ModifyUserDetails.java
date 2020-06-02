@@ -35,10 +35,10 @@ public class ModifyUserDetails extends JFrame {
 
         formattedTextField1.setEnabled(false);
         formattedTextField1.setText(user);
-//        Database.Permissions initialPermision = GetUserPermission(token,admin);
+        Database.Permissions initialPermision = List_billboard.GetUserPermission(token,admin);
 
-        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
-
+//        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
+//
         permissions[0] = initialPermision.getCreateBillboard();
         permissions[1] = initialPermision.getEditAllBillboards();
         permissions[2] = initialPermision.getEditSchedule();
@@ -193,13 +193,9 @@ public class ModifyUserDetails extends JFrame {
                     try {
                         String Hashed_password = getHash(User_Password);
                         Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
-                SetUserPermission( token, user, permission);
-
-                    } catch (NoSuchAlgorithmException ex) {
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch (ClassNotFoundException ex) {
+                        SetUserPermission( token, user, permission);
+                        changePassword.SetUserPassword(token,user,Hashed_password);
+                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                         ex.printStackTrace();
                     }
 
@@ -220,18 +216,18 @@ public class ModifyUserDetails extends JFrame {
 //        frame.setVisible(true);
 //    }
 
-    public static Database.Permissions GetUserPermission(String token, String user) throws IOException, ClassNotFoundException {
-        Socket socket = Client.getClientSocket();
-        HashMap<String, Object> request = new HashMap<>();
-        request.put("token", token);
-        request.put("type", "getUserPermissions");
-        request.put("username", user);
-        sendRequest(socket, request);
-        HashMap<String, Object> response = getResponse(socket);
-        Database.Permissions permissions = (Database.Permissions) response.get("permissions");
-        socket.close();
-        return permissions;
-    }
+//    public static Database.Permissions GetUserPermission(String token, String user) throws IOException, ClassNotFoundException {
+//        Socket socket = Client.getClientSocket();
+//        HashMap<String, Object> request = new HashMap<>();
+//        request.put("token", token);
+//        request.put("type", "getUserPermissions");
+//        request.put("username", user);
+//        sendRequest(socket, request);
+//        HashMap<String, Object> response = getResponse(socket);
+//        Database.Permissions permissions = (Database.Permissions) response.get("permissions");
+//        socket.close();
+//        return permissions;
+//    }
 
     public static void SetUserPermission(String token,String user,Database.Permissions permission) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();

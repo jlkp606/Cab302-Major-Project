@@ -74,8 +74,22 @@ class List_billboard extends JFrame {
         return billboard;
     }
 
+    public static Billboard GetCurrentBillboard(String token) throws IOException, ClassNotFoundException{
+
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "getCurrentBillboard");
+        sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        Billboard billboard = (Billboard) response.get("billboard");
+        socket.close();
+        return billboard;
+    }
+
     public List_billboard(String token, String user) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
         ArrayList<Database.Billboard> billboards = receiveBillboardList(token);
+//        Testing without server
 //        Billboard billboard1 = new Billboard("itsmeMario8Billboard", "itsmeMario8", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
 //                "more information.", "#00FFFF");
 //
@@ -149,10 +163,12 @@ class List_billboard extends JFrame {
 //
                                                try {
                                                    Billboard billboard = GetBillboardInfo(token, curr_billboard);
-                                                   if (billboard.getUsername().equals(user)) {
+                                                   Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
+                                                   if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
                                                        try {
                                                            Database.Permissions permissions = GetUserPermission(token, user);
-                                                           if (permissions.getCreateBillboard().equals("true")) {
+
+                                                           if ((permissions.getCreateBillboard().equals("true"))) {
                                                                JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
                                                                DeleteBillboard(token, curr_billboard);
                                                                ((DefaultTableModel) table.getModel()).removeRow(row);
@@ -190,7 +206,8 @@ class List_billboard extends JFrame {
 
                                                try {
                                                    Billboard billboard = GetBillboardInfo(token, curr_billboard);
-                                                   if (billboard.getUsername().equals(user)) {
+                                                   Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
+                                                   if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
                                                        try {
                                                            Database.Permissions permissions = GetUserPermission(token, user);
                                                            if (permissions.getCreateBillboard().equals("true")) {
@@ -273,13 +290,13 @@ class List_billboard extends JFrame {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
-
-        String token = "sgdfuksdk";
-        String user = "Sid";
-        new List_billboard(token, user);
-
-    }
+//    public static void main(String[] args) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
+//
+//        String token = "sgdfuksdk";
+//        String user = "Sid";
+//        new List_billboard(token, user);
+//
+//    }
 
 
 }
