@@ -52,7 +52,7 @@ public class viewer_billboard_time extends JFrame{
     private JButton add;
     private JButton remove;
 
-    public viewer_billboard_time(String title) {
+    public viewer_billboard_time(String title, String token ,String user) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -115,56 +115,11 @@ public class viewer_billboard_time extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
 
-                Monday_9.setText("false");
-                Monday_10.setText("false");
-                Monday_11.setText("false");
-                Monday_12.setText("false");
-                Monday_1.setText("false");
-                Monday_2.setText("false");
-                Monday_4.setText("false");
-                Monday_3.setText("false");
-                Monday_5.setText("false");
 
-                Tuesday_9.setText("false");
-                Tuesday_10.setText("false");
-                Tuesday_11.setText("false");
-                Tuesday_12.setText("false");
-                Tuesday_1.setText("false");
-                Tuesday_2.setText("false");
-                Tuesday_3.setText("false");
-                Tuesday_4.setText("false");
-                Tuesday_5.setText("false");
-
-                Wednesday_9.setText("false");
-                Wednesday_10.setText("false");
-                Wednesday_11.setText("false");
-                Wednesday_12.setText("false");
-                Wednesday_1.setText("false");
-                Wednesday_2.setText("false");
-                Wednesday_3.setText("false");
-                Wednesday_4.setText("false");
-                Wednesday_5.setText("false");
-
-                Thursday_9.setText("false");
-                Thursday_10.setText("false");
-                Thursday_11.setText("false");
-                Thursday_12.setText("false");
-                Thursday_1.setText("false");
-                Thursday_2.setText("false");
-                Thursday_3.setText("false");
-                Thursday_4.setText("false");
-                Thursday_5.setText("false");
-
-
-                Friday_9.setText("false");
-                Friday_10.setText("false");
-                Friday_11.setText("false");
-                Friday_12.setText("false");
-                Friday_1.setText("false");
-                Friday_2.setText("false");
-                Friday_3.setText("false");
-                Friday_4.setText("false");
-                Friday_5.setText("false");
+                JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
+                frame.setLocation(400,200);
+                frame.setSize(350,350);
+                frame.setVisible(true);
             }
         });
 
@@ -177,7 +132,9 @@ public class viewer_billboard_time extends JFrame{
     }
 
     public static void main(String[] args) {
-        JFrame frame = new viewer_billboard_time("View Schedule for Billboards");
+        String user = "Sid";
+        String token = "092408240280";
+        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
         frame.setLocation(400,200);
         frame.setSize(850,550);
         frame.setVisible(true);

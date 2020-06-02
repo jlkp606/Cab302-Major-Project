@@ -1,7 +1,15 @@
+import Server.Client;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
+import static Server.Client.sendRequest;
+import static Server.Hash.getHash;
 
 
 //create user class
@@ -17,12 +25,12 @@ public class CreateUser extends JFrame {
     private JFormattedTextField EnterName;
 
     //create user constructor
-    public CreateUser(String title) {
+    public CreateUser(String title,String token) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(SignUp);
         this.pack();
-        String[] permissions = {"No","No","No","No"};
+        String[] permissions = {"false","false","false","false"};
 
 
         // Adding action listeners to the following buttons:
@@ -35,20 +43,16 @@ public class CreateUser extends JFrame {
                 OKButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-//
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            permissions[0] = "Yes";
+                            permissions[0] = "true";
                         }
-//
-
-
                     }
 
                 });
             }
-
-
         });
+
+
         //2. Clicking on edit all billboard checkbox, will give the user Edit all billboard permission
         editAllBillboards.addActionListener(new ActionListener() {
             @Override
@@ -57,19 +61,12 @@ public class CreateUser extends JFrame {
                 OKButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-//
-
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            permissions[1] = "Yes";
+                            permissions[1] = "true";
                         }
-
-
                     }
-
                 });
-
             }
-
         });
 
         //3. Clicking on schedule billboard checkbox, will give the user schedule billboard permission
@@ -80,14 +77,9 @@ public class CreateUser extends JFrame {
                 OKButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-//
-
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            permissions[2] = "Yes";
+                            permissions[2] = "true";
                         }
-//
-
-
                     }
 
                 });
@@ -102,17 +94,14 @@ public class CreateUser extends JFrame {
                 OKButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-//
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            permissions[3] = "Yes";
+                            permissions[3] = "true";
                         }
-
-
                     }
-
                 });
             }
         });
+
 
         // Clicking on the Ok button will take all the details provided and will be stored in a db
         OKButton.addActionListener(new ActionListener() {
@@ -120,47 +109,39 @@ public class CreateUser extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String User_Name = EnterName.getText();
                 String User_Password = EnterPassword.getText();
+                if(User_Name.equals("")||User_Password.equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter a valid username or password ");
 
-
-                System.out.println(User_Name);
-                System.out.println(User_Password);
-                for (int i = 0; i < permissions.length; i++) {
-                    System.out.println(permissions[i]);
                 }
 
+                else {
+                    try {
+                        String Hashed_password = getHash(User_Password);
+                        Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
+                        CreateUser(token, User_Name, Hashed_password, permission);
 
-//                HashMap<String, Object> request = new HashMap<>();
-//                request.put( "type","createUser");
-//                request.put("username", User_Name);
-//                request.put("password", User_Password);
-//                request.put("permissions", permissions);
-////                request.put("permissionList", Permission);
-//                try {
-//                    Socket socket = Client.getClientSocket();
-//                    Client.sendRequest(socket, request);
-//
-//                    HashMap<String, Object> response = Client.getResponse(socket);
-//                    response.get("message");
-//                    String message =  (String) response.get("message");
-//                } catch (IOException | ClassNotFoundException ioException) {
-//                    ioException.printStackTrace();
-//                }
-
-
+                    } catch (NoSuchAlgorithmException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
 
         });
 
 
     }
+    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("type", "createUser");
+        request.put("token", token);
+        request.put("username",user);
+        request.put("password", hashedPassword);
+        request.put("permission", permission);
+        sendRequest(socket, request);
+        socket.close();
 
-
-    public static void main(String[] args) {
-
-        JFrame frame = new CreateUser("Create User");
-        frame.setLocation(500, 300);
-        frame.setSize(550, 550);
-        frame.setVisible(true);
     }
+
 }
 
