@@ -1,3 +1,4 @@
+import Database.Permissions;
 import Server.Client;
 
 import javax.swing.*;
@@ -30,7 +31,8 @@ public class changePassword extends JFrame {
         this.pack();
 
         Database.Permissions permissions = List_billboard.GetUserPermission( token,  user);
-
+//Testing without Server
+//        Database.Permissions permissions = new Permissions("Sid","true","true","true","true");
         CreateBillboard.setEnabled(false);
         EditAllBillboard.setEnabled(false);
         ScheduleBillboard.setEnabled(false);
@@ -67,29 +69,36 @@ public class changePassword extends JFrame {
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
+                try {
+                    SetUserPassword(token,userName,password);
+                    //Testing without Server
+//                    System.out.println("Sent to Server");
+                } catch (IOException | NoSuchAlgorithmException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        String userName = "Sid";
-        String token = "Sid";
-        JFrame frame = new changePassword("Change Password",token,userName);
-        frame.setLocation(500, 300);
-        frame.setSize(350, 350);
-        frame.setVisible(true);
-    }
-
-//    public static void TestSetUserPassword(String token,String user, String hashedPassword) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-//        //not working
-//        Socket socket = Client.getClientSocket();
-//
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("token", token);
-//        request.put("type", "setUserPassword");
-//        request.put("username", user);
-//        request.put("password", hashedPassword);
-//        sendRequest(socket, request);
-//        socket.close();
+//    Testing without Server
+//    public static void main(String[] args) throws IOException, ClassNotFoundException {
+//        String userName = "Sid";
+//        String token = "Sid";
+//        JFrame frame = new changePassword("Change Password",token,userName);
+//        frame.setLocation(500, 300);
+//        frame.setSize(350, 350);
+//        frame.setVisible(true);
 //    }
+
+    public static void SetUserPassword(String token,String userName,String hashedPassword) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+        //not working
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "setUserPassword");
+        request.put("username", userName);
+        request.put("password", hashedPassword);
+        sendRequest(socket, request);
+        socket.close();
+    }
 }

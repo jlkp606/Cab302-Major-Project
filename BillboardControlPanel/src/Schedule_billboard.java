@@ -59,6 +59,7 @@ public class Schedule_billboard extends JFrame {
 
                 else{
                     everyHourcheckbox.setEnabled(true);
+                    repeat = "";
                 }
             }
         });
@@ -73,6 +74,7 @@ public class Schedule_billboard extends JFrame {
 
                 else{
                     everyDayCheckBox.setEnabled(true);
+                    repeat = "";
                 }
             }
         });
@@ -82,7 +84,7 @@ public class Schedule_billboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String bbname= billboardName.getText();
-
+                String day = String.valueOf(Select.getSelectedItem());
                 String selectedDuration = String.valueOf(duration.getSelectedItem());
                 String selectedHours = String.valueOf(hours_selected.getSelectedItem());
                 String selectedMins = String.valueOf(mins_selected.getSelectedItem());
@@ -93,21 +95,36 @@ public class Schedule_billboard extends JFrame {
                 String end = String.valueOf(endTime);
                 String start = String.valueOf(startTime);
 
-                Database.Schedule schedule = new Schedule(user,bbname,start,end,repeat);
-                try {
-                    ScheduleBillboard( token, schedule);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchAlgorithmException ex) {
-                    ex.printStackTrace();
-                }
+                Database.Schedule schedule = new Schedule(user,bbname,start,end,day,repeat);
+//                System.out.println(schedule);
+//                System.out.println(schedule.getBillboardName());
+//                System.out.println(schedule.getEndTime());
+//                System.out.println(schedule.getStartTime());
+//                System.out.println(schedule.getUsername());
+                System.out.println(schedule.getRepeat());
+
+//                try {
+//                    ScheduleBillboard( token, schedule);
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                } catch (ClassNotFoundException ex) {
+//                    ex.printStackTrace();
+//                } catch (NoSuchAlgorithmException ex) {
+//                    ex.printStackTrace();
+//                }
 
             }
         });
     }
 
+    public static void main(String[] args) {
+        String user = "Sid";
+        String token = "2615386751237";
+        JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
+        frame.setLocation(400,200);
+        frame.setSize(350,350);
+        frame.setVisible(true);
+    }
     public static void ScheduleBillboard(String token,Schedule schedule) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
 
         Socket socket = Client.getClientSocket();
