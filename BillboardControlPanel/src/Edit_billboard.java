@@ -53,14 +53,7 @@ public class Edit_billboard extends JFrame {
         message_colour.setText(billboard.getInfoColour());
         name_billboard.setText(billboard.getbName());
 
-        String billboard_title = title_info.getText();
-        String billboard_title_colour = title_colour.getText();
-        String billboard_bg_colour = background_colour.getText();
-        String billboard_message = message.getText();
-        String billboard_message_colour = message_colour.getText();
-        String billboard_image_data = image_data.getText();
-        String billboard_image_url = image_url.getText();
-        String billboard_name = name_billboard.getText();
+
 
         previewButton.addActionListener(new ActionListener() {
             @Override
@@ -73,14 +66,22 @@ public class Edit_billboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                String billboard_title = title_info.getText();
+                String billboard_title_colour = title_colour.getText();
+                String billboard_bg_colour = background_colour.getText();
+                String billboard_message = message.getText();
+                String billboard_message_colour = message_colour.getText();
+                String billboard_image_data = image_data.getText();
+                String billboard_image_url = image_url.getText();
+                String billboard_name = name_billboard.getText();
 
-                if(billboard_name.equals("")){
-                    JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
-                }
-                else {
-                    Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
+                Database.Billboard billboard = new Database.Billboard(billboard_name, user, billboard_bg_colour, billboard_title, billboard_title_colour, billboard_image_data, billboard_image_url, billboard_message, billboard_message_colour);
+                if (billboard_name.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue ");
+                } else {
                     try {
-                        createBillboardRequest( token, billboard);
+
+                        createBillboardRequest(token, billboard);
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }

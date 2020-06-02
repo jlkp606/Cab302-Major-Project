@@ -45,14 +45,7 @@ public class Createbillboard extends JFrame {
         this.setContentPane(mainPanel);
         this.pack();
 
-        String billboard_title = title_info.getText();
-        String billboard_title_colour = title_colour.getText();
-        String billboard_bg_colour = background_colour.getText();
-        String billboard_message = message.getText();
-        String billboard_message_colour = message_colour.getText();
-        String billboard_image_data = image_data.getText();
-        String billboard_image_url = image_url.getText();
-        String billboard_name = name_billboard.getText();
+
         String user = username;
 
         image_data.setEnabled(false);
@@ -67,22 +60,28 @@ public class Createbillboard extends JFrame {
         uploadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-                if(billboard_name.equals("")){
-                    JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
-//                    System.out.println("null");
-                }
-                else {
+                String billboard_title = title_info.getText();
+                String billboard_title_colour = title_colour.getText();
+                String billboard_bg_colour = background_colour.getText();
+                String billboard_message = message.getText();
+                String billboard_message_colour = message_colour.getText();
+                String billboard_image_data = image_data.getText();
+                String billboard_image_url = image_url.getText();
+                String billboard_name = name_billboard.getText();
                     Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
-//                    send the  billboard info to server along with session token
                     try {
-                        createBillboardRequest(token,billboard);
+
+                        if(name_billboard.getText().equals("")){
+                            JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
+                        }
+                        else {
+                            createBillboardRequest(token, billboard);
+                        }
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
 
-                }
+
 
 
             }
@@ -162,6 +161,14 @@ public class Createbillboard extends JFrame {
         export_billboard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String billboard_title = title_info.getText();
+                String billboard_title_colour = title_colour.getText();
+                String billboard_bg_colour = background_colour.getText();
+                String billboard_message = message.getText();
+                String billboard_message_colour = message_colour.getText();
+                String billboard_image_data = image_data.getText();
+                String billboard_image_url = image_url.getText();
+                String billboard_name = name_billboard.getText();
 
                 //make an xml file
                 CreateXMLFile file = new CreateXMLFile(billboard_title,billboard_title_colour,billboard_bg_colour,billboard_message,billboard_message_colour,billboard_image_data,billboard_image_url);
@@ -177,14 +184,14 @@ public class Createbillboard extends JFrame {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        String token ="ksjbdkg";
-        String user = "Sid";
-        JFrame frame = new Createbillboard("Create Billboard",token,user);
-        frame.setLocation(500,300);
-        frame.setSize(550,550);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) throws IOException {
+//        String token ="ksjbdkg";
+//        String user = "Sid";
+//        JFrame frame = new Createbillboard("Create Billboard",token,user);
+//        frame.setLocation(500,300);
+//        frame.setSize(550,550);
+//        frame.setVisible(true);
+//    }
     public static void createBillboardRequest(String token, Database.Billboard billboard) throws IOException {
             Socket socket = Client.getClientSocket();
             HashMap<String , Object> request = new HashMap<String , Object>();
