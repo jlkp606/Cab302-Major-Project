@@ -1,12 +1,19 @@
 import Database.Schedule;
+import Server.Client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+
+import static Server.Client.sendRequest;
 
 public class Schedule_billboard extends JFrame {
     private JPanel mainPanel;
@@ -22,7 +29,7 @@ public class Schedule_billboard extends JFrame {
     private JLabel Day;
     private JComboBox Select;
 
-    public Schedule_billboard(String title,String user,String token) {
+    public Schedule_billboard(String title, String token ,String user) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -75,40 +82,41 @@ public class Schedule_billboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String bbname= billboardName.getText();
+
                 String selectedDuration = String.valueOf(duration.getSelectedItem());
                 String selectedHours = String.valueOf(hours_selected.getSelectedItem());
                 String selectedMins = String.valueOf(mins_selected.getSelectedItem());
-                String selectedDay = String.valueOf(Select.getSelectedItem());
 
                 LocalDateTime startTime = LocalDate.now().atTime(Integer.parseInt(selectedHours), Integer.parseInt(selectedMins));
                 LocalDateTime endTime = startTime.plusMinutes(Long.parseLong(selectedDuration));
 
                 String end = String.valueOf(endTime);
-                String end_bb_time = end.substring(11);
-
                 String start = String.valueOf(startTime);
-                String start_bb_time = start.substring(11);
-                System.out.println(LocalDateTime.parse(start));
-                System.out.println(bbname);
-                System.out.println(startTime);
-                System.out.println(endTime);
-                System.out.println(repeat);
-                System.out.println(selectedDay);
 
+                Database.Schedule schedule = new Schedule(user,bbname,start,end,repeat);
+                try {
+                    ScheduleBillboard( token, schedule);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
 
-                Database.Schedule schedule = new Schedule(user,bbname,start_bb_time,end_bb_time,repeat);
-
-//                Send the schedule to the server
             }
         });
     }
 
-    public static void main(String[] args) {
-        String user = "Sid";
-        String token = "092408240280";
-        JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
-        frame.setLocation(400,200);
-        frame.setSize(350,350);
-        frame.setVisible(true);
+    public static void ScheduleBillboard(String token,Schedule schedule) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "scheduleBillboard");
+        request.put("schedule", schedule);
+        sendRequest(socket, request);
+        socket.close();
     }
+
 }

@@ -52,7 +52,7 @@ public class viewer_billboard_time extends JFrame{
     private JButton add;
     private JButton remove;
 
-    public viewer_billboard_time(String title) {
+    public viewer_billboard_time(String title, String token ,String user) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -115,8 +115,7 @@ public class viewer_billboard_time extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
 
-                String user = "Sid";
-                String token = "092408240280";
+
                 JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
                 frame.setLocation(400,200);
                 frame.setSize(350,350);
@@ -133,7 +132,9 @@ public class viewer_billboard_time extends JFrame{
     }
 
     public static void main(String[] args) {
-        JFrame frame = new viewer_billboard_time("View Schedule for Billboards");
+        String user = "Sid";
+        String token = "092408240280";
+        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
         frame.setLocation(400,200);
         frame.setSize(850,550);
         frame.setVisible(true);

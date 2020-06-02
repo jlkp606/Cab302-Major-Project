@@ -6,16 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-
 import Server.Client;
-
-import static Server.Client.sendRequest;
 import static Server.Hash.getHash;
-import static sun.net.www.protocol.http.AuthCacheValue.Type.Server;
 
-//import Server.BillboardServer.*;
-//
-//import static Server.Hash.getHash;
 
 public class MyGui extends Component implements ActionListener {
 
@@ -62,14 +55,11 @@ public class MyGui extends Component implements ActionListener {
     }
     public static String LoginRequest(String Username, String Password) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
-        // test Login request
         HashMap<String, Object> request = new HashMap<>();
         request.put("type", "logIn");
         request.put("username", Username);
         request.put("password", Password);
-
         Client.sendRequest(socket, request);
-
         HashMap<String, Object> res = Client.getResponse(socket);
 
         return (String) res.get("token");
@@ -83,49 +73,32 @@ public class MyGui extends Component implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String userName = t1.getText();
         String password = t2.getText();
-        String token = null;
         try {
             String Hashed_password = getHash(password);
-            System.out.println(Hashed_password);
+
+            try {
+                token = LoginRequest(userName, Hashed_password);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        try {
-            token = LoginRequest(userName, password);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if (token.equals("")){
+
+            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
+
         }
 
-//        if (token.equals(null)){
-//
-//        }
-//        else{
-//            JFrame frame = new ControlPanel("Control Panel",token);
-//            frame.setLocation(500, 300);
-//            frame.setSize(550, 550);
-//            frame.setVisible(true);
-//
-//        }
+        else{
 
-//        send username and password to server
-//        receive its response as token or error
-        if (userName.trim().equals("admin") && password.trim().equals("admin")) {
-
-            JFrame frame = new ControlPanel("Control Panel");
+            JFrame frame = new ControlPanel("Control Panel",token,userName);
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
         }
-        else {
 
-            JOptionPane.showMessageDialog(null, "Username or Password incorrect");
-
-        }
     }
-
-
 
 }
