@@ -28,22 +28,17 @@ public class ModifyUserDetails extends JFrame {
     //Modify User Constructor
     public ModifyUserDetails(String title,String token,String admin,String user) throws IOException, ClassNotFoundException {
         super(title);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(ModifyDetails);
         this.pack();
         String[] permissions = {"false","false","false","false"};
 
         formattedTextField1.setEnabled(false);
         formattedTextField1.setText(user);
-        Database.Permissions initialPermision = List_billboard.GetUserPermission(token,user);
+//        Database.Permissions initialPermision = List_billboard.GetUserPermission(token,admin);
 
-//        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
+        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
 //
-        System.out.println(initialPermision.getCreateBillboard());
-        System.out.println(initialPermision.getEditAllBillboards());
-        System.out.println(initialPermision.getEditSchedule());
-        System.out.println(initialPermision.getEditUsers());
-
         permissions[0] = initialPermision.getCreateBillboard();
         permissions[1] = initialPermision.getEditAllBillboards();
         permissions[2] = initialPermision.getEditSchedule();
@@ -73,10 +68,6 @@ public class ModifyUserDetails extends JFrame {
         createBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                applyChangesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
                         if (e.getID() == ActionEvent.ACTION_PERFORMED) {
                             if(permissions[0] == "true"){
                                 permissions[0] = "false";
@@ -87,35 +78,21 @@ public class ModifyUserDetails extends JFrame {
                         }
 
                     }
-
                 });
-            }
 
-
-        });
         //2. Clicking on edit all billboard checkbox, will change the user Edit all billboard permission
 
         editAllBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                applyChangesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            if (permissions[1] == "true") {
-                                permissions[1] = "false";
-                            } else {
-                                permissions[1] = "true";
-                            }
-                        }
-
-
+                if (e.getID() == ActionEvent.ACTION_PERFORMED) {
+                    if(permissions[1] == "true"){
+                        permissions[1] = "false";
                     }
-
-                });
-
+                    else{
+                        permissions[1] = "true";
+                    }
+                }
             }
 
         });
@@ -124,22 +101,14 @@ public class ModifyUserDetails extends JFrame {
         scheduleBillboardsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                applyChangesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-                            if (permissions[2] == "true") {
-                                permissions[2] = "false";
-                            } else {
-                                permissions[2] = "true";
-                            }
-                        }
-
+                if (e.getID() == ActionEvent.ACTION_PERFORMED) {
+                    if(permissions[2] == "true"){
+                        permissions[2] = "false";
                     }
-
-                });
+                    else{
+                        permissions[2] = "true";
+                    }
+                }
             }
         });
 
@@ -155,32 +124,15 @@ public class ModifyUserDetails extends JFrame {
                     editUsersCheckBox.setSelected(true);
                 }
 
-                applyChangesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-
-                            if (permissions[3] == "true") {
-
-                                if(admin.equals(user)){
-                                    permissions[3] = "true";
-                                }
-                                else{
-                                    permissions[3] = "false";
-                                }
-
-                            }
-
-                            else {
-                                permissions[3] = "true";
-                            }
-                        }
-
-
+                if (e.getID() == ActionEvent.ACTION_PERFORMED) {
+                    if(permissions[3] == "true"){
+                        permissions[3] = "false";
                     }
+                    else{
+                        permissions[3] = "true";
+                    }
+                }
 
-                });
             }
         });
         // Clicking on the Apply changes button will change all the details provided and will be stored in a db
@@ -195,20 +147,23 @@ public class ModifyUserDetails extends JFrame {
                 }
 
                 else {
+//                    try {
                     try {
                         String Hashed_password = getHash(User_Password);
-                        Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
-                        SetUserPermission( token, user, permission);
-                        changePassword.SetUserPassword(token,user,Hashed_password);
-
-                        System.out.println(permission.getCreateBillboard());
-                        System.out.println(permission.getEditAllBillboards());
-                        System.out.println(permission.getEditSchedule());
-                        System.out.println(permission.getEditUsers());
-
-                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
+                    } catch (NoSuchAlgorithmException ex) {
                         ex.printStackTrace();
                     }
+                    Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
+                    System.out.println(permission.getCreateBillboard());
+                    System.out.println(permission.getEditAllBillboards());
+                    System.out.println(permission.getEditSchedule());
+                    System.out.println(permission.getEditUsers());
+                    System.out.println("\n");
+//                        SetUserPermission( token, user, permission);
+//                        changePassword.SetUserPassword(token,user,Hashed_password);
+//                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
+//                        ex.printStackTrace();
+//                    }
 
                 }
             }
@@ -216,16 +171,16 @@ public class ModifyUserDetails extends JFrame {
 
     }
 
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//
-//        String user = "Josh";
-//        String admin = "Sid";
-//        String token = "ihfoahfio";
-//        JFrame frame = new ModifyUserDetails("Modify Details",token,admin,user);
-//        frame.setLocation(500,300);
-//        frame.setSize(550,550);
-//        frame.setVisible(true);
-//    }
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+        String user = "Josh";
+        String admin = "Sid";
+        String token = "ihfoahfio";
+        JFrame frame = new ModifyUserDetails("Modify Details",token,admin,user);
+        frame.setLocation(500,300);
+        frame.setSize(550,550);
+        frame.setVisible(true);
+    }
 
 //    public static Database.Permissions GetUserPermission(String token, String user) throws IOException, ClassNotFoundException {
 //        Socket socket = Client.getClientSocket();

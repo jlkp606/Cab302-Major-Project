@@ -41,7 +41,7 @@ public class Createbillboard extends JFrame {
 
     public Createbillboard(String title, String token, String username) throws IOException {
         super(title);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
