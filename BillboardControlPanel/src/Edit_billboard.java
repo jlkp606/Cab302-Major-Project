@@ -37,7 +37,7 @@ public class Edit_billboard extends JFrame {
         super(title);
         this.token = token;
         this.billboard = billboard;
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 

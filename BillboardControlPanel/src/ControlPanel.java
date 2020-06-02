@@ -1,3 +1,4 @@
+import Database.Permissions;
 import Server.Client;
 import org.xml.sax.SAXException;
 
@@ -26,7 +27,7 @@ public class ControlPanel extends JFrame{
     //Constructor
     public ControlPanel(String title,String token,String user) {
         super(title);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
         this.setContentPane(ControlPanel);
         this.pack(); // will pack the GUI buttons etc.
 
@@ -37,28 +38,33 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Database.Permissions permissions = null;
+//
+                Permissions permissions = null;
                 try {
                     permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
+                } catch (IOException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
                 }
-                assert permissions != null;
-                if(permissions.getCreateBillboard().equals("true")) {
-                    JFrame frame = null;
-                    try {
-                        frame = new Createbillboard("Create Billboard",token,user);
-                    } catch (IOException exc) {
-                        exc.printStackTrace();
+
+                if (permissions != null) {
+                    if (permissions.getCreateBillboard().equals("true")) {
+                        JFrame frame = null;
+                        try {
+                            frame = new Createbillboard("Create Billboard", token, user);
+                        } catch (IOException exc) {
+                            exc.printStackTrace();
+                        }
+                        assert frame != null;
+                        frame.setLocation(500, 300);
+                        frame.setSize(550, 550);
+                        frame.setVisible(true);
                     }
-                    assert frame != null;
-                    frame.setLocation(500,300);
-                    frame.setSize(550,550);
-                    frame.setVisible(true);
                 }
-                else{
+
+                else {
                     JOptionPane.showMessageDialog(null, "Permission required ");
                 }
+
 
             }
         });
@@ -103,7 +109,13 @@ public class ControlPanel extends JFrame{
                 assert permissions != null;
                 if(permissions.getEditSchedule().equals("true")) {
                     JFrame frame = null;
-                    frame = new viewer_billboard_time(" Users",token,user);
+                    try {
+                        frame = new viewer_billboard_time(" Users",token,user);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (ClassNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                     frame.setLocation(500,300);
                     frame.setSize(850,650);
                     frame.setVisible(true);

@@ -31,7 +31,7 @@ public class Schedule_billboard extends JFrame {
 
     public Schedule_billboard(String title, String token ,String user) {
         super(title);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
@@ -117,14 +117,14 @@ public class Schedule_billboard extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        String user = "Sid";
-        String token = "2615386751237";
-        JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
-        frame.setLocation(400,200);
-        frame.setSize(350,350);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        String user = "Sid";
+//        String token = "2615386751237";
+//        JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
+//        frame.setLocation(400,200);
+//        frame.setSize(350,350);
+//        frame.setVisible(true);
+//    }
     public static void ScheduleBillboard(String token,Schedule schedule) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
 
         Socket socket = Client.getClientSocket();

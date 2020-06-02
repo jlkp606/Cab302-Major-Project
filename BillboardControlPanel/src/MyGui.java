@@ -25,7 +25,7 @@ public class MyGui extends Component implements ActionListener {
         f.setLocation(500, 300);
         f.setSize(450, 300);
         f.setLayout(null);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         l1 = new JLabel("NAME");
         l1.setBounds(50, 70, 80, 30);
@@ -97,6 +97,7 @@ public class MyGui extends Component implements ActionListener {
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
+
         }
 
     }
