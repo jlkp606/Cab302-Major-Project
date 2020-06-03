@@ -185,23 +185,18 @@ public class JDBCDatabaseSource implements DatabaseSource {
           deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
           getUserPerms = connection.prepareStatement(GET_USER_PERMISSIONS);
 
-          try{
-              User admin = new User();
+          User admin = getUser("admin");
+          if(admin.getUsername().equals(null)){
+              admin = new User();
               String salt = admin.getPasswordSalt();
               String hPassword = getHash("admin");
               String dbPassword = getHash(hPassword+salt);
               admin.setPassword(dbPassword);
               admin.setUsername("admin");
-              addUser(admin);
-              Permissions permissions = new Permissions("admin", "true", "true", "true", "true");
-              addUserPerms("admin", permissions);
-          } catch(Exception e) {
-            System.out.println("hi");
           }
 
 
-
-      } catch (SQLException ex) {
+      } catch (SQLException | NoSuchAlgorithmException ex) {
          ex.printStackTrace();
       }
    }
@@ -209,159 +204,128 @@ public class JDBCDatabaseSource implements DatabaseSource {
     /**
      * @see DatabaseSource
      */
-    public void addUser(User u) {
-        try {
-            addUser.setString(1, u.getUsername());
-            addUser.setString(2, u.getPassword());
-            addUser.setString(3, u.getPasswordSalt());
-            addUser.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    public void addUser(User u) throws SQLException {
+        addUser.setString(1, u.getUsername());
+        addUser.setString(2, u.getPassword());
+        addUser.setString(3, u.getPasswordSalt());
+        addUser.execute();
     }
     /**
      * @see DatabaseSource#getUser(String)
      */
-    public User getUser(String name) {
+    public User getUser(String name) throws SQLException {
         User u = new User();
         ResultSet rs = null;
 
-        try {
-            getUser.setString(1, name);
-            rs = getUser.executeQuery();
-            rs.next();
+        getUser.setString(1, name);
+        rs = getUser.executeQuery();
+        if(rs.next()){
             u.setUsername(rs.getString("username"));
             u.setPassword(rs.getString("password"));
             u.setPasswordSalt(rs.getString("passwordSalt"));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
-
         return u;
     }
 
    /**
     * @see DatabaseSource#getUsernames();
     */
-   public ArrayList<String> getUsernames() {
+   public ArrayList<String> getUsernames() throws SQLException {
       ResultSet rs = null;
       ResultSetMetaData rsmd = null;
       ArrayList<String> usernameList;
-      try {
-         rs = getUsernames.executeQuery();
-         rsmd = rs.getMetaData();
-         int columnCount = rsmd.getColumnCount();
+     rs = getUsernames.executeQuery();
+     rsmd = rs.getMetaData();
+     int columnCount = rsmd.getColumnCount();
 
-         usernameList = new ArrayList<>(columnCount);
-         while (rs.next()) {
-            int i = 1;
-            while (i <= columnCount) {
-               usernameList.add(rs.getString(i++));
-            }
-         }
-         return usernameList;
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
-      return null;
+     usernameList = new ArrayList<>(columnCount);
+     while (rs.next()) {
+        int i = 1;
+        while (i <= columnCount) {
+           usernameList.add(rs.getString(i++));
+        }
+     }
+     return usernameList;
+
    }
 
 
    /**
     * @see DatabaseSource#setUserPassword(String, String)
     */
-   public void setUserPassword(String name, String newPassword) {
-      try {
-         setUserPassword.setString(1, newPassword);
-         setUserPassword.setString(2, name);
-         setUserPassword.executeUpdate();
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
+   public void setUserPassword(String name, String newPassword) throws SQLException {
+     setUserPassword.setString(1, newPassword);
+     setUserPassword.setString(2, name);
+     setUserPassword.executeUpdate();
    }
 
    /**
      * @see DatabaseSource#deleteUser(String)
      */
-    public void deleteUser(String name) {
-        try {
-            deleteUser.setString(1, name);
-            deleteUser.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    public void deleteUser(String name) throws SQLException {
+        deleteUser.setString(1, name);
+        deleteUser.executeUpdate();
     }
 
     /**
     * @see DatabaseSource#addBillboard(Billboard)
     */
    public void addBillboard(Billboard b) throws SQLException {
-      try {
-         addBillboard.setString(1, b.getbName());
-         addBillboard.setString(2, b.getUsername());
-         addBillboard.setString(3, b.getColour());
-         addBillboard.setString(4, b.getMessage());
-         addBillboard.setString(5, b.getMessageColour());
-         addBillboard.setString(6, b.getPictureData());
-         addBillboard.setString(7, b.getPictureURL());
-         addBillboard.setString(8, b.getInfoMessage());
-         addBillboard.setString(9, b.getInfoColour());
-         addBillboard.execute();
-      } catch (SQLException ex) {
-          updateBillboard.setString(1, b.getbName());
-          updateBillboard.setString(2, b.getUsername());
-          updateBillboard.setString(3, b.getColour());
-          updateBillboard.setString(4, b.getMessage());
-          updateBillboard.setString(5, b.getMessageColour());
-          updateBillboard.setString(6, b.getPictureData());
-          updateBillboard.setString(7, b.getPictureURL());
-          updateBillboard.setString(8, b.getInfoMessage());
-          updateBillboard.setString(9, b.getInfoColour());
-          updateBillboard.setString(10, b.getbName());
-          updateBillboard.execute();
-      }
+       Billboard billboard = getBillboard(b.getbName());
+       if(billboard.getbName().equals(null)){
+           addBillboard.setString(1, b.getbName());
+           addBillboard.setString(2, b.getUsername());
+           addBillboard.setString(3, b.getColour());
+           addBillboard.setString(4, b.getMessage());
+           addBillboard.setString(5, b.getMessageColour());
+           addBillboard.setString(6, b.getPictureData());
+           addBillboard.setString(7, b.getPictureURL());
+           addBillboard.setString(8, b.getInfoMessage());
+           addBillboard.setString(9, b.getInfoColour());
+           addBillboard.execute();
+       } else {
+           updateBillboard.setString(1, b.getbName());
+           updateBillboard.setString(2, b.getUsername());
+           updateBillboard.setString(3, b.getColour());
+           updateBillboard.setString(4, b.getMessage());
+           updateBillboard.setString(5, b.getMessageColour());
+           updateBillboard.setString(6, b.getPictureData());
+           updateBillboard.setString(7, b.getPictureURL());
+           updateBillboard.setString(8, b.getInfoMessage());
+           updateBillboard.setString(9, b.getInfoColour());
+           updateBillboard.setString(10, b.getbName());
+           updateBillboard.execute();
+       }
    }
 
-    public ArrayList<Billboard> getAllBillboards() {
+    public ArrayList<Billboard> getAllBillboards() throws SQLException {
         ResultSet rs = null;
-        ResultSetMetaData rsmd = null;
         ArrayList<Billboard> billboardList;
-        try {
-            rs = getAllBillboard.executeQuery();
-            rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
+        rs = getAllBillboard.executeQuery();
 
-            billboardList = new ArrayList<>();
-            while (rs.next()) {
-                Billboard billboard = new Billboard();
-                billboard.setbName(rs.getString("bName"));
-                billboard.setUsername(rs.getString("username"));
-                billboard.setColour(rs.getString("colour"));
-                billboard.setMessage(rs.getString("message"));
-                billboard.setMessageColour(rs.getString("messageColour"));
-                billboard.setPictureData(rs.getString("pictureData"));
-                billboard.setPictureURL(rs.getString("pictureURL"));
-                billboard.setInfoMessage(rs.getString("infoMessage"));
-                billboard.setInfoColour(rs.getString("infoColour"));
-                billboardList.add(billboard);
-            }
-            return billboardList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        billboardList = new ArrayList<>();
+        while (rs.next()) {
+            Billboard billboard = new Billboard();
+            billboard.setbName(rs.getString("bName"));
+            billboard.setUsername(rs.getString("username"));
+            billboard.setColour(rs.getString("colour"));
+            billboard.setMessage(rs.getString("message"));
+            billboard.setMessageColour(rs.getString("messageColour"));
+            billboard.setPictureData(rs.getString("pictureData"));
+            billboard.setPictureURL(rs.getString("pictureURL"));
+            billboard.setInfoMessage(rs.getString("infoMessage"));
+            billboard.setInfoColour(rs.getString("infoColour"));
+            billboardList.add(billboard);
         }
-        return null;
+        return billboardList;
     }
 
     /**
      * @see DatabaseSource#deleteBillboard
      */
-    public void deleteBillboard(String billboardName) {
-       try {
-          deleteBillboard.setString(1, billboardName);
-          deleteBillboard.executeUpdate();
-       } catch (SQLException ex) {
-          ex.printStackTrace();
-       }
+    public void deleteBillboard(String billboardName) throws SQLException {
+      deleteBillboard.setString(1, billboardName);
+      deleteBillboard.executeUpdate();
     }
 
 
@@ -369,17 +333,13 @@ public class JDBCDatabaseSource implements DatabaseSource {
     /**
      * @see DatabaseSource#nameSet()
      */
-    public Set<String> nameSet() {
+    public Set<String> nameSet() throws SQLException {
         Set<String> names = new TreeSet<String>();
         ResultSet rs = null;
 
-        try {
-            rs = getAllBillboard.executeQuery();
-            while (rs.next()) {
-                names.add(rs.getString("name"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        rs = getAllBillboard.executeQuery();
+        while (rs.next()) {
+            names.add(rs.getString("name"));
         }
 
         return names;
@@ -388,27 +348,22 @@ public class JDBCDatabaseSource implements DatabaseSource {
     /**
      * @see DatabaseSource#getBillboard(String)
      */
-    public Billboard getBillboard(String name) {
+    public Billboard getBillboard(String name) throws SQLException {
         Billboard b = new Billboard();
         ResultSet rs = null;
 
-        try {
-            getBillboard.setString(1, name);
-            rs = getBillboard.executeQuery();
-            rs.next();
-            b.setbName(rs.getString("bname"));
-            b.setUsername(rs.getString("username"));
-            b.setColour(rs.getString("colour"));
-            b.setMessage(rs.getString("message"));
-            b.setMessageColour(rs.getString("messageColour"));
-            b.setPictureData(rs.getString("pictureData"));
-            b.setPictureURL(rs.getString("pictureUrl"));
-            b.setInfoMessage(rs.getString("infoMessage"));
-            b.setInfoColour(rs.getString("infoColour"));
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        getBillboard.setString(1, name);
+        rs = getBillboard.executeQuery();
+        rs.next();
+        b.setbName(rs.getString("bname"));
+        b.setUsername(rs.getString("username"));
+        b.setColour(rs.getString("colour"));
+        b.setMessage(rs.getString("message"));
+        b.setMessageColour(rs.getString("messageColour"));
+        b.setPictureData(rs.getString("pictureData"));
+        b.setPictureURL(rs.getString("pictureUrl"));
+        b.setInfoMessage(rs.getString("infoMessage"));
+        b.setInfoColour(rs.getString("infoColour"));
 
         return b;
     }
@@ -416,17 +371,13 @@ public class JDBCDatabaseSource implements DatabaseSource {
     /**
      * @see DatabaseSource#getSize()
      */
-    public int getSize() {
+    public int getSize() throws SQLException {
         ResultSet rs = null;
         int rows = 0;
 
-        try {
-            rs = rowCount.executeQuery();
-            rs.next();
-            rows = rs.getInt(1);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        rs = rowCount.executeQuery();
+        rs.next();
+        rows = rs.getInt(1);
 
         return rows;
     }
@@ -434,65 +385,49 @@ public class JDBCDatabaseSource implements DatabaseSource {
    /**
     * @see DatabaseSource //  #addUserPerms
     */
-   public void addUserPerms(String username, Permissions permission) {
-       try {
-           addPerms.setString(1, username);
-           addPerms.setString(2, permission.getCreateBillboard());
-           addPerms.setString(3, permission.getEditAllBillboards());
-           addPerms.setString(4, permission.getEditSchedule());
-           addPerms.setString(5, permission.getEditUsers());
+   public void addUserPerms(String username, Permissions permission) throws SQLException {
+       addPerms.setString(1, username);
+       addPerms.setString(2, permission.getCreateBillboard());
+       addPerms.setString(3, permission.getEditAllBillboards());
+       addPerms.setString(4, permission.getEditSchedule());
+       addPerms.setString(5, permission.getEditUsers());
 
-           addPerms.execute();
-       } catch (SQLException ex) {
-           ex.printStackTrace();
-       }
+       addPerms.execute();
    }
 
-   public void updateUserPerms(String username, Permissions permission){
-       try {
-           setPerms.setString(1, permission.getCreateBillboard());
-           setPerms.setString(2, permission.getEditAllBillboards());
-           setPerms.setString(3, permission.getEditSchedule());
-           setPerms.setString(4, permission.getEditUsers());
-           setPerms.setString(5, username);
+   public void updateUserPerms(String username, Permissions permission) throws SQLException {
+       setPerms.setString(1, permission.getCreateBillboard());
+       setPerms.setString(2, permission.getEditAllBillboards());
+       setPerms.setString(3, permission.getEditSchedule());
+       setPerms.setString(4, permission.getEditUsers());
+       setPerms.setString(5, username);
 
-           setPerms.execute();
-       } catch (SQLException ex) {
-           ex.printStackTrace();
-       }
+       setPerms.execute();
    }
 
    /**
     * @see DatabaseSource#deletePerms(String)
     */
-   public void deletePerms(String name) {
-      try {
-         deleteUser.setString(1, name);
-         deleteUser.executeUpdate();
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
+   public void deletePerms(String name) throws SQLException {
+     deleteUser.setString(1, name);
+     deleteUser.executeUpdate();
    }
 
    /**
     * @see DatabaseSource#getUserPerms(String)
     */
-   public Permissions getUserPerms(String username) {
+   public Permissions getUserPerms(String username) throws SQLException {
       Permissions p = new Permissions();
       ResultSet rs = null;
 
-      try {
-         getUserPerms.setString(1, username);
-         rs = getUserPerms.executeQuery();
-         rs.next();
-         p.setUsername(rs.getString("Username"));
-         p.setCreateBillboard(rs.getString("CreateBillboard"));
-         p.setEditAllBillboards(rs.getString("editAllBillboards"));
-         p.setEditSchedule(rs.getString("EditSchedule"));
-         p.setEditUsers(rs.getString("EditUsers"));
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
+     getUserPerms.setString(1, username);
+     rs = getUserPerms.executeQuery();
+     rs.next();
+     p.setUsername(rs.getString("Username"));
+     p.setCreateBillboard(rs.getString("CreateBillboard"));
+     p.setEditAllBillboards(rs.getString("editAllBillboards"));
+     p.setEditSchedule(rs.getString("EditSchedule"));
+     p.setEditUsers(rs.getString("EditUsers"));
 
       return p;
    }
@@ -500,42 +435,34 @@ public class JDBCDatabaseSource implements DatabaseSource {
    /**
     * @see DatabaseSource#addSchedule(Schedule)
     */
-   public void addSchedule(Schedule schedule) {
-      try {
-         addSchedule.setString(1, schedule.getUsername());
-         addSchedule.setString(2, schedule.getBillboardName());
-         addSchedule.setString(3, schedule.getStartTime());
-         addSchedule.setString(4, schedule.getEndTime());
-         addSchedule.setString(5, schedule.getDay());
-         addSchedule.setString(6, schedule.getRepeat());
+   public void addSchedule(Schedule schedule) throws SQLException {
+     addSchedule.setString(1, schedule.getUsername());
+     addSchedule.setString(2, schedule.getBillboardName());
+     addSchedule.setString(3, schedule.getStartTime());
+     addSchedule.setString(4, schedule.getEndTime());
+     addSchedule.setString(5, schedule.getDay());
+     addSchedule.setString(6, schedule.getRepeat());
 
-         addSchedule.execute();
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
+     addSchedule.execute();
    }
 
    /**
     * @see DatabaseSource#getSchedule
     */
-   public Schedule getSchedule(String billboardName) {
+   public Schedule getSchedule(String billboardName) throws SQLException {
       Schedule s = new Schedule();
       ResultSet rs = null;
 
-      try {
-         getSchedule.setString(1, billboardName);
-         rs = getSchedule.executeQuery();
-         rs.next();
-         s.setBillboardName(rs.getString("bName"));
-         s.setUsername(rs.getString("username"));
-         s.setStartTime(rs.getString("bstartTime"));
-         s.setEndTime(rs.getString("endTime"));
-         s.setDay(rs.getString("day"));
-         s.setRepeat(rs.getString("repeats"));
+     getSchedule.setString(1, billboardName);
+     rs = getSchedule.executeQuery();
+     rs.next();
+     s.setBillboardName(rs.getString("bName"));
+     s.setUsername(rs.getString("username"));
+     s.setStartTime(rs.getString("bstartTime"));
+     s.setEndTime(rs.getString("endTime"));
+     s.setDay(rs.getString("day"));
+     s.setRepeat(rs.getString("repeats"));
 
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
 
       return s;
    }
@@ -543,41 +470,32 @@ public class JDBCDatabaseSource implements DatabaseSource {
    /**
     * @see DatabaseSource#deleteSchedule(String)
     */
-   public void deleteSchedule(Schedule schedule) {
-      try {
-         deleteSchedule.setString(1, schedule.getBillboardName());
-         deleteSchedule.setString(2, schedule.getStartTime());
-         deleteSchedule.executeUpdate();
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
+   public void deleteSchedule(Schedule schedule) throws SQLException {
+     deleteSchedule.setString(1, schedule.getBillboardName());
+     deleteSchedule.setString(2, schedule.getStartTime());
+     deleteSchedule.executeUpdate();
    }
 
    /**
     * @see DatabaseSource#getAllSchedules();
     */
-    public ArrayList<Schedule> getAllSchedules() {
+    public ArrayList<Schedule> getAllSchedules() throws SQLException {
         ResultSet rs = null;
         ResultSetMetaData rsmd = null;
         ArrayList<Schedule> scheduleList;
-        try {
-            rs = getAllSchedules.executeQuery();
-            rsmd = rs.getMetaData();
-            scheduleList = new ArrayList<>();
-            while (rs.next()) {
-                Schedule schedule = new Schedule();
-                schedule.setBillboardName(rs.getString("bName"));
-                schedule.setStartTime(rs.getString("bStartTime"));
-                schedule.setEndTime(rs.getString("bEndTime"));
-                schedule.setDay(rs.getString("day"));
-                schedule.setRepeat(rs.getString("repeats"));
-                scheduleList.add(schedule);
-            }
-            return scheduleList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        rs = getAllSchedules.executeQuery();
+        rsmd = rs.getMetaData();
+        scheduleList = new ArrayList<>();
+        while (rs.next()) {
+            Schedule schedule = new Schedule();
+            schedule.setBillboardName(rs.getString("bName"));
+            schedule.setStartTime(rs.getString("bStartTime"));
+            schedule.setEndTime(rs.getString("bEndTime"));
+            schedule.setDay(rs.getString("day"));
+            schedule.setRepeat(rs.getString("repeats"));
+            scheduleList.add(schedule);
         }
-        return null;
+        return scheduleList;
     }
 
 }
