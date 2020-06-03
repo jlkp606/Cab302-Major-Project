@@ -25,41 +25,36 @@ public class ControlPanel extends JFrame{
     private JButton changePassword;
 
     //Constructor
-    public ControlPanel(String title,String token,String user) {
+    public ControlPanel(String title,String token,String user) throws IOException, ClassNotFoundException {
         super(title);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
         this.setContentPane(ControlPanel);
         this.pack(); // will pack the GUI buttons etc.
 
         // Adding action listeners to the following buttons:
+
+
+//        Permissions permissions = List_billboard.GetUserPermission(token, user);
+
+        Permissions permissions = new Permissions("Sid","true","true","true","true");
+
 
         //1. Clicking on create new billboard button, will take you to the create billboard GUI
         createNewBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-//
-                Permissions permissions = null;
-                try {
-                    permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (permissions != null) {
                     if (permissions.getCreateBillboard().equals("true")) {
-                        JFrame frame = null;
                         try {
-                            frame = new Createbillboard("Create Billboard", token, user);
+                            JFrame frame = new Createbillboard("Create Billboard", token, user);
+                            frame.setLocation(500, 300);
+                            frame.setSize(550, 550);
+                            frame.setVisible(true);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
-                        assert frame != null;
-                        frame.setLocation(500, 300);
-                        frame.setSize(550, 550);
-                        frame.setVisible(true);
                     }
-                }
+//                }
 
                 else {
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -69,17 +64,12 @@ public class ControlPanel extends JFrame{
             }
         });
 
+
         //2. Clicking on edit User button, will take you to the create user GUI
         editUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Database.Permissions permissions = null;
-                try {
-                    permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
-                }
-                assert permissions != null;
+
                 if(permissions.getEditUsers().equals("true")) {
                     try {
                         new listUsers(" Users",token,user);
@@ -100,25 +90,17 @@ public class ControlPanel extends JFrame{
         scheduleBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Database.Permissions permissions = null;
-                try {
-                    permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
-                }
-                assert permissions != null;
+
                 if(permissions.getEditSchedule().equals("true")) {
-                    JFrame frame = null;
                     try {
-                        frame = new viewer_billboard_time(" Users",token,user);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch (ClassNotFoundException ex) {
+                        JFrame frame = new viewer_billboard_time(" Users",token,user);
+                        frame.setLocation(500,300);
+                        frame.setSize(850,650);
+                        frame.setVisible(true);
+                    } catch (IOException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     }
-                    frame.setLocation(500,300);
-                    frame.setSize(850,650);
-                    frame.setVisible(true);
+
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -131,13 +113,6 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Database.Permissions permissions = null;
-                try {
-                    permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
-                }
-                assert permissions != null;
                 if(permissions.getEditAllBillboards().equals("true")) {
                     try {
                         new List_billboard(token, user);
@@ -169,17 +144,15 @@ public class ControlPanel extends JFrame{
         changePassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = null;
                 try {
-                    frame = new changePassword("Change Password",token,user);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
+                    JFrame frame = new changePassword("Change Password",token,user);
+                    frame.setLocation(500, 300);
+                    frame.setSize(350, 350);
+                    frame.setVisible(true);
+                } catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                frame.setLocation(500, 300);
-                frame.setSize(350, 350);
-                frame.setVisible(true);
+
             }
         });
     }
