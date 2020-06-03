@@ -68,6 +68,7 @@ public class MyGui extends Component implements ActionListener {
 
     public static void main(String[] args) {
         MyGui myGuo = new MyGui();
+
     }
 
     public void actionPerformed(ActionEvent ae) {
@@ -78,6 +79,7 @@ public class MyGui extends Component implements ActionListener {
 
             try {
                 token = LoginRequest(userName, Hashed_password);
+                System.out.println(token);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

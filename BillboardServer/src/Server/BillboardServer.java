@@ -8,7 +8,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -32,7 +35,7 @@ public class BillboardServer {
         objectOutputStream.flush();
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, SQLException {
 
         //Stores users that have logged in
         HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();
@@ -113,15 +116,20 @@ public class BillboardServer {
                             //not fully implemented
                             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
                             for (Schedule s : scheduleList){
-                                LocalDateTime ldt = null;
-                                LocalDateTime startTime = ldt.parse(s.getStartTime());
-                                LocalDateTime endTime = ldt.parse(s.getEndTime());
+                                LocalTime lt =  null;
+                                LocalTime startTime = lt.parse(s.getStartTime());
+                                LocalTime endTime = lt.parse(s.getEndTime());
+//                                LocalDateTime ldt = null;
+//                                LocalDateTime startTime = ldt.parse(s.getStartTime());
+//                                LocalDateTime endTime = ldt.parse(s.getEndTime());
                                 //repeat if hour - check whole hours, what minute we are on
                                 //repeat if days - check what hours,
                                 //repeat week - check day
-                                Boolean isOn =
-                                        (LocalDateTime.now().isAfter(startTime) &&
-                                        LocalDateTime.now().isBefore(endTime));
+                                Boolean isOn = false;
+                                if(s.getDay().equals(LocalDate.now().getDayOfWeek())){
+                                    isOn = (LocalTime.now().isAfter(startTime) &&
+                                            LocalTime.now().isBefore(endTime));
+                                };
 
                                 if (isOn) {
                                     Billboard billboard = dataSource.getBillboard(s.getBillboardName());
@@ -144,6 +152,7 @@ public class BillboardServer {
                         }
                         case "createBillboard":{
                             //tested
+                            System.out.println("in server");
                             Billboard billboard = (Billboard) request.get("billboard");
                             dataSource.addBillboard(billboard);
                             break;

@@ -75,6 +75,8 @@ public class Createbillboard extends JFrame {
                             JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
                         }
                         else {
+                            System.out.println(billboard.getbName());
+                            System.out.println("in else");
                             createBillboardRequest(token, billboard);
                         }
                     } catch (IOException ex) {
@@ -193,6 +195,7 @@ public class Createbillboard extends JFrame {
 //        frame.setVisible(true);
 //    }
     public static void createBillboardRequest(String token, Database.Billboard billboard) throws IOException {
+            System.out.println(token + " in createBillboard");
             Socket socket = Client.getClientSocket();
             HashMap<String , Object> request = new HashMap<String , Object>();
             request.put("type", "createBillboard");
