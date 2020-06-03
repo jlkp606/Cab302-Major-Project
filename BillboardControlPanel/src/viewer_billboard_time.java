@@ -13,43 +13,18 @@ import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
 
 public class viewer_billboard_time extends JFrame {
-    private JTextArea Friday_9;
+    private JPanel mainPanel;
+
     private JTextArea Monday_9;
     private JTextArea Monday_10;
     private JTextArea Monday_11;
     private JTextArea Monday_12;
-    private JPanel mainPanel;
-    private JTextArea Friday_4;
-    private JTextArea Friday_10;
-    private JTextArea Friday_11;
-    private JTextArea Friday_12;
-    private JTextArea Friday_1;
-    private JTextArea Friday_2;
-    private JTextArea Friday_3;
-    private JTextArea Friday_5;
-    private JTextArea Thursday_9;
-    private JTextArea Thursday_10;
-    private JTextArea Thursday_11;
-    private JTextArea Thursday_12;
-    private JTextArea Thursday_1;
-    private JTextArea Thursday_2;
-    private JTextArea Thursday_3;
-    private JTextArea Thursday_4;
-    private JTextArea Thursday_5;
-    private JTextArea Wednesday_9;
-    private JTextArea Wednesday_10;
-    private JTextArea Wednesday_11;
-    private JTextArea Wednesday_12;
-    private JTextArea Wednesday_1;
-    private JTextArea Wednesday_2;
-    private JTextArea Wednesday_3;
-    private JTextArea Wednesday_4;
-    private JTextArea Wednesday_5;
     private JTextArea Monday_1;
     private JTextArea Monday_2;
     private JTextArea Monday_4;
     private JTextArea Monday_3;
     private JTextArea Monday_5;
+
     private JTextArea Tuesday_9;
     private JTextArea Tuesday_10;
     private JTextArea Tuesday_11;
@@ -59,6 +34,38 @@ public class viewer_billboard_time extends JFrame {
     private JTextArea Tuesday_3;
     private JTextArea Tuesday_4;
     private JTextArea Tuesday_5;
+
+    private JTextArea Wednesday_9;
+    private JTextArea Wednesday_10;
+    private JTextArea Wednesday_11;
+    private JTextArea Wednesday_12;
+    private JTextArea Wednesday_1;
+    private JTextArea Wednesday_2;
+    private JTextArea Wednesday_3;
+    private JTextArea Wednesday_4;
+    private JTextArea Wednesday_5;
+
+    private JTextArea Thursday_9;
+    private JTextArea Thursday_10;
+    private JTextArea Thursday_11;
+    private JTextArea Thursday_12;
+    private JTextArea Thursday_1;
+    private JTextArea Thursday_2;
+    private JTextArea Thursday_3;
+    private JTextArea Thursday_4;
+    private JTextArea Thursday_5;
+
+    private JTextArea Friday_9;
+    private JTextArea Friday_10;
+    private JTextArea Friday_11;
+    private JTextArea Friday_12;
+    private JTextArea Friday_1;
+    private JTextArea Friday_2;
+    private JTextArea Friday_3;
+    private JTextArea Friday_4;
+    private JTextArea Friday_5;
+
+
     private JButton add;
     private JButton remove;
 
@@ -125,22 +132,24 @@ public class viewer_billboard_time extends JFrame {
                 textboxArray[i][j].setEnabled(false);
             }
         }
-
-//        Database.Schedule schedule1 = new Schedule(user, "Billboard1", "2020-06-02T09:40", "2020-06-02T10:25", "Friday", "repeat");
-//        Database.Schedule schedule2 = new Schedule(user, "Billboard2", "2020-06-02T12:16", "2020-06-02T12:45", "Tuesday", "repeat");
-//        Database.Schedule schedule3 = new Schedule(user, "Billboard3", "2020-06-02T14:00", "2020-06-02T14:05", "Monday", "repeat");
-//        Database.Schedule schedule4 = new Schedule(user, "Billboard4", "2020-06-02T15:25", "2020-06-02T16:50", "Thursday", "repeat");
-//        Database.Schedule schedule5 = new Schedule(user, "Billboard5", "2020-06-02T13:25", "2020-06-02T13:49", "Thursday", "repeat");
 //
-//        ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
+//        Database.Schedule schedule1 = new Schedule("Sid", "Billboard1", "2020-06-02T09:40", "2020-06-02T10:25", "FRIDAY", "Every Day");
+//        Database.Schedule schedule2 = new Schedule("Liam", "Billboard2", "2020-06-02T12:16", "2020-06-02T12:45", "TUESDAY", "repeat");
+//        Database.Schedule schedule3 = new Schedule("Josh", "Billboard3", "2020-06-02T14:00", "2020-06-02T14:05", "MONDAY", "repeat");
+//        Database.Schedule schedule4 = new Schedule("Jet", "Billboard4", "2020-06-02T15:25", "2020-06-02T16:50", "THURSDAY", "repeat");
+//        Database.Schedule schedule5 = new Schedule("Pratham", "Billboard5", "2020-06-02T13:25", "2020-06-02T13:49", "THURSDAY", "Every Day");
+//        Database.Schedule schedule6 = new Schedule("Ram", "Billboard6", "2020-06-02T09:20", "2020-06-02T09:25", "FRIDAY", "repeat");
+
+//      ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
         ArrayList<Database.Schedule> scheduleList = ViewSchedule( token);
 //        scheduleList.add(schedule1);
 //        scheduleList.add(schedule2);
 //        scheduleList.add(schedule3);
 //        scheduleList.add(schedule4);
 //        scheduleList.add(schedule5);
+//        scheduleList.add(schedule6);
 
-        String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        String[] weekDays = {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
         for (int p = 0; p < 5; p++) {
             for (int i = 0; i < scheduleList.size(); i++) {
                 String day = scheduleList.get(i).getDay();
@@ -149,11 +158,24 @@ public class viewer_billboard_time extends JFrame {
                 String displayEndTime = scheduleList.get(i).getEndTime().substring(11, 16);
                 String billboardScheduled = scheduleList.get(i).getBillboardName();
                 String billboardScheduledCreator = scheduleList.get(i).getUsername();
+                String repeat = scheduleList.get(i).getRepeat();
                 for (int k = 9; k < 18; k++) {
                     String hour = String.format("%02d", k);
                     if (day.equals(weekDays[p])) {
                         if (compareTime.equals(hour)) {
-                            textboxArray[p][k - 9].setText(billboardScheduledCreator + "\n"+ billboardScheduled + "\n" + displayStartTime + "-" + displayEndTime + "\n");
+
+                            if(repeat.equals("Every Day")){
+                                for(int m = 0;m<5;m++){
+                                textboxArray[m][k - 9].append(billboardScheduledCreator + "\n"+ billboardScheduled + "\n" + displayStartTime + "-" + displayEndTime + "\n");
+                                }
+
+                            }
+
+                            else{
+
+                                textboxArray[p][k - 9].append(billboardScheduledCreator + "\n"+ billboardScheduled + "\n" + displayStartTime + "-" + displayEndTime + "\n");
+
+                            }
                         }
                     }
                 }
@@ -164,20 +186,30 @@ public class viewer_billboard_time extends JFrame {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new Schedule_billboard("Add billboard to Schedule", user, token);
-                frame.setLocation(400, 200);
-                frame.setSize(350, 350);
-                frame.setVisible(true);
+                try {
+                    JFrame frame = new Schedule_billboard("Add billboard to Schedule", user, token);
+                    frame.setLocation(400, 200);
+                    frame.setSize(350, 350);
+                    frame.setVisible(true);
+                } catch (IOException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+
             }
         });
 
         remove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new removeScheduledBillboard("Remove Billboard", token, user);
-                frame.setLocation(300, 300);
-                frame.setSize(300, 250);
-                frame.setVisible(true);
+                try {
+                    JFrame frame = new removeScheduledBillboard("Remove Billboard", token, user);
+                    frame.setLocation(300, 300);
+                    frame.setSize(300, 250);
+                    frame.setVisible(true);
+                } catch (IOException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+
             }
         });
     }

@@ -23,8 +23,9 @@ public class CreateXMLFile {
     String message_colour;
     String image_data;
     String image_url;
-
-    public CreateXMLFile(String billboard_title,String billboard_title_colour,String billboard_bg_colour, String billboard_message, String billboard_message_colour, String billboard_image_data,String billboard_image_url){
+    String xmlFilePath;
+//    public static final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
+    public CreateXMLFile(String billboard_title,String billboard_title_colour,String billboard_bg_colour, String billboard_message, String billboard_message_colour, String billboard_image_data,String billboard_image_url,String FilePath){
         title = billboard_title;
         title_colour = billboard_title_colour;
         bg_colour=billboard_bg_colour;
@@ -32,7 +33,7 @@ public class CreateXMLFile {
         message_colour = billboard_message_colour;
         image_data = billboard_image_data;
         image_url = billboard_image_url;
-
+        xmlFilePath = FilePath;
     }
 
     public  void start() throws ParserConfigurationException, TransformerException {
@@ -88,9 +89,8 @@ public class CreateXMLFile {
 
         transformer.transform(domSource, streamResult);
 
-        System.out.println("Done creating XML File");
     }
 
-    public static final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
+
 
 }

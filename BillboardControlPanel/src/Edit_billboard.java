@@ -1,10 +1,6 @@
 import Database.Billboard;
 import Server.Client;
-import org.xml.sax.SAXException;
-
 import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -31,7 +27,6 @@ public class Edit_billboard extends JFrame {
     private JTextField name_billboard;
     private JButton importBillboardButton;
     private JButton export_billboard;
-    String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
 
     public Edit_billboard(String title, String token, Database.Billboard billboard){
         super(title);
@@ -124,33 +119,10 @@ public class Edit_billboard extends JFrame {
         importBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ReadXMLFile file = new ReadXMLFile();
-                String arr[]=new String[10];
-                try {
-                    arr = file.read(xmlFilePath);
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (SAXException ex) {
-                    ex.printStackTrace();
-                }
-                if(arr[6] == null ||arr[6].equals("")){
-                    image_url.setEnabled(true);
-
-                }
-
-                else if(arr[7] == null ||arr[7].equals("")){
-                    image_data.setEnabled(true);
-                }
-                title_info.setText(arr[1]);
-                title_colour.setText( arr[4]);
-                background_colour.setText(arr[0]);
-                message.setText( arr[2]);
-                message_colour.setText(arr[5]);
-                image_data.setText(arr[6]);
-                image_url.setText(arr[7]);
-
+                JFrame importBillboard = new importBillboard(title_info, title_colour, background_colour, message, message_colour, image_data, image_url);
+                importBillboard.setVisible(true);
+                importBillboard.setSize(450,150);
+                importBillboard.setLocation(450,250);
 
             }
         });
@@ -166,15 +138,11 @@ public class Edit_billboard extends JFrame {
                 String billboard_image_data = image_data.getText();
                 String billboard_image_url = image_url.getText();
 
-                //make an xml file
-                CreateXMLFile file = new CreateXMLFile(billboard_title,billboard_title_colour,billboard_bg_colour,billboard_message,billboard_message_colour,billboard_image_data,billboard_image_url);
-                try {
-                    file.start();
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (TransformerException ex) {
-                    ex.printStackTrace();
-                }
+                JFrame exportBillboard = new exportBillboard(  billboard_title,  billboard_title_colour,  billboard_bg_colour,  billboard_message, billboard_message_colour,  billboard_image_data,  billboard_image_url);
+                exportBillboard.setVisible(true);
+                exportBillboard.setSize(450,150);
+                exportBillboard.setLocation(450,250);
+
             }
         });
 

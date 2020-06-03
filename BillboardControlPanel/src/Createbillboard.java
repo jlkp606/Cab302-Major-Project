@@ -1,7 +1,4 @@
-import org.xml.sax.SAXException;
 import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -9,13 +6,11 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
-
 import Server.Client;
 
 
 
 public class Createbillboard extends JFrame {
-//    private final Object Billboard;
     private JPanel mainPanel;
     private JEditorPane message;
     private JButton previewButton;
@@ -32,7 +27,6 @@ public class Createbillboard extends JFrame {
     private JTextField name_billboard;
     private JButton importBillboardButton;
     private JButton export_billboard;
-    String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
 
 /**
  *
@@ -44,7 +38,6 @@ public class Createbillboard extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
-
 
         String user = username;
 
@@ -122,31 +115,10 @@ public class Createbillboard extends JFrame {
         importBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ReadXMLFile file = new ReadXMLFile();
-                String arr[]=new String[10];
-                try {
-                    arr = file.read(xmlFilePath);
-                } catch (ParserConfigurationException | IOException | SAXException ex) {
-                    ex.printStackTrace();
-                }
-                if(arr[6] == null || arr[6].equals("")){
-//                    Data.setEnabled(false);
-                    image_url.setEnabled(true);
-
-                }
-
-                else if(arr[7] == null || arr[7].equals("")){
-//                    URL.setEnabled(false);
-                    image_data.setEnabled(true);
-                }
-                title_info.setText(arr[1]);
-                title_colour.setText( arr[4]);
-                background_colour.setText(arr[0]);
-                message.setText( arr[2]);
-                message_colour.setText(arr[5]);
-                image_data.setText(arr[6]);
-                image_url.setText(arr[7]);
-
+                JFrame importBillboard = new importBillboard(title_info, title_colour, background_colour, message, message_colour, image_data, image_url);
+                importBillboard.setVisible(true);
+                importBillboard.setSize(450,150);
+                importBillboard.setLocation(450,250);
 
             }
         });
@@ -161,15 +133,12 @@ public class Createbillboard extends JFrame {
                 String billboard_message_colour = message_colour.getText();
                 String billboard_image_data = image_data.getText();
                 String billboard_image_url = image_url.getText();
-                String billboard_name = name_billboard.getText();
 
-                //make an xml file
-                CreateXMLFile file = new CreateXMLFile(billboard_title,billboard_title_colour,billboard_bg_colour,billboard_message,billboard_message_colour,billboard_image_data,billboard_image_url);
-                try {
-                    file.start();
-                } catch (ParserConfigurationException | TransformerException ex) {
-                    ex.printStackTrace();
-                }
+                JFrame exportBillboard = new exportBillboard(  billboard_title,  billboard_title_colour,  billboard_bg_colour,  billboard_message, billboard_message_colour,  billboard_image_data,  billboard_image_url);
+                exportBillboard.setVisible(true);
+                exportBillboard.setSize(450,150);
+                exportBillboard.setLocation(450,250);
+
             }
         });
 

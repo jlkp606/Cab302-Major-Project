@@ -179,18 +179,6 @@ public class ModifyUserDetails extends JFrame {
 //        frame.setVisible(true);
 //    }
 
-//    public static Database.Permissions GetUserPermission(String token, String user) throws IOException, ClassNotFoundException {
-//        Socket socket = Client.getClientSocket();
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("token", token);
-//        request.put("type", "getUserPermissions");
-//        request.put("username", user);
-//        sendRequest(socket, request);
-//        HashMap<String, Object> response = getResponse(socket);
-//        Database.Permissions permissions = (Database.Permissions) response.get("permissions");
-//        socket.close();
-//        return permissions;
-//    }
 
     public static void SetUserPermission(String token,String user,Database.Permissions permission) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
