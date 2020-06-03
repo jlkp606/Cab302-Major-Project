@@ -17,7 +17,7 @@ public class DatabaseData {
      * application.
      *
      */
-    public DatabaseData() {
+    public DatabaseData() throws SQLException {
         listModel = new DefaultListModel();
         databaseData = new JDBCDatabaseSource();
 
@@ -32,7 +32,7 @@ public class DatabaseData {
      *
      * @param u A user to add to the database
      */
-    public void UserAdd(User u)  {
+    public void UserAdd(User u) throws SQLException {
 
         // check to see if the person is already in the table
         // if not add the user to the table and the list model
@@ -63,7 +63,7 @@ public class DatabaseData {
      * @param key the name to retrieve.
      * @return the Person object related to the name.
      */
-    public Billboard get(Object key) {
+    public Billboard get(Object key) throws SQLException {
         return databaseData.getBillboard((String) key);
     }
 
@@ -79,7 +79,7 @@ public class DatabaseData {
     /**
      * @return the number of billboards in the table.
      */
-    public int getSize() {
+    public int getSize() throws SQLException {
         return databaseData.getSize();
     }
 

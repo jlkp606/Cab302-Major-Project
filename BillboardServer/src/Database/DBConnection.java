@@ -51,7 +51,6 @@ public class DBConnection {
                 String sql = "CREATE DATABASE IF NOT EXISTS " + schema;
 
                 statement.executeUpdate(sql);
-                System.out.println("Database created!");
 
 
             } catch (SQLException ex) {
