@@ -11,8 +11,6 @@ public class User implements Comparable<User>, Serializable {
     private String password;
     private String passwordSalt;
 
-    private HashMap<String, Boolean> permission;
-
     public User() {
         this.passwordSalt = generateRandomString();
     }

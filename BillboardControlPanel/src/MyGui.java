@@ -16,8 +16,8 @@ public class MyGui extends Component implements ActionListener {
     JButton bt1;
     JTextField t1, t2;
     JLabel l1, l2;
-//remove just for testing
-    String token ="jsbfliuabfilbaf";
+
+    String token;
 
     MyGui() {
 
@@ -43,6 +43,7 @@ public class MyGui extends Component implements ActionListener {
         bt1.setBounds(150, 150, 80, 30);
         bt1.addActionListener(this);
 
+
         f.add(l1);
         f.add(l2);
         f.add(t1);
@@ -67,43 +68,40 @@ public class MyGui extends Component implements ActionListener {
 
     public static void main(String[] args) {
         MyGui myGuo = new MyGui();
+
     }
 
     public void actionPerformed(ActionEvent ae) {
-
         String userName = t1.getText();
         String password = t2.getText();
-//        try {
-//            String Hashed_password = getHash(password);
-//
-//            try {
-//                token = LoginRequest(userName, Hashed_password);
-//            } catch (IOException | ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (token.equals("")){
-//
-//            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
-//
-//        }
-//
-//        else{
+        try {
+            String Hashed_password = getHash(password);
 
-        if(userName.trim().equals("admin")){
+            try {
+                token = LoginRequest(userName, Hashed_password);
+                System.out.println(token);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        if (token.equals("")){
+
+            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
+
+        }
+
+        else{
+
             JFrame frame = new ControlPanel("Control Panel",token,userName);
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
-            f.dispose();
+
         }
 
     }
-
-
-
 
 }

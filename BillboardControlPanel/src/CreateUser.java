@@ -95,18 +95,18 @@ public class CreateUser extends JFrame {
 
                 else {
 
-//                    try {
-//                        String Hashed_password = getHash(User_Password);
+                    try {
+                        String Hashed_password = getHash(User_Password);
                         Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
                         System.out.println(permission.getCreateBillboard());
                         System.out.println(permission.getEditAllBillboards());
                         System.out.println(permission.getEditSchedule());
                         System.out.println(permission.getEditUsers());
-//                        CreateUser(token, User_Name, Hashed_password, permission);
-//
-//                    } catch (NoSuchAlgorithmException | IOException ex) {
-//                        ex.printStackTrace();
-//                    }
+                        CreateUser(token, User_Name, Hashed_password, permission);
+
+                    } catch (NoSuchAlgorithmException | IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
 
@@ -114,7 +114,7 @@ public class CreateUser extends JFrame {
 
 
     }
-
+//
 //    public static void main(String[] args) {
 //        String token = "ijshfij";
 //        JFrame frame = new CreateUser("Create User",token);

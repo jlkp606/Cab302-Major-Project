@@ -2,6 +2,7 @@ package Database;
 
 import javax.swing.*;
 import java.security.Permission;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DatabaseData {
@@ -46,7 +47,7 @@ public class DatabaseData {
      *
      * @param b A Billboard to add to the database.
      */
-    public void BillboardAdd(Billboard b) {
+    public void BillboardAdd(Billboard b) throws SQLException {
 
         // check to see if the person is already in the book
         // if not add to the address book and the list model

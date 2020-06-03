@@ -21,9 +21,9 @@ public class TestBillboardServer {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
         request.put("type", "logIn");
-        request.put("username","itsmeMario8");
+        request.put("username","admin");
 
-        String hashedPassword = getHash("asd123");
+        String hashedPassword = getHash("admin");
         request.put("password", hashedPassword);
 
         sendRequest(socket, request);
@@ -39,9 +39,9 @@ public class TestBillboardServer {
 
         HashMap<String, Object> request = new HashMap<>();
         Permissions permission = new Permissions(
-                "itsmeMario9",
+                "itsmeMario12",
                 "true",
-                "false",
+                "true",
                 "true",
                 "true");
 
@@ -51,7 +51,7 @@ public class TestBillboardServer {
         String hashedPassword = getHash("asd123");
         request.put("type", "createUser");
         request.put("token", token);
-        request.put("username","itsmeMario9");
+        request.put("username","itsmeMario12");
         request.put("password", hashedPassword);
         request.put("permission", permission);
         sendRequest(socket, request);
@@ -146,7 +146,6 @@ public class TestBillboardServer {
     }
 
     public static void TestSetUserPassword() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        //not working
         Socket socket = Client.getClientSocket();
         String token = "kjryiauznhrjgrxypymj";
         HashMap<String, Object> request = new HashMap<>();
@@ -154,7 +153,7 @@ public class TestBillboardServer {
         request.put("type", "setUserPassword");
         request.put("username", "itsmeMario7");
 
-        String hashedPassword = getHash("aasda231");
+        String hashedPassword = getHash("123456789");
         request.put("password", hashedPassword);
 
         sendRequest(socket, request);
@@ -280,8 +279,18 @@ public class TestBillboardServer {
         socket.close();
     }
 
+    public static void TestLogOut() throws IOException, ClassNotFoundException{
+        Socket socket = Client.getClientSocket();
+        String token = "kjryiauznhrjgrxypymj";
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("token", token);
+        request.put("type", "logOut");
+        sendRequest(socket, request);
+        socket.close();
+    }
+
     public static void main(String[] Args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-        TestRemoveBillboardFromSchedule();
+        TestCreateBillboard();
     }
 
 }
