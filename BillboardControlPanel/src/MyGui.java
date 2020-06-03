@@ -16,8 +16,8 @@ public class MyGui extends Component implements ActionListener {
     JButton bt1;
     JTextField t1, t2;
     JLabel l1, l2;
-
-    String token;
+//Comment it just for testing
+    String token = "iugefuoygoef";
 
     MyGui() {
 
@@ -74,33 +74,38 @@ public class MyGui extends Component implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String userName = t1.getText();
         String password = t2.getText();
+//      UnComment it  for testing
+//        try {
+//            String Hashed_password = getHash(password);
+//
+//            try {
+//                token = LoginRequest(userName, Hashed_password);
+//            } catch (IOException | ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (token.equals("")){
+//
+//            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
+//
+//        }
+//
+//        else{
+
         try {
-            String Hashed_password = getHash(password);
-
-            try {
-                token = LoginRequest(userName, Hashed_password);
-                System.out.println(token);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        if (token.equals("")){
-
-            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
-
-        }
-
-        else{
-
             JFrame frame = new ControlPanel("Control Panel",token,userName);
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
-
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
+        f.dispose();;
+//        }
 
     }
 
