@@ -72,7 +72,7 @@ public class Createbillboard extends JFrame {
                             System.out.println("in else");
                             createBillboardRequest(token, billboard);
                         }
-                    } catch (IOException ex) {
+                    } catch (IOException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     }
             }
@@ -152,7 +152,7 @@ public class Createbillboard extends JFrame {
 //        frame.setSize(550,550);
 //        frame.setVisible(true);
 //    }
-    public static void createBillboardRequest(String token, Database.Billboard billboard) throws IOException {
+    public static void createBillboardRequest(String token, Database.Billboard billboard) throws IOException, ClassNotFoundException {
             System.out.println(token + " in createBillboard");
             Socket socket = Client.getClientSocket();
             HashMap<String , Object> request = new HashMap<String , Object>();
@@ -160,6 +160,8 @@ public class Createbillboard extends JFrame {
             request.put("token", token);
             request.put("billboard", billboard);
             Client.sendRequest(socket , request);
+            HashMap<String , Object> res = Client.getResponse(socket);
+            System.out.println((String) res.get("message"));
             socket.close();
     }
 
