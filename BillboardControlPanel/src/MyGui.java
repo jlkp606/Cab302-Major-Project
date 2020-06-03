@@ -16,8 +16,8 @@ public class MyGui extends Component implements ActionListener {
     JButton bt1;
     JTextField t1, t2;
     JLabel l1, l2;
-
-    String token;
+//remove just for testing
+    String token ="jsbfliuabfilbaf";
 
     MyGui() {
 
@@ -42,7 +42,6 @@ public class MyGui extends Component implements ActionListener {
         bt1 = new JButton("LOG IN");
         bt1.setBounds(150, 150, 80, 30);
         bt1.addActionListener(this);
-
 
         f.add(l1);
         f.add(l2);
@@ -71,35 +70,40 @@ public class MyGui extends Component implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
+
         String userName = t1.getText();
         String password = t2.getText();
-        try {
-            String Hashed_password = getHash(password);
+//        try {
+//            String Hashed_password = getHash(password);
+//
+//            try {
+//                token = LoginRequest(userName, Hashed_password);
+//            } catch (IOException | ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (token.equals("")){
+//
+//            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
+//
+//        }
+//
+//        else{
 
-            try {
-                token = LoginRequest(userName, Hashed_password);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        if (token.equals("")){
-
-            JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
-
-        }
-
-        else{
-
+        if(userName.trim().equals("admin")){
             JFrame frame = new ControlPanel("Control Panel",token,userName);
             frame.setLocation(500, 300);
             frame.setSize(550, 550);
             frame.setVisible(true);
-
+            f.dispose();
         }
 
     }
+
+
+
 
 }

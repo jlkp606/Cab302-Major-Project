@@ -369,13 +369,13 @@ public class viewer_billboard_time extends JFrame{
         return scheduleList;
     }
 //
-//    public static void main(String[] args) {
-//        String user = "Sid";
-//        String token = "092408240280";
-//        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
-//        frame.setLocation(400,200);
-//        frame.setSize(850,550);
-//        frame.setVisible(true);
-//    }
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        String user = "Sid";
+        String token = "092408240280";
+        JFrame frame = new viewer_billboard_time("View Schedule for Billboards",user,token);
+        frame.setLocation(400,200);
+        frame.setSize(850,550);
+        frame.setVisible(true);
+    }
 
 }

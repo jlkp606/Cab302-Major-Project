@@ -68,13 +68,13 @@ public class Createbillboard extends JFrame {
                 String billboard_image_data = image_data.getText();
                 String billboard_image_url = image_url.getText();
                 String billboard_name = name_billboard.getText();
-                    Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
                     try {
 
                         if(name_billboard.getText().equals("")){
                             JOptionPane.showMessageDialog(null, "Please fill the name for billboard to continue " );
                         }
                         else {
+                            Database.Billboard billboard = new Database.Billboard(billboard_name,user,billboard_bg_colour,billboard_title,billboard_title_colour, billboard_image_data,billboard_image_url,billboard_message,billboard_message_colour);
                             createBillboardRequest(token, billboard);
                         }
                     } catch (IOException ex) {

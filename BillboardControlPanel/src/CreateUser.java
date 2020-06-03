@@ -115,25 +115,25 @@ public class CreateUser extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        String token = "ijshfij";
-        JFrame frame = new CreateUser("Create User",token);
-        frame.setLocation(500,300);
-        frame.setSize(550,550);
-        frame.setVisible(true);
-    }
-//    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
-//        Socket socket = Client.getClientSocket();
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("type", "createUser");
-//        request.put("token", token);
-//        request.put("username",user);
-//        request.put("password", hashedPassword);
-//        request.put("permission", permission);
-//        sendRequest(socket, request);
-//        socket.close();
-//
+//    public static void main(String[] args) {
+//        String token = "ijshfij";
+//        JFrame frame = new CreateUser("Create User",token);
+//        frame.setLocation(500,300);
+//        frame.setSize(550,550);
+//        frame.setVisible(true);
 //    }
+    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("type", "createUser");
+        request.put("token", token);
+        request.put("username",user);
+        request.put("password", hashedPassword);
+        request.put("permission", permission);
+        sendRequest(socket, request);
+        socket.close();
+
+    }
 
 }
 

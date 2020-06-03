@@ -60,6 +60,7 @@ public class changePassword extends JFrame {
         }
 
         textField1.setText(user);
+        textField1.setEnabled(false);
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
