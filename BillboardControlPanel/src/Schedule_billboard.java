@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static Server.Client.sendRequest;
@@ -18,7 +19,6 @@ import static Server.Client.sendRequest;
 public class Schedule_billboard extends JFrame {
     private JPanel mainPanel;
     private JCheckBox everyDayCheckBox;
-    private JTextField billboardName;
     private JComboBox<Integer> mins_selected;
     private JComboBox<Integer> hours_selected;
     private JComboBox<Integer> duration;
@@ -26,16 +26,39 @@ public class Schedule_billboard extends JFrame {
     private JCheckBox everyHourcheckbox;
 
     private JButton Add;
-    private JLabel Day;
-    private JComboBox Select;
+    private JComboBox<String> Select;
+    private JComboBox<String> billboardList;
 
-    public Schedule_billboard(String title, String token ,String user) {
+    public Schedule_billboard(String title, String token ,String user) throws IOException, ClassNotFoundException {
         super(title);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
-        String days[]={"Monday","Tuesday","Wednesday","Thursday","Friday"};
+        String days[]= {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
+
+        ArrayList<Database.Billboard> billboards = List_billboard.receiveBillboardList(token);
+//        Database.Billboard billboard1 = new Database.Billboard("itsmeMario8Billboard", "itsmeMario8", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                "more information.", "#00FFFF");
+//
+//        Database.Billboard billboard2 = new Database.Billboard("SidBillboard", "Sid", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                "more information.", "#00FFFF");
+//
+//        Database.Billboard billboard3 = new Database.Billboard("JoshBillboard", "Josh", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                "more information.", "#00FFFF");
+//
+//        Database.Billboard billboard4 = new Database.Billboard("LiamBillboard", "Liam", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                "more information.", "#00FFFF");
+//        ArrayList<Database.Billboard> billboards = new ArrayList<Database.Billboard>();
+//        billboards.add(billboard1);
+//        billboards.add(billboard2);
+//        billboards.add(billboard3);
+//        billboards.add(billboard4);
+
+        for(int i =0;i<billboards.size();i++){
+            billboardList.addItem(billboards.get(i).getbName());
+        }
+
         for(int i = 0 ; i< days.length;i++){
             Select.addItem(days[i]);
         }
@@ -69,7 +92,7 @@ public class Schedule_billboard extends JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     everyDayCheckBox.setEnabled(false);
-                    repeat = "Every hour";
+                    repeat = "Every Week";
                 }
 
                 else{
@@ -83,7 +106,7 @@ public class Schedule_billboard extends JFrame {
         Add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String bbname= billboardName.getText();
+                String bbname= String.valueOf(billboardList.getSelectedItem());
                 String day = String.valueOf(Select.getSelectedItem());
                 String selectedDuration = String.valueOf(duration.getSelectedItem());
                 String selectedHours = String.valueOf(hours_selected.getSelectedItem());
@@ -101,28 +124,29 @@ public class Schedule_billboard extends JFrame {
 //                System.out.println(schedule.getEndTime());
 //                System.out.println(schedule.getStartTime());
 //                System.out.println(schedule.getUsername());
-                System.out.println(schedule.getRepeat());
+//                System.out.println(schedule.getRepeat());
 
-//                try {
-//                    ScheduleBillboard( token, schedule);
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                } catch (ClassNotFoundException ex) {
-//                    ex.printStackTrace();
-//                } catch (NoSuchAlgorithmException ex) {
-//                    ex.printStackTrace();
-//                }
+                try {
+                    ScheduleBillboard( token, schedule);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
     }
 
-//    public static void main(String[] args) {
+//    public static void main(String[] args) throws IOException, ClassNotFoundException {
 //        String user = "Sid";
 //        String token = "2615386751237";
-//        JFrame frame = new Schedule_billboard("Add billboard to Schedule",user,token);
+//        JFrame frame =
+//                new Schedule_billboard("Add billboard to Schedule",user,token);
 //        frame.setLocation(400,200);
-//        frame.setSize(350,350);
+//        frame.setSize(450,400);
 //        frame.setVisible(true);
 //    }
     public static void ScheduleBillboard(String token,Schedule schedule) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {

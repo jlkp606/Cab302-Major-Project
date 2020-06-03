@@ -63,8 +63,6 @@ public class listUsers extends JFrame {
 
         this.getContentPane().setLayout(new BorderLayout());
 
-
-
         modifyUserButton= new JButton("Modify User");
         createUserButton = new JButton("Create User");
         deleteUserButton = new JButton("Delete User");
@@ -97,24 +95,26 @@ public class listUsers extends JFrame {
                 if(user.equals(s)){
                     JOptionPane.showMessageDialog(null, "Invalid operation ");
                 }
+
                 else {
                     Database.Permissions permissions = null;
                     try {
                         permissions = List_billboard.GetUserPermission(token, user);
+                        if (permissions.getEditUsers().equals("true")) {
+                            try {
+                                DeleteUser(token, s);
+                                model.removeElementAt(index);
+                            } catch (IOException | ClassNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Permission required ");
+                        }
                     } catch (IOException | ClassNotFoundException exc) {
                         exc.printStackTrace();
                     }
-                    assert permissions != null;
-                    if (permissions.getEditUsers().equals("true")) {
-                        try {
-                            DeleteUser(token, s);
-                        } catch (IOException | ClassNotFoundException ex) {
-                            ex.printStackTrace();
-                        }
-                        model.removeElementAt(index);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Permission required ");
-                    }
+
                 }
             }
         });
@@ -127,19 +127,19 @@ public class listUsers extends JFrame {
                 Database.Permissions permissions = null;
                 try {
                     permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
-                }
-                assert permissions != null;
-                if (permissions.getEditUsers().equals("true")) {
+                    if (permissions.getEditUsers().equals("true")) {
                         JFrame frame = new CreateUser("Create User",token);
                         frame.setLocation(500,300);
                         frame.setSize(550,550);
                         frame.setVisible(true);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Permission required ");
+                    }
+                } catch (IOException | ClassNotFoundException exc) {
+                    exc.printStackTrace();
                 }
-                else {
-                    JOptionPane.showMessageDialog(null, "Permission required ");
-                }
+
 
             }
         });
@@ -152,25 +152,21 @@ public class listUsers extends JFrame {
                 Database.Permissions permissions = null;
                 try {
                     permissions = List_billboard.GetUserPermission(token, user);
-                } catch (IOException | ClassNotFoundException exc) {
-                    exc.printStackTrace();
-                }
-                if (permissions != null) {
                     if (permissions.getEditUsers().equals("true")) {
-                        JFrame frame = null;
                         try {
-                            frame = new ModifyUserDetails("Modify User Details",token,user,s);
+                            JFrame frame = new ModifyUserDetails("Modify User Details",token,user,s);
+                            frame.setLocation(500,300);
+                            frame.setSize(550,550);
+                            frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                         }
-                        assert frame != null;
-                        frame.setLocation(500,300);
-                        frame.setSize(550,550);
-                        frame.setVisible(true);
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Permission required ");
                     }
+                } catch (IOException | ClassNotFoundException exc) {
+                    exc.printStackTrace();
                 }
             }
 

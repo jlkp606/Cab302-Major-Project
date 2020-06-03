@@ -18,46 +18,16 @@ public class changePassword extends JFrame {
     private JTextField textField1;
     private JPasswordField passwordField1;
     private JPanel mainPanel;
-    private JTextField CreateBillboard;
-    private JTextField EditAllBillboard;
-    private JTextField EditUsers;
-    private JTextField ScheduleBillboard;
+    private JPasswordField passwordField2;
     String userName;
     String password;
+    String password1;
     public changePassword(String title,String token, String user) throws IOException, ClassNotFoundException {
         super(title);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
-        Database.Permissions permissions = List_billboard.GetUserPermission( token,  user);
-//Testing without Server
-//        Database.Permissions permissions = new Permissions("Sid","true","true","true","true");
-        CreateBillboard.setEnabled(false);
-        EditAllBillboard.setEnabled(false);
-        ScheduleBillboard.setEnabled(false);
-        EditUsers.setEnabled(false);
-
-        if (permissions.getCreateBillboard().equals("true")) {
-            CreateBillboard.setText("Permitted");
-        } else {
-            CreateBillboard.setText("Not Permitted");
-        }
-        if (permissions.getEditAllBillboards().equals("true")) {
-            EditAllBillboard.setText("Permitted");
-        } else {
-            EditAllBillboard.setText("Not Permitted");
-        }
-        if (permissions.getEditSchedule().equals("true")) {
-            ScheduleBillboard.setText("Permitted");
-        } else {
-            ScheduleBillboard.setText("Not Permitted");
-        }
-        if (permissions.getEditUsers().equals("true")) {
-            EditUsers.setText("Permitted");
-        } else {
-            EditUsers.setText("Not Permitted");
-        }
 
         textField1.setText(user);
         textField1.setEnabled(false);
@@ -65,18 +35,26 @@ public class changePassword extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 userName=textField1.getText();
-                try {
-                    password = getHash(passwordField1.getText());
-                } catch (NoSuchAlgorithmException ex) {
-                    ex.printStackTrace();
-                }
-                try {
-                    SetUserPassword(token,userName,password);
-                    //Testing without Server
+                password = passwordField1.getText();
+                password1 = passwordField2.getText();
+
+                if(password.equals(password1)){
+                    try {
+                        password = getHash(passwordField1.getText());
+                        SetUserPassword(token,userName,password);
+                        //Testing without Server
 //                    System.out.println("Sent to Server");
-                } catch (IOException | NoSuchAlgorithmException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
+                    } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+
+                else{
+
+                    JOptionPane.showMessageDialog(null, " Password Mismatch ");
+
+                }
+
             }
         });
     }
