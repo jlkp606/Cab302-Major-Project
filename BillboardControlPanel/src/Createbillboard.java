@@ -82,10 +82,6 @@ public class Createbillboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-
-
-
-
             }
         });
 
@@ -96,14 +92,12 @@ public class Createbillboard extends JFrame {
                     URL.setEnabled(false);
                     image_data.setEnabled(true);
                     image_url.setText("");
-
-
                 }
 
                 else{
                     URL.setEnabled(true);
+                    URL.setSelected(true);
                     image_data.setEnabled(false);
-
                 }
             }
         });
@@ -118,6 +112,7 @@ public class Createbillboard extends JFrame {
                 }
 
                 else{
+                    Data.setSelected(true);
                     Data.setEnabled(true);
                     image_url.setEnabled(false);
                 }
@@ -131,11 +126,7 @@ public class Createbillboard extends JFrame {
                 String arr[]=new String[10];
                 try {
                     arr = file.read(xmlFilePath);
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (SAXException ex) {
+                } catch (ParserConfigurationException | IOException | SAXException ex) {
                     ex.printStackTrace();
                 }
                 if(arr[6] == null || arr[6].equals("")){
@@ -176,9 +167,7 @@ public class Createbillboard extends JFrame {
                 CreateXMLFile file = new CreateXMLFile(billboard_title,billboard_title_colour,billboard_bg_colour,billboard_message,billboard_message_colour,billboard_image_data,billboard_image_url);
                 try {
                     file.start();
-                } catch (ParserConfigurationException ex) {
-                    ex.printStackTrace();
-                } catch (TransformerException ex) {
+                } catch (ParserConfigurationException | TransformerException ex) {
                     ex.printStackTrace();
                 }
             }
