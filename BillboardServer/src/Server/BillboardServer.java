@@ -4,6 +4,7 @@ import Database.*;
 import Exceptions.IncorrectPasswordException;
 import Exceptions.IncorrectUserException;
 import Exceptions.MissingPermissionException;
+import Exceptions.NoClientInputStreamException;
 import Token.Token;
 
 import java.io.*;
@@ -11,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,6 +21,12 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class BillboardServer {
+    /**
+     * Reads from network.props and establishes a socket
+     *
+     * @return ServerSocket
+     * @throws IOException
+     */
     public static ServerSocket getServerSocket() throws IOException {
         Properties props = new Properties();
         FileInputStream in = new FileInputStream("./network.props");
@@ -29,13 +37,26 @@ public class BillboardServer {
         ServerSocket socket = new ServerSocket(Integer.parseInt(port));
         return socket;
     }
-    public static void sendResponse(Socket clientSocket, HashMap<String, Object> response) throws IOException {
-        OutputStream out = clientSocket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
-        objectOutputStream.writeObject(response);
-        objectOutputStream.flush();
+
+    /**
+     * Sends a response to the Client
+     * @param clientSocket
+     * @param response A hashmap with String as key and Object as the values
+     * @throws IOException
+     */
+    public static void sendResponse(Socket clientSocket, HashMap<String, Object> response) throws IOException, NoClientInputStreamException {
+        try {
+            OutputStream out = clientSocket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
+            objectOutputStream.writeObject(response);
+            objectOutputStream.flush();
+        } catch (Exception e){
+            throw new NoClientInputStreamException("Client has no input Stream");
+        }
     }
     /**
+     * Checks if given password is same as the User and returns token
+     *
      * @param dbUser User from DB
      * @param password password to be authenticated against the DBUser
      *
@@ -63,6 +84,12 @@ public class BillboardServer {
         }
     }
 
+    /**
+     * Gets the name of the current billboard
+     *
+     * @param scheduleList a List of Schedule Object
+     * @return String billboardName
+     */
     public static String getCurrentBillboard(ArrayList<Schedule> scheduleList){
 
         for (Schedule s : scheduleList){
@@ -92,6 +119,16 @@ public class BillboardServer {
         return null;
     }
 
+    /**
+     * Creates a User and checks if permission were set correctly
+     *
+     * @param permissions Permission Object
+     * @param username Username to be setup
+     * @param password Password to be setup
+     * @return User
+     * @throws MissingPermissionException
+     * @throws NoSuchAlgorithmException
+     */
     public static User setUpUser(Permissions permissions, String username, String password) throws MissingPermissionException, NoSuchAlgorithmException {
         if ((permissions.getCreateBillboard() != null && permissions.getEditAllBillboards() != null) &&
                 (permissions.getEditSchedule() != null && permissions.getEditUsers() != null)){
@@ -104,10 +141,20 @@ public class BillboardServer {
         }
     }
 
+    /**
+     * Network layer function which routes the request to get the correct response from the Server
+     *
+     * @param request HashMap<String, Object> containing type of request and neccessary informations
+     * @param response HashMap<String, Object> containing requested information and status of request
+     * @param tokenStore HashMap<String, ArrayList<Object>> which holds current tokens
+     * @param dataSource JDBCDatabaseSource which has all database functions
+     * @throws SQLException
+     * @throws NoSuchAlgorithmException
+     */
     public static void routeRequest(HashMap<String, Object> request,
                                     HashMap<String, Object> response,
                                     HashMap<String, ArrayList<Object>> tokenStore,
-                                    JDBCDatabaseSource dataSource) throws SQLException, NoSuchAlgorithmException {
+                                    JDBCDatabaseSource dataSource) throws SQLException, NoSuchAlgorithmException, MissingPermissionException {
 
         String requestType = (String) request.get("type");
 
@@ -134,119 +181,121 @@ public class BillboardServer {
         }
         else{
             String token = (String) request.get("token");
+            // checks token value is valid
             if (tokenStore.containsKey(token) || token.equals("kjryiauznhrjgrxypymj")){
+                LocalDateTime expiry = (LocalDateTime) tokenStore.get(token).get(1);
+                //checks token not expired
+                if(expiry.isAfter(LocalDateTime.now())){
+                    switch (requestType){
+                        case "logOut":{
+                            tokenStore.remove(token);
+                            break;
+                        }
+                        case "listBillboard":{
+                            //tested
+                            ArrayList<Billboard> billboardList = dataSource.getAllBillboards();
+                            response.put("billboardList", billboardList);
+                            break;
+                        }
+                        case "getCurrentBillboard": {
+                            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
+                            String currentBillboardName = getCurrentBillboard(scheduleList);
+                            Billboard billboard = dataSource.getBillboard(currentBillboardName);
+                            response.put("billboard", billboard);
+                            break;
 
-                switch (requestType){
-                    case "logOut":{
-                        tokenStore.remove(token);
-                        break;
-                    }
-                    case "listBillboard":{
-                        //tested
-                        ArrayList<Billboard> billboardList = dataSource.getAllBillboards();
-                        response.put("billboardList", billboardList);
-                        break;
-                    }
-                    case "getCurrentBillboard": {
-                        ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
-                        String currentBillboardName = getCurrentBillboard(scheduleList);
-                        Billboard billboard = dataSource.getBillboard(currentBillboardName);
-                        response.put("billboard", billboard);
-                        break;
+                        }
+                        case "getBillboardInfo":{
+                            //Tested
+                            String billboardName = (String) request.get("billboardName");
+                            Billboard billboard = dataSource.getBillboard(billboardName);
+                            response.put("billboard", billboard);
+                            break;
+                        }
+                        case "createBillboard":{
+                            //tested
+                            Billboard billboard = (Billboard) request.get("billboard");
+                            dataSource.addBillboard(billboard);
+                            break;
+                        }
+                        case "deleteBillboard":{
+                            //tested
+                            String billboardName = (String) request.get("billboardName");
+                            dataSource.deleteBillboard(billboardName);
+                            break;
+                        }
+                        case "viewSchedule":{
+                            //tested
+                            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
+                            response.put("scheduleList", scheduleList);
+                            break;
+                        }
+                        case "scheduleBillboard":{
+                            //Tested
+                            Schedule schedule = (Schedule) request.get("schedule");
+                            dataSource.addSchedule(schedule);
+                            break;
+                        }
+                        case "removeBillboardFromSchedule":{
+                            //Tested
+                            Schedule schedule = (Schedule) request.get("schedule");
+                            dataSource.deleteSchedule(schedule);
+                            break;
+                        }
+                        case "listUsers":{
+                            //Tested
+                            ArrayList<String> userList = dataSource.getUsernames();
+                            response.put("userList", userList);
+                            break;
+                        }
+                        case "createUser": {
+                            //TESTED//
+                            String username = (String) request.get("username");
+                            String password = (String) request.get("password");
 
-                    }
-                    case "getBillboardInfo":{
-                        //Tested
-                        String billboardName = (String) request.get("billboardName");
-                        Billboard billboard = dataSource.getBillboard(billboardName);
-                        response.put("billboard", billboard);
-                        break;
-                    }
-                    case "createBillboard":{
-                        //tested
-                        Billboard billboard = (Billboard) request.get("billboard");
-                        dataSource.addBillboard(billboard);
-                        request.put("message", "Success");
-                        break;
-                    }
-                    case "deleteBillboard":{
-                        //tested
-                        String billboardName = (String) request.get("billboardName");
-                        dataSource.deleteBillboard(billboardName);
-                        break;
-                    }
-                    case "viewSchedule":{
-                        //tested
-                        ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
-                        response.put("scheduleList", scheduleList);
-                        break;
-                    }
-                    case "scheduleBillboard":{
-                        //Tested
-                        Schedule schedule = (Schedule) request.get("schedule");
-                        dataSource.addSchedule(schedule);
-                        break;
-                    }
-                    case "removeBillboardFromSchedule":{
-                        //Tested
-                        Schedule schedule = (Schedule) request.get("schedule");
-                        dataSource.deleteSchedule(schedule);
-                        break;
-                    }
-                    case "listUsers":{
-                        //Tested
-                        ArrayList<String> userList = dataSource.getUsernames();
-                        response.put("userList", userList);
-                        break;
-                    }
-                    case "createUser": {
-                        //TESTED//
-                        String username = (String) request.get("username");
-                        String password = (String) request.get("password");
-
-                        Permissions permList = (Permissions) request.get("permission");
-                        try{
+                            Permissions permList = (Permissions) request.get("permission");
                             User user = setUpUser(permList, username, password);
                             dataSource.addUser(user);
                             dataSource.addUserPerms(username, permList);
-                            response.put("message", "Successful");
-                        } catch (Exception e){
-                            response.put("message", e);
+
+                            break;
                         }
+                        case "getUserPermissions": {
+                            //TESTED
+                            String username = (String) request.get("username");
+                            Permissions permissions = dataSource.getUserPerms(username);
+                            response.put("permissions", permissions);
+                            break;
+                        }
+                        case "setUserPermissions": {
+                            //tested
+                            String username = (String) request.get("username");
+                            Permissions userPermissions = (Permissions) request.get("permission");
+                            dataSource.updateUserPerms(username, userPermissions);
+                            break;
+                        }
+                        case "setUserPassword":{
+                            //tested
+                            String username = (String) request.get("username");
+                            String password = (String) request.get("password");
 
-                        break;
+                            User user = dataSource.getUser(username);
+                            String salt = user.getPasswordSalt();
+                            String dbPassword = Hash.getHash(password + salt);
+                            dataSource.setUserPassword(username, dbPassword);
+                            break;
+                        }
+                        case "deleteUser": {
+                            //tested
+                            String username = (String) request.get("username");
+                            dataSource.deleteUser(username);
+                            break;
+                        }
                     }
-                    case "getUserPermissions": {
-                        //TESTED
-                        String username = (String) request.get("username");
-                        Permissions permissions = dataSource.getUserPerms(username);
-                        response.put("permissions", permissions);
-                        break;
-                    }
-                    case "setUserPermissions": {
-                        //tested
-                        String username = (String) request.get("username");
-                        Permissions userPermissions = (Permissions) request.get("permission");
-                        dataSource.updateUserPerms(username, userPermissions);
-                        break;
-                    }
-                    case "setUserPassword":{
-                        //tested
-                        String username = (String) request.get("username");
-                        String password = (String) request.get("password");
-
-                        User user = dataSource.getUser(username);
-                        String salt = user.getPasswordSalt();
-                        String dbPassword = Hash.getHash(password + salt);
-                        dataSource.setUserPassword(username, dbPassword);
-                        break;
-                    }
-                    case "deleteUser": {
-                        //tested
-                        String username = (String) request.get("username");
-                        dataSource.deleteUser(username);
-                        break;
-                    }
+                    request.put("message", "Success");
+                } else {
+                    System.out.println("Token Expired");
+                    response.put("message", "Token Expired");
                 }
             } else {
                 System.out.println("Invalid Token");
@@ -257,6 +306,7 @@ public class BillboardServer {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, SQLException {
+        System.out.println("Server running....");
 
         //Stores users that have logged in
         HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();
@@ -265,26 +315,32 @@ public class BillboardServer {
         ServerSocket serverSocket = getServerSocket();
 
         //connect to database
-        JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
+        try {
+            JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
 
-        for ( ; ; ) {
-            //network layer
-            Socket clientSocket = serverSocket.accept();
+            for ( ; ; ) {
+                //network layer
+                Socket clientSocket = serverSocket.accept();
 
-            InputStream inputStream = clientSocket.getInputStream();
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            HashMap<String, Object> request = (HashMap<String, Object>) objectInputStream.readObject();
+                InputStream inputStream = clientSocket.getInputStream();
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-            HashMap<String, Object> response = new HashMap<>();
-
-            //functional
-
-            String requestType = (String) request.get("type");
-
-            routeRequest(request, response,tokenStore,dataSource);
-
-            sendResponse(clientSocket, response);
-            clientSocket.close();
+                HashMap<String, Object> request = (HashMap<String, Object>) objectInputStream.readObject();
+                HashMap<String, Object> response = new HashMap<>();
+                try{
+                    routeRequest(request, response,tokenStore,dataSource);
+                    sendResponse(clientSocket, response);
+                } catch( SQLException e){
+                    response.put("message", "Something went wrong with Database");
+                    System.out.println(e);
+                } catch(Exception e){
+                    response.put("message", e);
+                    System.out.println(e);
+                }
+                clientSocket.close();
+            }
+        } catch (SQLNonTransientConnectionException e){
+            System.out.println("Could not connect to database, Error:" +e);
         }
     }
 }

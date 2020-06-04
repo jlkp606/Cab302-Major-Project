@@ -131,22 +131,22 @@ public class viewer_billboard_time extends JFrame {
                 textboxArray[i][j].setEnabled(false);
             }
         }
-
-        Database.Schedule schedule1 = new Schedule("Sid", "Billboard1", "2020-06-02T09:40", "2020-06-02T10:25", "FRIDAY", "Every Day");
-        Database.Schedule schedule2 = new Schedule("Liam", "Billboard2", "2020-06-02T12:16", "2020-06-02T12:45", "TUESDAY", "repeat");
-        Database.Schedule schedule3 = new Schedule("Josh", "Billboard3", "2020-06-02T14:00", "2020-06-02T14:05", "MONDAY", "repeat");
-        Database.Schedule schedule4 = new Schedule("Jet", "Billboard4", "2020-06-02T15:25", "2020-06-02T16:50", "THURSDAY", "repeat");
-        Database.Schedule schedule5 = new Schedule("Pratham", "Billboard5", "2020-06-02T13:25", "2020-06-02T13:49", "THURSDAY", "Every Day");
-        Database.Schedule schedule6 = new Schedule("Ram", "Billboard6", "2020-06-02T09:20", "2020-06-02T09:25", "FRIDAY", "repeat");
-
-      ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
-//        ArrayList<Database.Schedule> scheduleList = ViewSchedule( token);
-        scheduleList.add(schedule1);
-        scheduleList.add(schedule2);
-        scheduleList.add(schedule3);
-        scheduleList.add(schedule4);
-        scheduleList.add(schedule5);
-        scheduleList.add(schedule6);
+//
+//        Database.Schedule schedule1 = new Schedule("Sid", "Billboard1", "2020-06-02T09:40", "2020-06-02T10:25", "FRIDAY", "Every Day");
+//        Database.Schedule schedule2 = new Schedule("Liam", "Billboard2", "2020-06-02T12:16", "2020-06-02T12:45", "TUESDAY", "repeat");
+//        Database.Schedule schedule3 = new Schedule("Josh", "Billboard3", "2020-06-02T14:00", "2020-06-02T14:05", "MONDAY", "repeat");
+//        Database.Schedule schedule4 = new Schedule("Jet", "Billboard4", "2020-06-02T15:25", "2020-06-02T16:50", "THURSDAY", "repeat");
+//        Database.Schedule schedule5 = new Schedule("Pratham", "Billboard5", "2020-06-02T13:25", "2020-06-02T13:49", "THURSDAY", "Every Day");
+//        Database.Schedule schedule6 = new Schedule("Ram", "Billboard6", "2020-06-02T09:20", "2020-06-02T09:25", "FRIDAY", "repeat");
+//
+//      ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
+        ArrayList<Database.Schedule> scheduleList = ViewSchedule( token);
+//        scheduleList.add(schedule1);
+//        scheduleList.add(schedule2);
+//        scheduleList.add(schedule3);
+//        scheduleList.add(schedule4);
+//        scheduleList.add(schedule5);
+//        scheduleList.add(schedule6);
 
         String[] weekDays = {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
         for (int p = 0; p < 5; p++) {

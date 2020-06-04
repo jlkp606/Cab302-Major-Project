@@ -46,6 +46,14 @@ public interface DatabaseSource {
     void addBillboard(Billboard b) throws SQLException;
 
     /**
+     * Gets all the billboards
+     *
+     * @return ArrayList<Billboard>
+     * @throws SQLException
+     */
+    ArrayList<Billboard> getAllBillboards() throws SQLException;
+
+    /**
      * Extracts all the details of a Billboard from the table based on the
      * name passed in.
      *
@@ -76,13 +84,13 @@ public interface DatabaseSource {
      */
     Set<String> nameSet() throws SQLException;
 
-//    /**
-//     * Adds permissions to a specific user
-//     *
-//     * @param username User to add permissions to.
-//     * @param permission Permissions Object.
-//     */
-//    void addUserPerms(String username, Permission permission);
+    /**
+     * Adds permissions to a specific user
+     *
+     * @param username User to add permissions to.
+     * @param permissions Permissions Object.
+     */
+    void addUserPerms(String username, Permissions permissions) throws SQLException;
 
     /**
      * updates User permissions
@@ -121,7 +129,7 @@ public interface DatabaseSource {
     /**
      * Deletes a schedule from the database
      *
-     * @param name The name of the billboard display schedule that would be deleted.
+     * @param schedule The Schedule Object that would be deleted.
      */
     void deleteSchedule(Schedule schedule) throws SQLException;
 

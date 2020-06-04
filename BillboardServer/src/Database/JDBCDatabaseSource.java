@@ -1,5 +1,6 @@
 package Database;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 import java.sql.*;
@@ -146,63 +147,69 @@ public class JDBCDatabaseSource implements DatabaseSource {
    private PreparedStatement getUserPerms;
 
 
-
-   public JDBCDatabaseSource() {
+    /**
+     * Establishes Connection to database and allows for uses of Database query functions
+     *
+     * @throws SQLException
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+   public JDBCDatabaseSource() throws SQLException, NoSuchAlgorithmException, IOException {
+       //Connect to DB
       connection = Database.DBConnection.getInstance();
-      try {
+      System.out.println("Connected to database");
+      Statement st = connection.createStatement();
 
-          Statement st = connection.createStatement();
+      // Setup User Functions
+      st.execute(CREATE_USER_TABLE);
 
-          st.execute(CREATE_USER_TABLE);
+      addUser = connection.prepareStatement(INSERT_USER);
+      getUser = connection.prepareStatement(GET_USER);
+      setUserPassword = connection.prepareStatement(SET_USER_PASSWORD);
+      deleteUser = connection.prepareStatement(DELETE_USER);
+      getUsernames = connection.prepareStatement(GET_USERNAMES);
+      countUsers = connection.prepareStatement(COUNT_USER);
 
-          addUser = connection.prepareStatement(INSERT_USER);
-          getUser = connection.prepareStatement(GET_USER);
-          setUserPassword = connection.prepareStatement(SET_USER_PASSWORD);
-          deleteUser = connection.prepareStatement(DELETE_USER);
-          getUsernames = connection.prepareStatement(GET_USERNAMES);
-          countUsers = connection.prepareStatement(COUNT_USER);
-          st.execute(CREATE_BILLBOARD_TABLE);
+      //Set up Billboard Functions
+      st.execute(CREATE_BILLBOARD_TABLE);
 
-          addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
-          updateBillboard = connection.prepareStatement(UPDATE_BILLBOARD);
-          getAllBillboard = connection.prepareStatement(GET_ALL_BILLBOARD);
-          getBillboard = connection.prepareStatement(GET_BILLBOARD);
-          deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
-          rowCount = connection.prepareStatement(COUNT_ROWS);
-          //getAllBillboards = connection.prepareStatement(GET_ALL_BILLBOARDS);
+      addBillboard = connection.prepareStatement(INSERT_BILLBOARD);
+      updateBillboard = connection.prepareStatement(UPDATE_BILLBOARD);
+      getAllBillboard = connection.prepareStatement(GET_ALL_BILLBOARD);
+      getBillboard = connection.prepareStatement(GET_BILLBOARD);
+      deleteBillboard = connection.prepareStatement(DELETE_BILLBOARD);
+      rowCount = connection.prepareStatement(COUNT_ROWS);
 
-          st.execute(CREATE_SCHEDULE_TABLE);
+      // Setup Schedule Functions
+      st.execute(CREATE_SCHEDULE_TABLE);
 
-          addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
-          getSchedule = connection.prepareStatement(GET_SCHEDULE);
-          deleteSchedule = connection.prepareStatement(DELETE_SCHEDULE);
-          getAllSchedules = connection.prepareStatement(GET_ALL_SCHEDULES);
+      addSchedule = connection.prepareStatement(INSERT_SCHEDULE);
+      getSchedule = connection.prepareStatement(GET_SCHEDULE);
+      deleteSchedule = connection.prepareStatement(DELETE_SCHEDULE);
+      getAllSchedules = connection.prepareStatement(GET_ALL_SCHEDULES);
 
-          st.execute(CREATE_PERMISSION_TABLE);
+      // Setup Permission Functions
+      st.execute(CREATE_PERMISSION_TABLE);
 
-          addPerms = connection.prepareStatement(INSERT_PERMISSIONS);
-          setPerms = connection.prepareStatement(SET_USER_PERMISSIONS);
-          deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
-          getUserPerms = connection.prepareStatement(GET_USER_PERMISSIONS);
+      addPerms = connection.prepareStatement(INSERT_PERMISSIONS);
+      setPerms = connection.prepareStatement(SET_USER_PERMISSIONS);
+      deletePerms = connection.prepareStatement(DELETE_USER_PERMISSIONS);
+      getUserPerms = connection.prepareStatement(GET_USER_PERMISSIONS);
 
-          User admin = getUser("admin");
-          if(admin.getUsername().equals(null)){
-              admin = new User();
-              String salt = admin.getPasswordSalt();
-              String hPassword = getHash("admin");
-              String dbPassword = getHash(hPassword+salt);
-              admin.setPassword(dbPassword);
-              admin.setUsername("admin");
-          }
-
-
-      } catch (SQLException | NoSuchAlgorithmException ex) {
-         ex.printStackTrace();
+      //Setup Admin User if not already there
+      User admin = getUser("admin");
+      if(admin.getUsername().equals(null)){
+          admin = new User();
+          String salt = admin.getPasswordSalt();
+          String hPassword = getHash("admin");
+          String dbPassword = getHash(hPassword+salt);
+          admin.setPassword(dbPassword);
+          admin.setUsername("admin");
       }
    }
 
     /**
-     * @see DatabaseSource
+     * @see DatabaseSource#addUser(User)
      */
     public void addUser(User u) throws SQLException {
         addUser.setString(1, u.getUsername());
@@ -298,6 +305,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
        }
    }
 
+    /**
+     * @see DatabaseSource#getAllBillboards()
+     */
     public ArrayList<Billboard> getAllBillboards() throws SQLException {
         ResultSet rs = null;
         ArrayList<Billboard> billboardList;
@@ -383,7 +393,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
     }
 
    /**
-    * @see DatabaseSource //  #addUserPerms
+    * @see DatabaseSource#addUserPerms(String, Permissions)
     */
    public void addUserPerms(String username, Permissions permission) throws SQLException {
        addPerms.setString(1, username);
@@ -394,7 +404,9 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
        addPerms.execute();
    }
-
+    /**
+     * @see DatabaseSource#updateUserPerms(String,Permissions)
+     */
    public void updateUserPerms(String username, Permissions permission) throws SQLException {
        setPerms.setString(1, permission.getCreateBillboard());
        setPerms.setString(2, permission.getEditAllBillboards());
@@ -468,7 +480,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
    }
 
    /**
-    * @see DatabaseSource#deleteSchedule(String)
+    * @see DatabaseSource#deleteSchedule(Schedule)
     */
    public void deleteSchedule(Schedule schedule) throws SQLException {
      deleteSchedule.setString(1, schedule.getBillboardName());
