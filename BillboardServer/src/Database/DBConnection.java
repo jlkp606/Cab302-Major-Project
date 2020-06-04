@@ -30,7 +30,7 @@ public class DBConnection {
 
         Properties props = new Properties();
         FileInputStream in = null;
-        in = new FileInputStream("./BillboardServer/db.props");
+        in = new FileInputStream("./db.props");
         props.load(in);
         in.close();
 
@@ -40,6 +40,7 @@ public class DBConnection {
         String password = props.getProperty("jdbc.password");
         String schema = props.getProperty("jdbc.schema");
 
+        System.out.println(schema);
         //Create the database if not already exists
         Connection conn = DriverManager.getConnection(url+ "/", username,
                 password);

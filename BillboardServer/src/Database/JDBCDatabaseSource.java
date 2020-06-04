@@ -198,7 +198,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
       //Setup Admin User if not already there
       User admin = getUser("admin");
-      if(admin.getUsername().equals(null)){
+      if(admin.getUsername() == null){
           admin = new User();
           String salt = admin.getPasswordSalt();
           String hPassword = getHash("admin");

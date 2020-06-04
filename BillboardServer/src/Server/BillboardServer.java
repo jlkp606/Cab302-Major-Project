@@ -100,22 +100,27 @@ public class BillboardServer {
             String repeat = s.getRepeat();
             Boolean isOn = false;
 
-            if (repeat.equals("never")){
+            if(repeat == "week"){
 
-            } else if(repeat.equals("week")){
                 if(s.getDay().equals(LocalDate.now().getDayOfWeek())){
                     isOn = (LocalTime.now().isAfter(startTime) &&
                             LocalTime.now().isBefore(endTime));
                 };
-            } else if(repeat.equals("day")){
+            } else if(repeat == "day"){
+
                 isOn = (LocalTime.now().isAfter(startTime) &&
                         LocalTime.now().isBefore(endTime));
+            } else {
+                isOn = (LocalDateTime.now().isAfter(ldt.parse(s.getStartTime())) &&
+                        LocalDateTime.now().isBefore(ldt.parse(s.getEndTime())));
             }
             if (isOn){
                 return s.getBillboardName();
             }
 
+
         }
+
         return null;
     }
 
@@ -178,11 +183,27 @@ public class BillboardServer {
                 response.put("message", e);
             }
 
+        } else if (requestType.equals("getCurrentBillboard")) {
+            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
+            String currentBillboardName = getCurrentBillboard(scheduleList);
+            System.out.println(currentBillboardName);
+            if (currentBillboardName != null){
+                Billboard billboard = dataSource.getBillboard(currentBillboardName);
+                response.put("billboard", billboard);
+            }
+            else {
+                Billboard defaultBillboard = new Billboard();
+                defaultBillboard.setbName("defaultBillboard");
+                defaultBillboard.setMessage("No Current Billboard");
+                defaultBillboard.setInfoMessage("nothing to see here");
+                response.put("billboard", defaultBillboard);
+            }
         }
+
         else{
             String token = (String) request.get("token");
             // checks token value is valid
-            if (tokenStore.containsKey(token) || token.equals("kjryiauznhrjgrxypymj")){
+            if (tokenStore.containsKey(token)){
                 LocalDateTime expiry = (LocalDateTime) tokenStore.get(token).get(1);
                 //checks token not expired
                 if(expiry.isAfter(LocalDateTime.now())){
@@ -196,14 +217,6 @@ public class BillboardServer {
                             ArrayList<Billboard> billboardList = dataSource.getAllBillboards();
                             response.put("billboardList", billboardList);
                             break;
-                        }
-                        case "getCurrentBillboard": {
-                            ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
-                            String currentBillboardName = getCurrentBillboard(scheduleList);
-                            Billboard billboard = dataSource.getBillboard(currentBillboardName);
-                            response.put("billboard", billboard);
-                            break;
-
                         }
                         case "getBillboardInfo":{
                             //Tested
@@ -335,7 +348,7 @@ public class BillboardServer {
                     System.out.println(e);
                 } catch(Exception e){
                     response.put("message", e);
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
                 clientSocket.close();
             }

@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 import java.net.URL;
@@ -30,24 +31,36 @@ import java.net.Socket;
 import java.util.Base64;
 import java.util.HashMap;
 
+import static Server.Client.getResponse;
+import static Server.Client.sendRequest;
+
 public class BillboardGenerator {
 
-    //        Socket socket = Client.getClientSocket();
-//        HashMap<String, Object> request = new HashMap<>();
-//        request.put("type", "getBillboard");
-//        Client.sendRequest(socket, request);
-//        HashMap<String, Object> response = Client.getResponse(socket);
-//        Billboard currentBillboard = (Billboard) response.get("billboard");
+    public static Billboard GetCurrentBillboard() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+        Socket socket = Client.getClientSocket();
+        HashMap<String, Object> request = new HashMap<>();
 
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+        request.put("type", "getCurrentBillboard");
+        sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        Billboard billboard = (Billboard) response.get("billboard");
 
-        /**Setting up the JFrame and JPanel*/
+        System.out.println(billboard.getbName());
+        System.out.println(!billboard.getPictureData().equals(""));
+        socket.close();
+
+        return billboard;
+
+    }
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchAlgorithmException {
+
+        /*Setting up the JFrame and JPanel*/
         JFrame BillboardFrame = new JFrame("Billboard Viewer");
         BillboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         BillboardFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         JPanel BillboardElements = new JPanel();
         BillboardElements.setLayout(new BoxLayout(BillboardElements,BoxLayout.PAGE_AXIS));
-        /**Setting up a mouse listener to exit when the mouse is clicked*/
+        /*Setting up a mouse listener to exit when the mouse is clicked*/
         MouseListener mouseExit = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -70,7 +83,7 @@ public class BillboardGenerator {
             public void mouseExited(MouseEvent mouseEvent) {
             }
         };
-        /**setting up a key listener to exit when the escape key is released*/
+        /*setting up a key listener to exit when the escape key is released*/
         KeyListener escapeExit = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
@@ -88,14 +101,15 @@ public class BillboardGenerator {
             }
         };
 
-        /**adding the mouse and key listeners to the frame*/
+        /*adding the mouse and key listeners to the frame*/
         BillboardFrame.addMouseListener(mouseExit);
         BillboardFrame.addKeyListener(escapeExit);
-        /**grabbing the billboard settings from the class grabbed from the server*/
-        Billboard Billboard = new Billboard();
+        /*grabbing the billboard settings from the class grabbed from the server*/
+        Billboard Billboard = GetCurrentBillboard();
+
         JLabel BillboardMessage = new JLabel(Billboard.getMessage());
-        JLabel BillboardInformation = new JLabel("<html>" + Billboard.getInfoMessage() + "</html>");
-        /** ErrorMessage in the case that the class has no background colour input and is invalid*/
+        JLabel BillboardInformation = new JLabel(Billboard.getInfoMessage());
+        /* ErrorMessage in the case that the class has no background colour input and is invalid*/
         Color BillboardBackgroundColour = null;
         try {
             BillboardBackgroundColour = Color.decode(Billboard.getColour());
@@ -125,39 +139,41 @@ public class BillboardGenerator {
 //            BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
 //            JLabel ConvertedURLImage = new JLabel(new ImageIcon(URLtoImage));
 
-        /**setting a font for the billboard message and information*/
-        BillboardMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 48));
-        BillboardInformation.setFont(new Font("Century Schoolbook", Font.PLAIN, 28));
+        /*setting a font for the billboard message and information*/
+        BillboardMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 52));
+        BillboardInformation.setFont(new Font("Century Schoolbook", Font.PLAIN, 32));
 
-        /**setting colours for messages, information and background*/
+        /*setting colours for messages, information and background*/
         BillboardMessage.setForeground(BillboardMessageColour);
         BillboardInformation.setForeground(BillboardInformationColour);
         BillboardElements.setBackground(BillboardBackgroundColour);
 
-        /**Show all elements present, Base64 image*/
-        if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != null){
+        /*Show all elements present, Base64 image*/
+        if (!Billboard.getMessage().equals("") &&
+                !Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureData().equals("")){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
             JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
 
-            /**set Element alignments*/
+            /*set Element alignments*/
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            /**add elements*/
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            /*add elements*/
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(ConvertedImage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show message and Base64 image, no information*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != null){
+        /*Show message and Base64 image, no information*/
+        else if (!Billboard.getMessage().equals("") && Billboard.getInfoMessage().equals("") && !Billboard.getPictureData().equals("")){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -168,15 +184,17 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(ConvertedImage);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show information and Base64 image, no message*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && Billboard.getPictureData() != null){
+        /*Show information and Base64 image, no message*/
+        else if (Billboard.getMessage().equals("") &&
+                !Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureData().equals("")){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -187,15 +205,17 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(ConvertedImage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show all elements present, URL image*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && Billboard.getPictureURL() != ""){
+        /*Show all elements present, URL image*/
+        else if (!Billboard.getMessage().equals("") &&
+                !Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
             JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
@@ -206,17 +226,19 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(ConvertedImage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show message and URL Image, no information*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && Billboard.getPictureURL() != ""){
+        /*Show message and URL Image, no information*/
+        else if (!Billboard.getMessage().equals("") &&
+                Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
             JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
@@ -226,15 +248,17 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(ConvertedImage);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show information and URL Image, no message*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && Billboard.getPictureURL() != ""){
+        /*Show information and URL Image, no message*/
+        else if (Billboard.getMessage().equals("") &&
+                !Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
             JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
@@ -244,54 +268,58 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(ConvertedImage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show information and message, no image*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        /*Show information and message, no image*/
+        else if (!Billboard.getMessage().equals("") && !Billboard.getInfoMessage().equals("") &&
+                (Billboard.getPictureData().equals("")|| Billboard.getPictureURL().equals(""))){
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
             BillboardElements.add(Box.createVerticalGlue());
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show only message*/
-        else if (Billboard.getMessage() != "" && Billboard.getInfoMessage() == "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        /*Show only message*/
+        else if (!Billboard.getMessage().equals("") && Billboard.getInfoMessage().equals("") &&
+                (Billboard.getPictureData().equals("")|| Billboard.getPictureURL().equals(""))){
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardMessage);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show only information*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() != "" && (Billboard.getPictureData() == null|| Billboard.getPictureURL() == "")){
+        /*Show only information*/
+        else if (Billboard.getMessage().equals("") && !Billboard.getInfoMessage().equals("") &&
+                (Billboard.getPictureData().equals("")|| Billboard.getPictureURL().equals(""))){
 
             //set Element alignments
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(BillboardInformation);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show only Base64 Image*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() == "" && Billboard.getPictureData() != null){
+        /*Show only Base64 Image*/
+        else if (Billboard.getMessage().equals("") && Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureData().equals("")){
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
@@ -301,13 +329,14 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(ConvertedImage);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
 
-        /**Show only URL Image*/
-        else if (Billboard.getMessage() == "" && Billboard.getInfoMessage() == "" && Billboard.getPictureURL() != ""){
+        /*Show only URL Image*/
+        else if (Billboard.getMessage().equals("") && Billboard.getInfoMessage().equals("") &&
+                !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
             JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
@@ -316,9 +345,9 @@ public class BillboardGenerator {
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             //add elements
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
             BillboardElements.add(ConvertedImage);
-            BillboardElements.add(Box.createRigidArea(new Dimension(0, 60)));
+            BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
         }
         else {
             JLabel ErrorMessage = new JLabel("Error: File not found or invalid.");
@@ -329,7 +358,7 @@ public class BillboardGenerator {
             BillboardFrame.getContentPane().setBackground(Color.BLUE);
         }
 
-        /**finally adding all parts to the frame*/
+        /*finally adding all parts to the frame*/
         BillboardFrame.getContentPane().add(BillboardElements);
         BillboardFrame.setUndecorated(true);
         BillboardFrame.setVisible(true);
