@@ -46,8 +46,7 @@ public class BillboardGenerator {
     public static JLabel[] createBillboardViewer( JLabel[] labels, JFrame BillboardFrame, JPanel BillboardElements, MouseListener mouseExit, KeyListener escapeExit) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         Billboard Billboard = GetCurrentBillboard();
 
-        BillboardFrame.getContentPane().remove(labels[0]);
-        BillboardFrame.getContentPane().remove(labels[1]);
+
 
         JLabel BillboardMessage = new JLabel();
         JLabel BillboardInformation = new JLabel();

@@ -81,6 +81,10 @@ public class MyGui extends Component implements ActionListener {
         String password = t2.getText();
 //      UnComment it  for testing
         try {
+            if(userName.equals("")||password.equals("")){
+                JOptionPane.showMessageDialog(null, "Invalid username or password ");
+            }
+            else{
             String Hashed_password = getHash(password);
 
             try {
@@ -89,6 +93,7 @@ public class MyGui extends Component implements ActionListener {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
 
+            }
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -108,7 +113,7 @@ public class MyGui extends Component implements ActionListener {
                     frame.setLocation(500, 300);
                     frame.setSize(550, 550);
                     frame.setVisible(true);
-
+//                        DisplayControlPanel( token, userName)
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();

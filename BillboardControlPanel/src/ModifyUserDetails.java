@@ -1,3 +1,4 @@
+import Database.Permissions;
 import Server.Client;
 
 import javax.swing.*;
@@ -8,7 +9,6 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
-import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
 import static Server.Hash.getHash;
 
@@ -36,13 +36,6 @@ public class ModifyUserDetails extends JFrame {
         formattedTextField1.setEnabled(false);
         formattedTextField1.setText(user);
         Database.Permissions initialPermision = List_billboard.GetUserPermission(token,user);
-
-//        Database.Permissions initialPermision = new Database.Permissions("sid","true","false","false","true");
-//
-//        permissions[0] = initialPermision.getCreateBillboard();
-//        permissions[1] = initialPermision.getEditAllBillboards();
-//        permissions[2] = initialPermision.getEditSchedule();
-//        permissions[3] = initialPermision.getEditUsers();
 
         if(initialPermision.getCreateBillboard().equals("true")){
             createBillboardsCheckBox.setSelected(true);
@@ -147,19 +140,29 @@ public class ModifyUserDetails extends JFrame {
                 }
 
                 else {
-//                    try {
+
                     try {
                         String Hashed_password = getHash(User_Password);
                         Database.Permissions permission = new Database.Permissions(User_Name, initialPermision.getCreateBillboard(), initialPermision.getEditAllBillboards(), initialPermision.getEditSchedule(), initialPermision.getEditUsers());
-                        System.out.println(permission.getCreateBillboard());
-                        System.out.println(permission.getEditAllBillboards());
-                        System.out.println(permission.getEditSchedule());
-                        System.out.println(permission.getEditUsers());
-                        System.out.println("\n");
-                        SetUserPermission( token, user, permission);
-                        changePassword.SetUserPassword(token,user,Hashed_password);
+                        String response = SetUserPermission( token, user, permission);
+
+                        String serverResponse = changePassword.SetUserPassword(token,user,Hashed_password);
+                        if((serverResponse.equals("Success") &&(response.equals("Success")))) {
+                            CloseJframe();
+                        }
+                        else {
+                            if(!serverResponse.equals("Success")){
+                            JOptionPane.showMessageDialog(null, serverResponse);
+                            }
+                            else if(!response.equals("Success")) {
+
+                                JOptionPane.showMessageDialog(null, response);
+                            }
+                        }
                     } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                         ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Please enter a valid password");
+
                     }
 
                 }
@@ -167,20 +170,9 @@ public class ModifyUserDetails extends JFrame {
         });
 
     }
-//
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//
-//        String user = "Josh";
-//        String admin = "Sid";
-//        String token = "ihfoahfio";
-//        JFrame frame = new ModifyUserDetails("Modify Details",token,admin,user);
-//        frame.setLocation(500,300);
-//        frame.setSize(550,550);
-//        frame.setVisible(true);
-//    }
 
 
-    public static void SetUserPermission(String token,String user,Database.Permissions permission) throws IOException, ClassNotFoundException {
+    public static String SetUserPermission(String token, String user, Permissions permission) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
         request.put("token", token);
@@ -188,6 +180,13 @@ public class ModifyUserDetails extends JFrame {
         request.put("username", user);
         request.put("permission", permission);
         sendRequest(socket, request);
+        HashMap<String , Object> res = Client.getResponse(socket);
+        String message = (String) res.get("message");
         socket.close();
+        return message;
+    }
+
+    public void CloseJframe(){
+        super.dispose();
     }
 }
