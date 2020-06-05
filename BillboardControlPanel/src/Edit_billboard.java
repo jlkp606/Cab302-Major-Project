@@ -119,11 +119,15 @@ public class Edit_billboard extends JFrame {
         importBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame importBillboard = new importBillboard(title_info, title_colour, background_colour, message, message_colour, image_data, image_url);
-                importBillboard.setVisible(true);
-                importBillboard.setSize(450,150);
-                importBillboard.setLocation(450,250);
-
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        JFrame importBillboard = new importBillboard(title_info, title_colour, background_colour, message, message_colour, image_data, image_url);
+                        importBillboard.setVisible(true);
+                        importBillboard.setSize(450, 150);
+                        importBillboard.setLocation(450, 250);
+//                importBillboard.dispose();
+                    }
+                });
             }
         });
 
@@ -137,12 +141,14 @@ public class Edit_billboard extends JFrame {
                 String billboard_message_colour = message_colour.getText();
                 String billboard_image_data = image_data.getText();
                 String billboard_image_url = image_url.getText();
-
-                JFrame exportBillboard = new exportBillboard(  billboard_title,  billboard_title_colour,  billboard_bg_colour,  billboard_message, billboard_message_colour,  billboard_image_data,  billboard_image_url);
-                exportBillboard.setVisible(true);
-                exportBillboard.setSize(450,150);
-                exportBillboard.setLocation(450,250);
-
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        JFrame exportBillboard = new exportBillboard(billboard_title, billboard_title_colour, billboard_bg_colour, billboard_message, billboard_message_colour, billboard_image_data, billboard_image_url);
+                        exportBillboard.setVisible(true);
+                        exportBillboard.setSize(450, 150);
+                        exportBillboard.setLocation(450, 250);
+                    }
+                });
             }
         });
 

@@ -99,15 +99,21 @@ public class MyGui extends Component implements ActionListener {
         }
 
         else{
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    try {
+                    JFrame frame = new ControlPanel("Control Panel",token,userName);
+                    frame.setLocation(500, 300);
+                    frame.setSize(550, 550);
+                    frame.setVisible(true);
 
-        try {
-            JFrame frame = new ControlPanel("Control Panel",token,userName);
-            frame.setLocation(500, 300);
-            frame.setSize(550, 550);
-            frame.setVisible(true);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
 
         f.dispose();;
         }

@@ -2,10 +2,10 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class viewPermissions extends JFrame{
-    private JTextField EditAllBillboard;
-    private JTextField EditUsers;
-    private JTextField ScheduleBillboard;
-    private JTextField CreateBillboard;
+    private JLabel EditAllBillboard;
+    private JLabel EditUsers;
+    private JLabel ScheduleBillboard;
+    private JLabel CreateBillboard;
     private JPanel mainPanel;
 
     public  viewPermissions(String title,String token ,String user) throws IOException, ClassNotFoundException {
@@ -19,10 +19,6 @@ public class viewPermissions extends JFrame{
         //Testing without Server
 //        Database.Permissions permissions = new Database.Permissions("Sid","true","true","true","true");
 
-        CreateBillboard.setEnabled(false);
-        EditAllBillboard.setEnabled(false);
-        ScheduleBillboard.setEnabled(false);
-        EditUsers.setEnabled(false);
 
         if (permissions.getCreateBillboard().equals("true")) {
             CreateBillboard.setText("Permitted");

@@ -125,17 +125,15 @@ public class Schedule_billboard extends JFrame {
 //                System.out.println(schedule.getStartTime());
 //                System.out.println(schedule.getUsername());
 //                System.out.println(schedule.getRepeat());
-
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    public void run() {
                 try {
-                    ScheduleBillboard( token, schedule);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchAlgorithmException ex) {
+                    ScheduleBillboard(token, schedule);
+                } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
-
+//                    }
+//                });
             }
         });
     }

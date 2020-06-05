@@ -47,16 +47,22 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                    if (permissions.getCreateBillboard().equals("true")) {
-                        try {
-                            JFrame frame = new Createbillboard("Create Billboard", token, user);
-                            frame.setLocation(500, 300);
-                            frame.setSize(550, 550);
-                            frame.setVisible(true);
-                        } catch (IOException exc) {
-                            exc.printStackTrace();
+                if (permissions.getCreateBillboard().equals("true")) {
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            try {
+
+                                JFrame frame = new Createbillboard("Create Billboard", token, user);
+                                frame.setLocation(500, 300);
+                                frame.setSize(550, 550);
+                                frame.setVisible(true);
+                            } catch (IOException exc) {
+                                exc.printStackTrace();
+                            }
                         }
-                    }
+                    });
+                }
 
                 else {
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -72,14 +78,17 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(permissions.getEditUsers().equals("true")) {
-                    try {
-                        new listUsers(" Users",token,user);
-                    } catch (IOException | ClassNotFoundException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                else{
+                if (permissions.getEditUsers().equals("true")) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            try {
+                                new listUsers(" Users", token, user);
+                            } catch (IOException | ClassNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                } else {
                     JOptionPane.showMessageDialog(null, "Permission required ");
                 }
 
@@ -91,16 +100,19 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(permissions.getEditSchedule().equals("true")) {
-                    try {
-                        JFrame frame = new viewer_billboard_time(" Users",token,user);
-                        frame.setLocation(500,300);
-                        frame.setSize(850,650);
-                        frame.setVisible(true);
-                    } catch (IOException | ClassNotFoundException ex) {
-                        ex.printStackTrace();
-                    }
-
+                if (permissions.getEditSchedule().equals("true")) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            try {
+                                JFrame frame = new viewer_billboard_time(" Users", token, user);
+                                frame.setLocation(500, 300);
+                                frame.setSize(850, 650);
+                                frame.setVisible(true);
+                            } catch (IOException | ClassNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -113,13 +125,16 @@ public class ControlPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(permissions.getEditAllBillboards().equals("true")) {
-                    try {
-                        new List_billboard(token, user);
-                    } catch (IOException | ParserConfigurationException | ClassNotFoundException | SAXException ex) {
-                        ex.printStackTrace();
-                    }
-
+                if (permissions.getEditAllBillboards().equals("true")) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            try {
+                                new List_billboard(token, user);
+                            } catch (IOException | ParserConfigurationException | ClassNotFoundException | SAXException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Permission required ");
@@ -138,35 +153,42 @@ public class ControlPanel extends JFrame{
                 } catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
+
             }
         });
 
         changePassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    JFrame frame = new changePassword("Change Password",token,user);
-                    frame.setLocation(500, 300);
-                    frame.setSize(350, 350);
-                    frame.setVisible(true);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        try {
+                            JFrame frame = new changePassword("Change Password", token, user);
+                            frame.setLocation(500, 300);
+                            frame.setSize(350, 350);
+                            frame.setVisible(true);
+                        } catch (IOException | ClassNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         viewPermissionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    JFrame frame = new viewPermissions(user + " Permissions",token,user);
-                    frame.setLocation(500, 300);
-                    frame.setSize(350, 350);
-                    frame.setVisible(true);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        try {
+                            JFrame frame = new viewPermissions(user + " Permissions", token, user);
+                            frame.setLocation(500, 300);
+                            frame.setSize(350, 350);
+                            frame.setVisible(true);
+                        } catch (IOException | ClassNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }

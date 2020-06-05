@@ -160,32 +160,23 @@ class List_billboard extends JFrame {
                curr_billboard = table.getValueAt(row, 1).toString();
                curr_user= table.getValueAt(row, 0).toString();
                System.out.println(curr_billboard);
-//               Database.Permissions permissions = GetUserPermission(token, user);
-               Database.Permissions permissions = new Permissions(user,"true","true","true","true");
+               Permissions permissions = null;
+               try {
+                   permissions = GetUserPermission(token, user);
+               } catch (IOException | ClassNotFoundException ex) {
+                   ex.printStackTrace();
+               }
+//               Database.Permissions permissions = new Permissions(user,"true","true","true","true");
+               Permissions finalPermissions = permissions;
                Delete.addActionListener(new ActionListener() {
                    @Override
                    public void actionPerformed(ActionEvent e) {
-//                 Uncomment the lines for server testing
                        try {
                            Billboard billboard = GetBillboardInfo(token, curr_billboard);
-
-//                       comment the lines for server testing
-//                           Billboard billboard = new Billboard(curr_billboard, "Sid" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                                   "more information.", "#00FFFF");
-
-                           //                       Uncomment the lines for server testing
                            Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
-
-//                       comment the lines for server testing
-//                           Billboard curr_scheduled_billboard = new Billboard(curr_billboard, "Siddgfdghd" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                                   "more information.", "#00FFFF");
                            if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
-                               if ((permissions.getCreateBillboard().equals("true"))) {
+                               if ((finalPermissions.getCreateBillboard().equals("true"))) {
                                    JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
-//                                  Comment the line
-//                                   ((DefaultTableModel) table.getModel()).removeRow(row);
-
-//                                  Uncomment the lines for server testing
                                    try {
                                        DeleteBillboard(token, curr_billboard);
                                        ((DefaultTableModel) table.getModel()).removeRow(row);
@@ -199,23 +190,18 @@ class List_billboard extends JFrame {
                                }
                            }
                            else{
-                               if ((permissions.getEditAllBillboards().equals("true"))) {
+                               if ((finalPermissions.getEditAllBillboards().equals("true"))) {
                                    JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
-//                              Comment the line for server testing
-//                                   ((DefaultTableModel) table.getModel()).removeRow(row);
-//                              Uncomment the lines for server testing
                                    try {
                                        DeleteBillboard(token, curr_billboard);
                                    } catch (IOException | ClassNotFoundException ex) {
                                        ex.printStackTrace();
                                    }
-
                                }
                                else {
                                    JOptionPane.showMessageDialog(null, "Permission required ");
                                }
                            }
-//                       Uncomment the lines for server testing
                        }
                        catch (IOException | ClassNotFoundException ex) {
                            ex.printStackTrace();
@@ -224,47 +210,54 @@ class List_billboard extends JFrame {
                    }
                });
 
+               Permissions finalPermissions1 = permissions;
                Edit.addActionListener(new ActionListener() {
                    @Override
                    public void actionPerformed(ActionEvent e) {
-//                       try {
-//                       Billboard billboard = GetBillboardInfo(token, curr_billboard);
-                       Billboard billboard = new Billboard(curr_billboard, "Sid" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                               "more information.", "#00FFFF");
-//                           Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
+                       try {
+                       Billboard billboard = GetBillboardInfo(token, curr_billboard);
+//                       Billboard billboard = new Billboard(curr_billboard, "Sid" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                               "more information.", "#00FFFF");
+                           Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
 
-                       Billboard curr_scheduled_billboard = new Billboard(curr_billboard, "Siddgfdghd" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                               "more information.", "#00FFFF");
+//                       Billboard curr_scheduled_billboard = new Billboard(curr_billboard, "Siddgfdghd" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
+//                               "more information.", "#00FFFF");
                            if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
-                               if ((permissions.getCreateBillboard().equals("true"))) {
-                                   JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
-                                   frame.setLocation(500, 300);
-                                   frame.setSize(550, 550);
-                                   frame.setVisible(true);
-
+                               if ((finalPermissions1.getCreateBillboard().equals("true"))) {
+                                   SwingUtilities.invokeLater(new Runnable() {
+                                       public void run() {
+                                           JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
+                                           frame.setLocation(500, 300);
+                                           frame.setSize(550, 550);
+                                           frame.setVisible(true);
+                                       }
+                                   });
                                }
                                else {
                                    JOptionPane.showMessageDialog(null, "Permission required ");
                                }
                            }
                            else{
-                               if ((permissions.getEditAllBillboards().equals("true"))) {
-                                   JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
-                                   frame.setLocation(500, 300);
-                                   frame.setSize(550, 550);
-                                   frame.setVisible(true);
-
+                               if ((finalPermissions1.getEditAllBillboards().equals("true"))) {
+                                   SwingUtilities.invokeLater(new Runnable() {
+                                       public void run() {
+                                           JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
+                                           frame.setLocation(500, 300);
+                                           frame.setSize(550, 550);
+                                           frame.setVisible(true);
+                                       }
+                                   });
                                }
                                else {
                                    JOptionPane.showMessageDialog(null, "Permission required ");
                                }
                            }
 
-//                       }
-//
-//                       catch (IOException | ClassNotFoundException ex) {
-//                           ex.printStackTrace();
-//                       }
+                       }
+
+                       catch (IOException | ClassNotFoundException ex) {
+                           ex.printStackTrace();
+                       }
 
                    }
                });
