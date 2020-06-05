@@ -195,11 +195,8 @@ public class BillboardServer {
 //                String bName, String username, String colour, String message,String messageColour,
 //                        String pictureData, String pictureURL, String infoMessage, String infoColour
                 Billboard defaultBillboard = new Billboard("defaultBillboard", "admin","#6800C0", "No Current Billboard",
-                       "#FFFFFF", "","","nothing to see here","#FFFFFF");
-
-                defaultBillboard.setbName("defaultBillboard");
-                defaultBillboard.setMessage("No Current Billboard");
-                defaultBillboard.setInfoMessage("nothing to see here");
+                       "#FFFFFF", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQIAAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQmCC",
+                        "","nothing to see here","#FFFFFF");
 
                 response.put("billboard", defaultBillboard);
             }
@@ -353,7 +350,6 @@ public class BillboardServer {
                     System.out.println(e);
                 } catch(Exception e){
                     response.put("message", e);
-                    e.printStackTrace();
                 }
                 clientSocket.close();
             }

@@ -40,7 +40,6 @@ public class DBConnection {
         String password = props.getProperty("jdbc.password");
         String schema = props.getProperty("jdbc.schema");
 
-        System.out.println(schema);
         //Create the database if not already exists
         Connection conn = DriverManager.getConnection(url+ "/", username,
                 password);
