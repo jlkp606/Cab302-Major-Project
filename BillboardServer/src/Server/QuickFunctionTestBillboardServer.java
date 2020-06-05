@@ -185,9 +185,9 @@ public class QuickFunctionTestBillboardServer {
         request.put("type", "scheduleBillboard");
 
         String username = "itsmeMario8";
-        String billboardName = "GoodTest";
+        String billboardName = "MyNameJeff";
         String startTime = LocalDateTime.now().toString();
-        String endTime = LocalDateTime.now().plusSeconds(30).toString();
+        String endTime = LocalDateTime.now().plusSeconds(500).toString();
         String day = "Tuesday";
         String repeat = "day";
         Schedule schedule = new Schedule(username,billboardName,startTime,endTime,day,repeat);
