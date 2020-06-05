@@ -120,10 +120,19 @@ public class Edit_billboard extends JFrame {
                     BufferedImage Base64Image = null;
                     try {
                         Base64Image = ImageIO.read(Base64Stream);
+
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+                    double imgWidth = Base64Image.getWidth();
+                    double imgHeight = Base64Image.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+                    JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
                     /*set Element alignments*/
                     BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -150,8 +159,15 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+                    double imgWidth = Base64Image.getWidth();
+                    double imgHeight = Base64Image.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
 
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+                    JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
                     //set Element alignments
                     BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
                     ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -176,6 +192,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = Base64Image.getWidth();
+                    double imgHeight = Base64Image.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
 
                     //set Element alignments
@@ -206,6 +230,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = URLtoImage.getWidth();
+                    double imgHeight = URLtoImage.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
 
                     //set Element alignments
@@ -239,6 +271,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = URLtoImage.getWidth();
+                    double imgHeight = URLtoImage.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
 
                     //set Element alignments
@@ -269,6 +309,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = URLtoImage.getWidth();
+                    double imgHeight = URLtoImage.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
 
                     //set Element alignments
@@ -336,6 +384,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = Base64Image.getWidth();
+                    double imgHeight = Base64Image.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
 
                     //set Element alignments
@@ -362,6 +418,14 @@ public class Edit_billboard extends JFrame {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                    double imgWidth = URLtoImage.getWidth();
+                    double imgHeight = URLtoImage.getHeight();
+                    double widthHeightRatio = imgWidth/imgHeight;
+
+                    double width = 400* widthHeightRatio;
+                    double height = (400.0);
+
+                    Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
                     JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
 
                     //set Element alignments

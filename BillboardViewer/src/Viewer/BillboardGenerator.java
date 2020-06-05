@@ -43,10 +43,13 @@ public class BillboardGenerator {
 
     }
 
-    public static JLabel[] createBillboardViewer( JLabel[] labels, JFrame BillboardFrame, JPanel BillboardElements, MouseListener mouseExit, KeyListener escapeExit) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+    public static void createBillboardViewer( JFrame BillboardFrame, JPanel BillboardElements, MouseListener mouseExit, KeyListener escapeExit) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+
+        BillboardElements.removeAll();
         Billboard Billboard = GetCurrentBillboard();
 
-
+        System.out.println(Billboard.getPictureData());
+        System.out.println(Billboard.getbName());
 
         JLabel BillboardMessage = new JLabel();
         JLabel BillboardInformation = new JLabel();
@@ -113,12 +116,22 @@ public class BillboardGenerator {
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+            double imgWidth = Base64Image.getWidth();
+            double imgHeight = Base64Image.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             /*set Element alignments*/
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            ConvertedImage.setSize(new Dimension(500, 500));
 
             /*add elements*/
             BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
@@ -135,7 +148,15 @@ public class BillboardGenerator {
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+            double imgWidth = Base64Image.getWidth();
+            double imgHeight = Base64Image.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -156,7 +177,15 @@ public class BillboardGenerator {
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+            double imgWidth = Base64Image.getWidth();
+            double imgHeight = Base64Image.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -176,7 +205,15 @@ public class BillboardGenerator {
                 !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+            double imgWidth = URLtoImage.getWidth();
+            double imgHeight = URLtoImage.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -199,7 +236,15 @@ public class BillboardGenerator {
                 !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+            double imgWidth = URLtoImage.getWidth();
+            double imgHeight = URLtoImage.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -219,7 +264,15 @@ public class BillboardGenerator {
                 !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+            double imgWidth = URLtoImage.getWidth();
+            double imgHeight = URLtoImage.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -281,7 +334,15 @@ public class BillboardGenerator {
             byte[] Base64toImage = Base64.getDecoder().decode(Billboard.getPictureData());
             ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
             BufferedImage Base64Image = ImageIO.read(Base64Stream);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+            double imgWidth = Base64Image.getWidth();
+            double imgHeight = Base64Image.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = Base64Image.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -297,7 +358,15 @@ public class BillboardGenerator {
                 !Billboard.getPictureURL().equals("")){
             URL BillboardImageURL = new URL(Billboard.getPictureURL());
             BufferedImage URLtoImage = ImageIO.read(BillboardImageURL);
-            JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+            double imgWidth = URLtoImage.getWidth();
+            double imgHeight = URLtoImage.getHeight();
+            double widthHeightRatio = imgWidth/imgHeight;
+
+            double width = 400* widthHeightRatio;
+            double height = (400.0);
+
+            Image newImage = URLtoImage.getScaledInstance((int) width,(int) height, Image.SCALE_DEFAULT);
+            JLabel ConvertedImage = new JLabel(new ImageIcon(newImage));
 
             //set Element alignments
             ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -320,8 +389,7 @@ public class BillboardGenerator {
         BillboardFrame.getContentPane().add(BillboardElements);
         BillboardFrame.validate();
         BillboardFrame.repaint();
-        labels = new JLabel[]{BillboardMessage, BillboardInformation};
-        return labels;
+
     }
 
 
@@ -386,11 +454,10 @@ public class BillboardGenerator {
         JLabel BillboardMessage = new JLabel();
         JLabel BillboardInformation = new JLabel();
 
-        JLabel[] labels = {BillboardMessage, BillboardInformation};
-
         Timer timer = new Timer();
-        TimerTask task = new UpdateBillboard(/*BillboardMessage, BillboardInformation,*/ labels, BillboardFrame, BillboardElements, mouseExit, escapeExit);
-        timer.schedule(task, 0, 15000);
+        TimerTask task = new UpdateBillboard(/*BillboardMessage, BillboardInformation,*/ BillboardFrame, BillboardElements, mouseExit, escapeExit);
+        timer.schedule(task, 0, 5000);
+
 
         BillboardFrame.setUndecorated(true);
         BillboardFrame.setVisible(true);
