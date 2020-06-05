@@ -67,8 +67,10 @@ public class Schedule_billboard extends JFrame {
             hours_selected.addItem(i);
         }
 
-        for(int i = 0 ; i<=59;i++){
+        for(int i = 1 ; i<60;i++){
             mins_selected.addItem(i);
+        }
+        for(int i = 1 ; i<60;i++){
             duration.addItem(i);
         }
 
@@ -125,15 +127,15 @@ public class Schedule_billboard extends JFrame {
 //                System.out.println(schedule.getStartTime());
 //                System.out.println(schedule.getUsername());
 //                System.out.println(schedule.getRepeat());
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    public void run() {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
                 try {
                     ScheduleBillboard(token, schedule);
                 } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
-//                    }
-//                });
+                    }
+                });
             }
         });
     }
