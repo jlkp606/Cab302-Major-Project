@@ -133,11 +133,13 @@ public class viewer_billboard_time extends JFrame {
             }
         }
 
-        ArrayList<Database.Schedule> scheduleList = new ArrayList<Database.Schedule>();
+        ArrayList<Database.Schedule> scheduleList = ViewSchedule(token);
+        System.out.println("billboardScheduled");
 
         String[] weekDays = {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
         for (int p = 0; p < 5; p++) {
-            for (int i = 0; i < scheduleList.size(); i++) {
+            int size = scheduleList.size();
+            for (int i = 0; i < size; i++) {
                 String day = scheduleList.get(i).getDay();
                 String compareTime = scheduleList.get(i).getStartTime().substring(11, 13);
                 String displayStartTime = scheduleList.get(i).getStartTime().substring(11, 16);
@@ -145,6 +147,10 @@ public class viewer_billboard_time extends JFrame {
                 String billboardScheduled = scheduleList.get(i).getBillboardName();
                 String billboardScheduledCreator = scheduleList.get(i).getUsername();
                 String repeat = scheduleList.get(i).getRepeat();
+
+                System.out.println(billboardScheduled);
+                System.out.println("billboardScheduled");
+
                 for (int k = 9; k < 18; k++) {
                     String hour = String.format("%02d", k);
                     if (day.equals(weekDays[p])) {
@@ -166,7 +172,6 @@ public class viewer_billboard_time extends JFrame {
                         }
                     }
                 }
-
             }
         }
 
@@ -177,7 +182,7 @@ public class viewer_billboard_time extends JFrame {
                     public void run() {
                         try {
                             JFrame frame = new Schedule_billboard("Add billboard to Schedule", token, user);
-                            frame.setSize(350, 350);
+                            frame.setSize(450, 400);
                             frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();

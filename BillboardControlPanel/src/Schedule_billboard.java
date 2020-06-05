@@ -38,23 +38,7 @@ public class Schedule_billboard extends JFrame {
 
         String days[]= {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
 
-//        ArrayList<Database.Billboard> billboards = List_billboard.receiveBillboardList(token);
-        Database.Billboard billboard1 = new Database.Billboard("itsmeMario8Billboard", "itsmeMario8", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                "more information.", "#00FFFF");
-
-        Database.Billboard billboard2 = new Database.Billboard("SidBillboard", "Sid", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                "more information.", "#00FFFF");
-
-        Database.Billboard billboard3 = new Database.Billboard("JoshBillboard", "Josh", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                "more information.", "#00FFFF");
-
-        Database.Billboard billboard4 = new Database.Billboard("LiamBillboard", "Liam", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-                "more information.", "#00FFFF");
-        ArrayList<Database.Billboard> billboards = new ArrayList<Database.Billboard>();
-        billboards.add(billboard1);
-        billboards.add(billboard2);
-        billboards.add(billboard3);
-        billboards.add(billboard4);
+        ArrayList<Database.Billboard> billboards = List_billboard.receiveBillboardList(token);
 
         for(int i =0;i<billboards.size();i++){
             billboardList.addItem(billboards.get(i).getbName());
@@ -147,15 +131,6 @@ public class Schedule_billboard extends JFrame {
         });
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        String user = "Sid";
-        String token = "2615386751237";
-        JFrame frame =
-                new Schedule_billboard("Add billboard to Schedule",user,token);
-        frame.setLocation(400,200);
-        frame.setSize(450,400);
-        frame.setVisible(true);
-    }
     public static String ScheduleBillboard(String token, Schedule schedule) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
 
         Socket socket = Client.getClientSocket();
