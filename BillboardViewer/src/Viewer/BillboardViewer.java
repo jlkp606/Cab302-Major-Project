@@ -26,7 +26,7 @@ import java.util.Timer;
 import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
 
-public class BillboardGenerator {
+public class BillboardViewer {
 
 
     public static Billboard GetCurrentBillboard() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {

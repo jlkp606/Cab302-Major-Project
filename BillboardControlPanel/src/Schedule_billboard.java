@@ -29,6 +29,7 @@ public class Schedule_billboard extends JFrame {
     private JComboBox<String> billboardList;
     private JTextField textField1;
 
+
     public Schedule_billboard(String title, String token ,String user) throws IOException, ClassNotFoundException {
         super(title);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -70,7 +71,6 @@ public class Schedule_billboard extends JFrame {
         for(int i = 0 ; i<60;i++){
             mins_selected.addItem(i);
         }
-
 
         everyDayCheckBox.addItemListener(new ItemListener() {
             @Override

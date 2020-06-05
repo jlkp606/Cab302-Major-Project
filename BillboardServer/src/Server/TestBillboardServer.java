@@ -1,16 +1,13 @@
 package Server;
 
-import Database.Billboard;
 import Database.Permissions;
 import Database.Schedule;
 import Database.User;
 import Exceptions.IncorrectPasswordException;
 import Exceptions.IncorrectUserException;
 import Exceptions.MissingPermissionException;
-import Token.Token;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import Server.BillboardServer;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;

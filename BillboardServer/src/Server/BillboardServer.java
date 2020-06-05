@@ -5,7 +5,6 @@ import Exceptions.IncorrectPasswordException;
 import Exceptions.IncorrectUserException;
 import Exceptions.MissingPermissionException;
 import Exceptions.NoClientInputStreamException;
-import Token.Token;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -177,7 +176,7 @@ public class BillboardServer {
                 tokenInfo.add(newToken.getExpiry());
                 tokenStore.put(newToken.getToken(), tokenInfo);
                 response.put("token", newToken.getToken());
-                response.put("message", "Successful");
+                response.put("message", "Success");
             }
             catch(Exception e){
                 response.put("message", e);
@@ -186,10 +185,10 @@ public class BillboardServer {
         } else if (requestType.equals("getCurrentBillboard")) {
             ArrayList<Schedule> scheduleList = dataSource.getAllSchedules();
             String currentBillboardName = getCurrentBillboard(scheduleList);
-            System.out.println(currentBillboardName);
             if (currentBillboardName != null){
                 Billboard billboard = dataSource.getBillboard(currentBillboardName);
                 response.put("billboard", billboard);
+                response.put("message", "Success");
             }
             else {
 //                String bName, String username, String colour, String message,String messageColour,
@@ -199,6 +198,7 @@ public class BillboardServer {
                         "","nothing to see here","#FFFFFF");
 
                 response.put("billboard", defaultBillboard);
+                response.put("message", "Success");
             }
         }
 
@@ -307,7 +307,7 @@ public class BillboardServer {
                             break;
                         }
                     }
-                    request.put("message", "Success");
+                    response.put("message", "Success");
                 } else {
                     System.out.println("Token Expired");
                     response.put("message", "Token Expired");
@@ -321,7 +321,6 @@ public class BillboardServer {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, SQLException {
-        System.out.println("Server running....");
 
         //Stores users that have logged in
         HashMap<String, ArrayList<Object>> tokenStore = new HashMap<String, ArrayList<Object>>();
@@ -332,6 +331,7 @@ public class BillboardServer {
         //connect to database
         try {
             JDBCDatabaseSource dataSource = new JDBCDatabaseSource();
+            System.out.println("Server running....");
 
             for ( ; ; ) {
                 //network layer
