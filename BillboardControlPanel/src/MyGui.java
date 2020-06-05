@@ -87,6 +87,8 @@ public class MyGui extends Component implements ActionListener {
                 token = LoginRequest(userName, Hashed_password);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
