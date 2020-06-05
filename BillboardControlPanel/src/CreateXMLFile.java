@@ -24,7 +24,7 @@ public class CreateXMLFile {
     String image_data;
     String image_url;
     String xmlFilePath;
-//    public static final String xmlFilePath = System.getProperty("user.dir")+"/billboard.xml";
+
     public CreateXMLFile(String billboard_title,String billboard_title_colour,String billboard_bg_colour, String billboard_message, String billboard_message_colour, String billboard_image_data,String billboard_image_url,String FilePath){
         title = billboard_title;
         title_colour = billboard_title_colour;
