@@ -1,17 +1,11 @@
 package Viewer;
 import Server.Client;
 import Database.Billboard;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,21 +14,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 import java.net.URL;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.TimerTask;
+import java.util.Timer;
 
 import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
 
 public class BillboardGenerator {
+
 
     public static Billboard GetCurrentBillboard() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
         Socket socket = Client.getClientSocket();
@@ -44,71 +37,23 @@ public class BillboardGenerator {
         sendRequest(socket, request);
         HashMap<String, Object> response = getResponse(socket);
         Billboard billboard = (Billboard) response.get("billboard");
-
-        System.out.println(billboard.getbName());
-        System.out.println(!billboard.getPictureData().equals(""));
         socket.close();
 
         return billboard;
 
     }
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchAlgorithmException {
 
-        /*Setting up the JFrame and JPanel*/
-        JFrame BillboardFrame = new JFrame("Billboard Viewer");
-        BillboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        BillboardFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        JPanel BillboardElements = new JPanel();
-        BillboardElements.setLayout(new BoxLayout(BillboardElements,BoxLayout.PAGE_AXIS));
-        /*Setting up a mouse listener to exit when the mouse is clicked*/
-        MouseListener mouseExit = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                BillboardFrame.dispose();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-            }
-        };
-        /*setting up a key listener to exit when the escape key is released*/
-        KeyListener escapeExit = new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent keyEvent) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    BillboardFrame.dispose();
-                }
-            }
-        };
-
-        /*adding the mouse and key listeners to the frame*/
-        BillboardFrame.addMouseListener(mouseExit);
-        BillboardFrame.addKeyListener(escapeExit);
-        /*grabbing the billboard settings from the class grabbed from the server*/
+    public static JLabel[] createBillboardViewer( JLabel[] labels, JFrame BillboardFrame, JPanel BillboardElements, MouseListener mouseExit, KeyListener escapeExit) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         Billboard Billboard = GetCurrentBillboard();
 
-        JLabel BillboardMessage = new JLabel(Billboard.getMessage());
-        JLabel BillboardInformation = new JLabel(Billboard.getInfoMessage());
+        BillboardFrame.getContentPane().remove(labels[0]);
+        BillboardFrame.getContentPane().remove(labels[1]);
+
+        JLabel BillboardMessage = new JLabel();
+        JLabel BillboardInformation = new JLabel();
+
+        BillboardMessage.setText(Billboard.getMessage());
+        BillboardInformation.setText(Billboard.getInfoMessage());
         /* ErrorMessage in the case that the class has no background colour input and is invalid*/
         Color BillboardBackgroundColour = null;
         try {
@@ -127,8 +72,22 @@ public class BillboardGenerator {
             BillboardFrame.setFocusable(true);
             BillboardFrame.setVisible(true);
         }
-        Color BillboardMessageColour = Color.decode(Billboard.getMessageColour());
-        Color BillboardInformationColour = Color.decode(Billboard.getInfoColour());
+        Color BillboardMessageColour = null;
+        Color BillboardInformationColour = null;
+        try {
+            if (!Billboard.getMessageColour().equals("")) {
+                BillboardMessageColour = Color.decode(Billboard.getMessageColour());
+            }
+        } catch(Exception e){
+            System.out.println("not a valid color");
+        }
+        try{
+            if(!Billboard.getInfoColour().equals("")){
+                BillboardInformationColour = Color.decode(Billboard.getInfoColour());
+            }
+        }catch(Exception e){
+            System.out.println("not a valid color");
+        }
 
 //            byte[] Base64toImage = Base64.getDecoder().decode(BillboardSettings[6]);
 //            ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
@@ -357,9 +316,83 @@ public class BillboardGenerator {
             BillboardFrame.getContentPane().add(ErrorMessage);
             BillboardFrame.getContentPane().setBackground(Color.BLUE);
         }
-
         /*finally adding all parts to the frame*/
+
         BillboardFrame.getContentPane().add(BillboardElements);
+        BillboardFrame.validate();
+        BillboardFrame.repaint();
+        labels = new JLabel[]{BillboardMessage, BillboardInformation};
+        return labels;
+    }
+
+
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchAlgorithmException {
+
+        /*Setting up the JFrame and JPanel*/
+        JFrame BillboardFrame = new JFrame("Billboard Viewer");
+        BillboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        BillboardFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        JPanel BillboardElements = new JPanel();
+        BillboardElements.setLayout(new BoxLayout(BillboardElements,BoxLayout.PAGE_AXIS));
+
+        /*Setting up a mouse listener to exit when the mouse is clicked*/
+        MouseListener mouseExit = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                BillboardFrame.dispose();
+                System.exit(0);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+            }
+        };
+        /*setting up a key listener to exit when the escape key is released*/
+        KeyListener escapeExit = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    BillboardFrame.dispose();
+                    System.exit(0);
+                }
+            }
+        };
+
+        /*adding the mouse and key listeners to the frame*/
+        BillboardFrame.addMouseListener(mouseExit);
+        BillboardFrame.addKeyListener(escapeExit);
+        /*grabbing the billboard settings from the class grabbed from the server*/
+
+
+        JLabel BillboardMessage = new JLabel();
+        JLabel BillboardInformation = new JLabel();
+
+        JLabel[] labels = {BillboardMessage, BillboardInformation};
+
+        Timer timer = new Timer();
+        TimerTask task = new UpdateBillboard(/*BillboardMessage, BillboardInformation,*/ labels, BillboardFrame, BillboardElements, mouseExit, escapeExit);
+        timer.schedule(task, 0, 15000);
+
         BillboardFrame.setUndecorated(true);
         BillboardFrame.setVisible(true);
         BillboardFrame.setFocusable(true);

@@ -192,10 +192,15 @@ public class BillboardServer {
                 response.put("billboard", billboard);
             }
             else {
-                Billboard defaultBillboard = new Billboard();
+//                String bName, String username, String colour, String message,String messageColour,
+//                        String pictureData, String pictureURL, String infoMessage, String infoColour
+                Billboard defaultBillboard = new Billboard("defaultBillboard", "admin","#6800C0", "No Current Billboard",
+                       "#FFFFFF", "","","nothing to see here","#FFFFFF");
+
                 defaultBillboard.setbName("defaultBillboard");
                 defaultBillboard.setMessage("No Current Billboard");
                 defaultBillboard.setInfoMessage("nothing to see here");
+
                 response.put("billboard", defaultBillboard);
             }
         }
