@@ -272,7 +272,7 @@ public class JDBCDatabaseSource implements DatabaseSource {
     */
    public void addBillboard(Billboard b) throws SQLException {
        Billboard billboard = getBillboard(b.getbName());
-       if(billboard.getbName().equals(null)){
+       if(billboard.getbName() == null){
            addBillboard.setString(1, b.getbName());
            addBillboard.setString(2, b.getUsername());
            addBillboard.setString(3, b.getColour());
@@ -354,17 +354,17 @@ public class JDBCDatabaseSource implements DatabaseSource {
 
         getBillboard.setString(1, name);
         rs = getBillboard.executeQuery();
-        rs.next();
-        b.setbName(rs.getString("bname"));
-        b.setUsername(rs.getString("username"));
-        b.setColour(rs.getString("colour"));
-        b.setMessage(rs.getString("message"));
-        b.setMessageColour(rs.getString("messageColour"));
-        b.setPictureData(rs.getString("pictureData"));
-        b.setPictureURL(rs.getString("pictureUrl"));
-        b.setInfoMessage(rs.getString("infoMessage"));
-        b.setInfoColour(rs.getString("infoColour"));
-
+        if(rs.next()){
+            b.setbName(rs.getString("bname"));
+            b.setUsername(rs.getString("username"));
+            b.setColour(rs.getString("colour"));
+            b.setMessage(rs.getString("message"));
+            b.setMessageColour(rs.getString("messageColour"));
+            b.setPictureData(rs.getString("pictureData"));
+            b.setPictureURL(rs.getString("pictureUrl"));
+            b.setInfoMessage(rs.getString("infoMessage"));
+            b.setInfoColour(rs.getString("infoColour"));
+        }
         return b;
     }
 
