@@ -12,6 +12,7 @@ import java.net.Socket;
 public class Client {
 
     public static Socket getClientSocket() throws IOException {
+
         Properties props = new Properties();
         FileInputStream in = new FileInputStream("./network.props");
         props.load(in);

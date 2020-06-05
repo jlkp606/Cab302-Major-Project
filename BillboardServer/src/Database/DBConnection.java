@@ -26,55 +26,41 @@ public class DBConnection {
      * Constructor intializes the connection.
      */
 
-    private DBConnection() {
+    private DBConnection() throws SQLException, IOException {
 
         Properties props = new Properties();
         FileInputStream in = null;
-        try {
-            in = new FileInputStream("./BillboardServer/db.props");
-            props.load(in);
-            in.close();
+        in = new FileInputStream("./db.props");
+        props.load(in);
+        in.close();
 
-            // specify the data source, username and password
-            String url = props.getProperty("jdbc.url");
-            String username = props.getProperty("jdbc.username");
-            String password = props.getProperty("jdbc.password");
-            String schema = props.getProperty("jdbc.schema");
+        // specify the data source, username and password
+        String url = props.getProperty("jdbc.url");
+        String username = props.getProperty("jdbc.username");
+        String password = props.getProperty("jdbc.password");
+        String schema = props.getProperty("jdbc.schema");
 
-            //Create the database if not already exists
+        System.out.println(schema);
+        //Create the database if not already exists
+        Connection conn = DriverManager.getConnection(url+ "/", username,
+                password);
 
-            try {
-                Connection conn = DriverManager.getConnection(url+ "/", username,
-                        password);
+        statement = conn.createStatement();
+        String sql = "CREATE DATABASE IF NOT EXISTS " + schema;
 
-                statement = conn.createStatement();
-                String sql = "CREATE DATABASE IF NOT EXISTS " + schema;
+        statement.executeUpdate(sql);
 
-                statement.executeUpdate(sql);
-
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            // get a connection
-            instance = DriverManager.getConnection(url + "/" + schema, username,
-                    password);
-        } catch (SQLException sqle) {
-            System.err.println(sqle);
-        } catch (FileNotFoundException fnfe) {
-            System.err.println(fnfe);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+        // get a connection
+        instance = DriverManager.getConnection(url + "/" + schema, username,
+                password);
+}
 
     /**
      * Provides global access to the singleton instance of the UrlSet.
      *
      * @return a handle to the singleton instance of the UrlSet.
      */
-    public static Connection getInstance() {
+    public static Connection getInstance() throws IOException, SQLException {
         if (instance == null) {
             new DBConnection();
         }
