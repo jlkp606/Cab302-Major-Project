@@ -77,7 +77,7 @@ public class Schedule_billboard extends JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     everyHourcheckbox.setEnabled(false);
-                    repeat = "Every Day";
+                    repeat = "day";
                 }
 
                 else{
@@ -92,7 +92,7 @@ public class Schedule_billboard extends JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     everyDayCheckBox.setEnabled(false);
-                    repeat = "Every Week";
+                    repeat = "week";
                 }
 
                 else{

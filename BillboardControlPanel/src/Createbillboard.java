@@ -170,5 +170,4 @@ public class Createbillboard extends JFrame {
             System.out.println((String) res.get("message"));
             socket.close();
     }
-
 }

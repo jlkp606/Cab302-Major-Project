@@ -1,6 +1,8 @@
 package Database;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class DatabaseData {
      * application.
      *
      */
-    public DatabaseData() throws SQLException {
+    public DatabaseData() throws SQLException, NoSuchAlgorithmException, IOException {
         listModel = new DefaultListModel();
         databaseData = new JDBCDatabaseSource();
 
