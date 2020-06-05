@@ -14,9 +14,9 @@ public class exportBillboard extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
-
         button1.addActionListener(new ActionListener() {
             @Override
+
             public void actionPerformed(ActionEvent e) {
 
                 //make an xml file
@@ -24,6 +24,8 @@ public class exportBillboard extends JFrame {
                     String xmlFilePath = textField1.getText().trim();
                     CreateXMLFile file = new CreateXMLFile(billboard_title, billboard_title_colour, billboard_bg_colour, billboard_message, billboard_message_colour, billboard_image_data, billboard_image_url,xmlFilePath);
                     file.start();
+//                    exportBillboard.DISPOSE_ON_CLOSE;
+
                 } catch (ParserConfigurationException | TransformerException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Please enter a valid file path ");
