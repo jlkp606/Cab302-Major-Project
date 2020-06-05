@@ -140,6 +140,18 @@ class List_billboard extends JFrame {
         JButton Preview = new JButton();
         Preview.setText("Preview");
 
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                int row = table.rowAtPoint(e.getPoint());
+
+                curr_billboard = table.getValueAt(row, 1).toString();
+                curr_user = table.getValueAt(row, 0).toString();
+            }
+        });
+
+
         Permissions permissions = null;
         try {
             permissions = GetUserPermission(token, user);
@@ -153,15 +165,6 @@ class List_billboard extends JFrame {
         Preview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-                table.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                    public void mouseClicked(java.awt.event.MouseEvent e) {
-
-                        int row = table.rowAtPoint(e.getPoint());
-
-                        curr_billboard = table.getValueAt(row, 1).toString();
 
                         JFrame BillboardFrame = new JFrame();
                         JPanel BillboardElements = new JPanel();
@@ -494,25 +497,18 @@ class List_billboard extends JFrame {
                         BillboardFrame.setVisible(true);
                         BillboardFrame.setSize(1000, 1000);
 
-                    }
-                });
+
 
             }
         });
 
 
-        Edit.addActionListener(new ActionListener() {
+
+
+                Edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(curr_billboard);
-                table.addMouseListener(new java.awt.event.MouseAdapter() {
 
-                                           public void mouseClicked(java.awt.event.MouseEvent e) {
-
-                                               int row = table.rowAtPoint(e.getPoint());
-
-                                               curr_billboard = table.getValueAt(row, 1).toString();
-                                               curr_user = table.getValueAt(row, 0).toString();
 
                                                if (curr_billboard == null) {
 
@@ -558,24 +554,13 @@ class List_billboard extends JFrame {
 
                                                }
                                            }
-                                       }
-                );
 
 
-            }
         });
 
         Delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                                           public void mouseClicked(java.awt.event.MouseEvent e) {
-
-                                               int row = table.rowAtPoint(e.getPoint());
-
-                                               curr_billboard = table.getValueAt(row, 1).toString();
-                                               curr_user = table.getValueAt(row, 0).toString();
 
                                                if (curr_billboard == null) {
 
@@ -593,7 +578,7 @@ class List_billboard extends JFrame {
                                                                        try {
                                                                            String response = DeleteBillboard(token, curr_billboard);
                                                                            if (response.equals("Sucess")) {
-                                                                               ((DefaultTableModel) table.getModel()).removeRow(row);
+                                                                               JOptionPane.showMessageDialog(null, response);
                                                                            } else {
                                                                                JOptionPane.showMessageDialog(null, response);
 
@@ -614,7 +599,7 @@ class List_billboard extends JFrame {
                                                                        try {
                                                                            String response = DeleteBillboard(token, curr_billboard);
                                                                            if (response.equals("Sucess")) {
-                                                                               ((DefaultTableModel) table.getModel()).removeRow(row);
+                                                                               JOptionPane.showMessageDialog(null, response);
                                                                            } else {
                                                                                JOptionPane.showMessageDialog(null, response);
 
@@ -635,10 +620,7 @@ class List_billboard extends JFrame {
                                                    }
                                                }
                                            }
-                                       }
-                );
 
-            }
         });
 
 

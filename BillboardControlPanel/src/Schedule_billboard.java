@@ -114,6 +114,10 @@ public class Schedule_billboard extends JFrame {
                                 String response = ScheduleBillboard(token, schedule);
                                 if(response.equals("Success")){
                                     CloseJframe();
+                                    JFrame frame = new viewer_billboard_time(" Users", token, user);
+                                    frame.setLocation(500, 300);
+                                    frame.setSize(850, 650);
+                                    frame.setVisible(true);
                                 }
                                 else{
                                     JOptionPane.showMessageDialog(null, response);

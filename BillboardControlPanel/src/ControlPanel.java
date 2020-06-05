@@ -12,8 +12,10 @@ import java.util.HashMap;
 
 import static Server.Client.sendRequest;
 
-// Control Panel class
 
+/**
+ * Creates the control panel gui
+ */
 public class ControlPanel extends JFrame{
     //Adding following panel, buttons to the GUI
     private JPanel ControlPanel;
@@ -27,10 +29,6 @@ public class ControlPanel extends JFrame{
 
     //Constructor
     public ControlPanel(String title,String token,String user) throws IOException, ClassNotFoundException {
-//        JFrame frame = new ControlPanel("Control Panel",token,user);
-//        frame.setLocation(500, 300);
-//        frame.setSize(550, 550);
-//        frame.setVisible(true);
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
         this.setContentPane(ControlPanel);
@@ -40,16 +38,14 @@ public class ControlPanel extends JFrame{
 
 
 
-//        Permissions permissions = List_billboard.GetUserPermission(token, user);
-
-        Permissions permissions = new Permissions("Sid","true","true","true","true");
+        Permissions permissions = List_billboard.GetUserPermission(token, user);
 
 
         //1. Clicking on create new billboard button, will take you to the create billboard GUI
         createNewBillboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+//      Checks if the user has permission to create billboard
                 if (permissions.getCreateBillboard().equals("true")) {
 
                     SwingUtilities.invokeLater(new Runnable() {

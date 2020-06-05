@@ -184,6 +184,7 @@ public class viewer_billboard_time extends JFrame {
                             JFrame frame = new Schedule_billboard("Add billboard to Schedule", token, user);
                             frame.setSize(450, 400);
                             frame.setVisible(true);
+                            CloseJframe();
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
@@ -203,6 +204,7 @@ public class viewer_billboard_time extends JFrame {
                             JFrame frame = new removeScheduledBillboard("Remove Billboard", token, user);
                             frame.setSize(300, 250);
                             frame.setVisible(true);
+                            CloseJframe();
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
@@ -226,5 +228,8 @@ public class viewer_billboard_time extends JFrame {
         return scheduleList;
     }
 
+    public void CloseJframe(){
+        super.dispose();
+    }
 
 }
