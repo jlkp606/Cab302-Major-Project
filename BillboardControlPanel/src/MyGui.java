@@ -9,16 +9,18 @@ import java.util.HashMap;
 import Server.Client;
 import static Server.Hash.getHash;
 
-
+/**
+ * Creates the login page of the control pane;
+ */
 public class MyGui extends Component implements ActionListener {
 
     JFrame f;
     JButton bt1;
     JTextField t1, t2;
     JLabel l1, l2;
-//Comment it just for testing
     String token ;
 
+//    Creating  a login gui
     MyGui() {
 
         f = new JFrame("LOG IN FORM");
@@ -53,6 +55,8 @@ public class MyGui extends Component implements ActionListener {
         f.setVisible(true);
 
     }
+
+//  A fuction to send a user name and hashed password to server and receiving token
     public static String LoginRequest(String Username, String Password) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
@@ -66,6 +70,7 @@ public class MyGui extends Component implements ActionListener {
 
     }
 
+//    Main function
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -76,18 +81,23 @@ public class MyGui extends Component implements ActionListener {
 
     }
 
+//    Action listener for login button
     public void actionPerformed(ActionEvent ae) {
         String userName = t1.getText();
         String password = t2.getText();
-//      UnComment it  for testing
         try {
+//            Checks whether the user has proving a username or password
             if(userName.equals("")||password.equals("")){
+//                Shows up with the error window
                 JOptionPane.showMessageDialog(null, "Invalid username or password ");
             }
             else{
+ //            Generates the hash value of password
             String Hashed_password = getHash(password);
 
             try {
+ //            Sends it to the server
+
                 token = LoginRequest(userName, Hashed_password);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -98,13 +108,13 @@ public class MyGui extends Component implements ActionListener {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
+//if server return empty token prompts user to log in again
         if (token.equals("")){
 
             JOptionPane.showMessageDialog(null, "Incorrect Username or Password ");
 
         }
-
+//else opens the control panel gui
         else{
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
@@ -113,7 +123,6 @@ public class MyGui extends Component implements ActionListener {
                     frame.setLocation(500, 300);
                     frame.setSize(550, 550);
                     frame.setVisible(true);
-//                        DisplayControlPanel( token, userName)
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
