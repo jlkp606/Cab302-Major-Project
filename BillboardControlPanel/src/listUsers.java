@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
@@ -35,25 +34,23 @@ public class listUsers extends JFrame {
         return userList;
     }
 
-    public static void DeleteUser(String token,String user) throws IOException, ClassNotFoundException{
+    public static String DeleteUser(String token, String user) throws IOException, ClassNotFoundException{
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
         request.put("token", token);
         request.put("type", "deleteUser");
         request.put("username", user);
         sendRequest(socket, request);
+        HashMap<String , Object> res = Client.getResponse(socket);
+        String message = (String) res.get("message");
         socket.close();
+        return message;
     }
 
     public listUsers(String title, String token,String user) throws IOException, ClassNotFoundException {
         super(title);
         ArrayList<String> users = ListUser( token);
-//        ArrayList<String> users = new ArrayList<String>();
-//        users.add("Volvo");
-//        users.add("BMW");
-//        users.add("Ford");
-//        users.add("Mazda");
-//
+
         DefaultListModel model = new DefaultListModel();
         JList list= new JList(model) ;
 
@@ -102,10 +99,18 @@ public class listUsers extends JFrame {
                         permissions = List_billboard.GetUserPermission(token, user);
                         if (permissions.getEditUsers().equals("true")) {
                             try {
-                                DeleteUser(token, s);
-                                model.removeElementAt(index);
+                                String response = DeleteUser(token, s);
+                                if(response.equals("Success")){
+                                    model.removeElementAt(index);
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null, response);
+
+                                }
                             } catch (IOException | ClassNotFoundException ex) {
                                 ex.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to Connect to Server ");
+
                             }
 
                         } else {
@@ -138,6 +143,8 @@ public class listUsers extends JFrame {
                     }
                 } catch (IOException | ClassNotFoundException exc) {
                     exc.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Failed to Connect to server  ");
+
                 }
 
 
@@ -160,6 +167,8 @@ public class listUsers extends JFrame {
                             frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Failed to Connect to server  ");
+
                         }
                     }
                     else {
@@ -173,11 +182,5 @@ public class listUsers extends JFrame {
         });
 
     }
-
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        String token = "hsgydfuyigs";
-//        String user = "sdgfuiygs";
-//        new listUsers(" Users",token,user);
-//    }
 
 }

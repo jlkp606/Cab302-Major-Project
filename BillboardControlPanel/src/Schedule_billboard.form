@@ -40,12 +40,12 @@
               <text value="Every Day"/>
             </properties>
           </component>
-          <component id="37f28" class="javax.swing.JCheckBox" binding="everyHourcheckbox">
+          <component id="37f28" class="javax.swing.JCheckBox" binding="everyWeekcheckbox">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Every hour"/>
+              <text value="Every Week"/>
             </properties>
           </component>
           <component id="e5fc9" class="javax.swing.JLabel">
@@ -72,19 +72,17 @@
           </component>
           <component id="efd0d" class="javax.swing.JComboBox" binding="hours_selected">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="58442" class="javax.swing.JComboBox" binding="duration">
-            <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="253" height="30"/>
+              </grid>
             </constraints>
             <properties/>
           </component>
           <component id="72719" class="javax.swing.JButton" binding="Add">
             <constraints>
-              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="253" height="30"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Add"/>
@@ -92,13 +90,17 @@
           </component>
           <component id="d0e15" class="javax.swing.JComboBox" binding="Select">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="253" height="30"/>
+              </grid>
             </constraints>
             <properties/>
           </component>
           <component id="65cf2" class="javax.swing.JComboBox" binding="billboardList">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="253" height="30"/>
+              </grid>
             </constraints>
             <properties/>
           </component>
@@ -109,6 +111,14 @@
             <properties>
               <text value="Day"/>
             </properties>
+          </component>
+          <component id="98395" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="253" height="30"/>
+              </grid>
+            </constraints>
+            <properties/>
           </component>
         </children>
       </grid>

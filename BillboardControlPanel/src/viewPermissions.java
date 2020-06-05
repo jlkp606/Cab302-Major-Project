@@ -16,8 +16,6 @@ public class viewPermissions extends JFrame{
 
         Database.Permissions permissions = List_billboard.GetUserPermission( token,  user);
 
-        //Testing without Server
-//        Database.Permissions permissions = new Database.Permissions("Sid","true","true","true","true");
 
 
         if (permissions.getCreateBillboard().equals("true")) {
@@ -41,13 +39,4 @@ public class viewPermissions extends JFrame{
             EditUsers.setText("Not Permitted");
         }
     }
-    //    Testing without Server
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        String userName = "Sid";
-//        String token = "Sid";
-//        JFrame frame = new viewPermissions(userName + " Permissions",token,userName);
-//        frame.setLocation(500, 300);
-//        frame.setSize(350, 350);
-//        frame.setVisible(true);
-//    }
 }

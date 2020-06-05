@@ -1,3 +1,4 @@
+import Database.Permissions;
 import Server.Client;
 
 import javax.swing.*;
@@ -82,7 +83,7 @@ public class CreateUser extends JFrame {
         });
 
 
-                // Clicking on the Ok button will take all the details provided and will be stored in a db
+        // Clicking on the Ok button will take all the details provided and will be stored in a db
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,14 +99,20 @@ public class CreateUser extends JFrame {
                     try {
                         String Hashed_password = getHash(User_Password);
                         Database.Permissions permission = new Database.Permissions(User_Name, permissions[0], permissions[1], permissions[2], permissions[3]);
-                        System.out.println(permission.getCreateBillboard());
-                        System.out.println(permission.getEditAllBillboards());
-                        System.out.println(permission.getEditSchedule());
-                        System.out.println(permission.getEditUsers());
-                        CreateUser(token, User_Name, Hashed_password, permission);
 
-                    } catch (NoSuchAlgorithmException | IOException ex) {
+                        String serverResponse = CreateUser(token, User_Name, Hashed_password, permission);
+                        if(serverResponse.equals("Success")){
+                            CloseJframe();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, serverResponse);
+
+                        }
+
+                    } catch (NoSuchAlgorithmException | IOException | ClassNotFoundException ex) {
                         ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                     }
                 }
             }
@@ -114,15 +121,8 @@ public class CreateUser extends JFrame {
 
 
     }
-//
-//    public static void main(String[] args) {
-//        String token = "ijshfij";
-//        JFrame frame = new CreateUser("Create User",token);
-//        frame.setLocation(500,300);
-//        frame.setSize(550,550);
-//        frame.setVisible(true);
-//    }
-    public static void CreateUser(String token,String user, String hashedPassword, Database.Permissions permission ) throws IOException, NoSuchAlgorithmException {
+
+    public static String CreateUser(String token, String user, String hashedPassword, Permissions permission ) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
         request.put("type", "createUser");
@@ -131,9 +131,14 @@ public class CreateUser extends JFrame {
         request.put("password", hashedPassword);
         request.put("permission", permission);
         sendRequest(socket, request);
+        HashMap<String , Object> res = Client.getResponse(socket);
+        String message = (String) res.get("message");
         socket.close();
+        return message;
 
     }
-
+    public void CloseJframe(){
+        super.dispose();
+    }
 }
 

@@ -5,10 +5,16 @@ import org.xml.sax.SAXException;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,14 +58,17 @@ class List_billboard extends JFrame {
         return permissions;
     }
 
-    public static void DeleteBillboard(String token, String billboardName) throws IOException, ClassNotFoundException {
+    public static String DeleteBillboard(String token, String billboardName) throws IOException, ClassNotFoundException {
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
         request.put("token", token);
         request.put("type", "deleteBillboard");
         request.put("billboardName", billboardName);
         sendRequest(socket, request);
+        HashMap<String , Object> res = Client.getResponse(socket);
+        String message = (String) res.get("message");
         socket.close();
+        return message;
     }
 
     public static Billboard GetBillboardInfo(String token, String billboardName) throws IOException, ClassNotFoundException {
@@ -75,7 +84,7 @@ class List_billboard extends JFrame {
         return billboard;
     }
 
-    public static Billboard GetCurrentBillboard(String token) throws IOException, ClassNotFoundException{
+    public static Billboard GetCurrentBillboard(String token) throws IOException, ClassNotFoundException {
 
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
@@ -89,30 +98,11 @@ class List_billboard extends JFrame {
     }
 
     public List_billboard(String token, String user) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-//      Uncomment the lines for server testing
       ArrayList<Database.Billboard> billboards = receiveBillboardList(token);
 
-//      comment the lines for server testing
-//        Billboard billboard1 = new Billboard("itsmeMario8Billboard", "itsmeMario8", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                "more information.", "#00FFFF");
-//
-//        Billboard billboard2 = new Billboard("SidBillboard", "Sid", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                "more information.", "#00FFFF");
-//
-//        Billboard billboard3 = new Billboard("JoshBillboard", "Josh", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                "more information.", "#00FFFF");
-//
-//        Billboard billboard4 = new Billboard("LiamBillboard", "Liam", "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                "more information.", "#00FFFF");
-//        ArrayList<Database.Billboard> billboards = new ArrayList<Database.Billboard>();
-//        billboards.add(billboard1);
-//        billboards.add(billboard2);
-//        billboards.add(billboard3);
-//        billboards.add(billboard4);
-
         int size = billboards.size();
-        String user_array[] = new String[size];
-        String data[] = new String[size];
+        String[] user_array = new String[size];
+        String[] data = new String[size];
         for (int i = 0; i < size; i++) {
             data[i] = billboards.get(i).getbName();
             user_array[i] = billboards.get(i).getUsername();
@@ -152,120 +142,464 @@ class List_billboard extends JFrame {
 
         table.addMouseListener(new java.awt.event.MouseAdapter() {
 
-           public void mouseClicked(java.awt.event.MouseEvent e) {
+                                   public void mouseClicked(java.awt.event.MouseEvent e) {
 
-               int row = table.rowAtPoint(e.getPoint());
-//               int col = table.columnAtPoint(e.getPoint());
+                                       int row = table.rowAtPoint(e.getPoint());
 
-               curr_billboard = table.getValueAt(row, 1).toString();
-               curr_user= table.getValueAt(row, 0).toString();
-               System.out.println(curr_billboard);
-               Permissions permissions = null;
-               try {
-                   permissions = GetUserPermission(token, user);
-               } catch (IOException | ClassNotFoundException ex) {
-                   ex.printStackTrace();
-               }
+                                       curr_billboard = table.getValueAt(row, 1).toString();
+                                       curr_user = table.getValueAt(row, 0).toString();
+                                       System.out.println(curr_billboard);
+                                       Permissions permissions = null;
+                                       try {
+                                           permissions = GetUserPermission(token, user);
+                                       } catch (IOException | ClassNotFoundException ex) {
+                                           ex.printStackTrace();
+                                           JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
+                                       }
 //               Database.Permissions permissions = new Permissions(user,"true","true","true","true");
-               Permissions finalPermissions = permissions;
-               Delete.addActionListener(new ActionListener() {
-                   @Override
-                   public void actionPerformed(ActionEvent e) {
-                       try {
-                           Billboard billboard = GetBillboardInfo(token, curr_billboard);
-                           Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
-                           if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
-                               if ((finalPermissions.getCreateBillboard().equals("true"))) {
-                                   JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
-                                   try {
-                                       DeleteBillboard(token, curr_billboard);
-                                       ((DefaultTableModel) table.getModel()).removeRow(row);
-                                   } catch (IOException | ClassNotFoundException ex) {
-                                       ex.printStackTrace();
+                                       Permissions finalPermissions = permissions;
+                                       Delete.addActionListener(new ActionListener() {
+                                           @Override
+                                           public void actionPerformed(ActionEvent e) {
+                                               try {
+                                                   Billboard billboard = GetBillboardInfo(token, curr_billboard);
+                                                   Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
+                                                   if (billboard.getUsername() != null) {
+                                                       if ((billboard.getUsername().equals(user)) && !(curr_scheduled_billboard.getbName().equals(curr_billboard))) {
+                                                           if (finalPermissions != null) {
+                                                               if ((finalPermissions.getCreateBillboard().equals("true"))) {
+                                                                   JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
+                                                                   try {
+                                                                       String response = DeleteBillboard(token, curr_billboard);
+                                                                       if (response.equals("Sucess")) {
+                                                                           ((DefaultTableModel) table.getModel()).removeRow(row);
+                                                                       } else {
+                                                                           JOptionPane.showMessageDialog(null, response);
+
+                                                                       }
+                                                                   } catch (IOException | ClassNotFoundException ex) {
+                                                                       ex.printStackTrace();
+                                                                       JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
+                                                                   }
+
+                                                               } else {
+                                                                   JOptionPane.showMessageDialog(null, "Permission required ");
+                                                               }
+
+                                                           } else {
+                                                               if ((finalPermissions.getEditAllBillboards().equals("true"))) {
+                                                                   JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
+                                                                   try {
+                                                                       String response = DeleteBillboard(token, curr_billboard);
+                                                                       if (response.equals("Sucess")) {
+                                                                           ((DefaultTableModel) table.getModel()).removeRow(row);
+                                                                       } else {
+                                                                           JOptionPane.showMessageDialog(null, response);
+
+                                                                       }
+                                                                   } catch (IOException | ClassNotFoundException ex) {
+                                                                       ex.printStackTrace();
+                                                                       JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
+                                                                   }
+                                                               } else {
+                                                                   JOptionPane.showMessageDialog(null, "Permission required ");
+                                                               }
+                                                           }
+                                                       }
+                                                   }
+                                               } catch (IOException | ClassNotFoundException ex) {
+                                                   ex.printStackTrace();
+                                               }
+
+                                           }
+                                       });
+
+                                       Permissions finalPermissions1 = permissions;
+                                       Edit.addActionListener(new ActionListener() {
+                                           @Override
+                                           public void actionPerformed(ActionEvent e) {
+                                               try {
+                                                   Billboard billboard = GetBillboardInfo(token, curr_billboard);
+                                                   Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
+
+                                                   if ((billboard.getUsername().equals(user)) && !(curr_scheduled_billboard.getbName().equals(curr_billboard))) {
+                                                       if ((finalPermissions1.getCreateBillboard().equals("true"))) {
+                                                           SwingUtilities.invokeLater(new Runnable() {
+                                                               public void run() {
+                                                                   JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
+                                                                   frame.setLocation(500, 300);
+                                                                   frame.setSize(550, 550);
+                                                                   frame.setVisible(true);
+                                                               }
+                                                           });
+                                                       } else {
+                                                           JOptionPane.showMessageDialog(null, "Permission required ");
+                                                       }
+                                                   } else {
+                                                       if ((finalPermissions1.getEditAllBillboards().equals("true"))) {
+                                                           SwingUtilities.invokeLater(new Runnable() {
+                                                               public void run() {
+                                                                   JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
+                                                                   frame.setLocation(500, 300);
+                                                                   frame.setSize(550, 550);
+                                                                   frame.setVisible(true);
+                                                               }
+                                                           });
+                                                       } else {
+                                                           JOptionPane.showMessageDialog(null, "Permission required ");
+                                                       }
+                                                   }
+
+                                               } catch (IOException | ClassNotFoundException ex) {
+                                                   ex.printStackTrace();
+                                               }
+
+                                           }
+                                       });
+
+                                       Preview.addActionListener(new ActionListener() {
+                                           @Override
+                                           public void actionPerformed(ActionEvent e) {
+                                               JFrame BillboardFrame = new JFrame();
+                                               JPanel BillboardElements = new JPanel();
+
+
+
+                                               Billboard billboard = null;
+                                               try {
+                                                   billboard = GetBillboardInfo(token, curr_billboard);
+                                               } catch (IOException | ClassNotFoundException ex) {
+                                                   ex.printStackTrace();
+                                               }
+                                               JLabel BillboardMessage = new JLabel();
+                                               JLabel BillboardInformation = new JLabel();
+
+                                               BillboardMessage.setText(billboard.getMessage());
+                                               BillboardInformation.setText(billboard.getInfoMessage());
+                                               /* ErrorMessage in the case that the class has no background colour input and is invalid*/
+                                               Color BillboardBackgroundColour = null;
+                                               try {
+                                                   BillboardBackgroundColour = Color.decode(billboard.getColour());
+                                                   ;
+                                               } catch (Exception NumberFormatException) {
+                                                   JLabel ErrorMessage = new JLabel("Error: File not found or invalid.");
+                                                   ErrorMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 48));
+                                                   ErrorMessage.setForeground(Color.WHITE);
+                                                   ErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+                                                   BillboardFrame.getContentPane().add(ErrorMessage);
+                                                   BillboardFrame.getContentPane().setBackground(Color.BLUE);
+                                                   BillboardFrame.setUndecorated(true);
+                                                   BillboardFrame.setFocusable(true);
+                                                   BillboardFrame.setVisible(true);
+                                               }
+                                               Color BillboardMessageColour = null;
+                                               Color BillboardInformationColour = null;
+                                               try {
+                                                   if (!billboard.getMessageColour().equals("")) {
+                                                       BillboardMessageColour = Color.decode(billboard.getMessageColour());
+                                                   }
+                                               } catch (Exception exp) {
+                                                   System.out.println("not a valid color");
+                                               }
+                                               try {
+                                                   if (!billboard.getInfoColour().equals("")) {
+                                                       BillboardInformationColour = Color.decode(billboard.getInfoColour());
+                                                   }
+                                               } catch (Exception exp) {
+                                                   System.out.println("not a valid color");
+                                               }
+                                               BillboardMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 52));
+                                               BillboardInformation.setFont(new Font("Century Schoolbook", Font.PLAIN, 32));
+
+                                               /*setting colours for messages, information and background*/
+                                               BillboardMessage.setForeground(BillboardMessageColour);
+                                               BillboardInformation.setForeground(BillboardInformationColour);
+                                               BillboardElements.setBackground(BillboardBackgroundColour);
+
+                                               /*Show all elements present, Base64 image*/
+                                               if (!billboard.getMessage().equals("") &&
+                                                       !billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureData().equals("")) {
+                                                   byte[] Base64toImage = Base64.getDecoder().decode(billboard.getPictureData());
+                                                   ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
+                                                   BufferedImage Base64Image = null;
+                                                   try {
+                                                       Base64Image = ImageIO.read(Base64Stream);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+
+                                                   /*set Element alignments*/
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   /*add elements*/
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show message and Base64 image, no information*/
+                                               else if (!billboard.getMessage().equals("") && billboard.getInfoMessage().equals("") && !billboard.getPictureData().equals("")) {
+                                                   byte[] Base64toImage = Base64.getDecoder().decode(billboard.getPictureData());
+                                                   ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
+                                                   BufferedImage Base64Image = null;
+                                                   try {
+                                                       Base64Image = ImageIO.read(Base64Stream);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+
+                                                   //set Element alignments
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show information and Base64 image, no message*/
+                                               else if (billboard.getMessage().equals("") &&
+                                                       !billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureData().equals("")) {
+                                                   byte[] Base64toImage = Base64.getDecoder().decode(billboard.getPictureData());
+                                                   ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
+                                                   BufferedImage Base64Image = null;
+                                                   try {
+                                                       Base64Image = ImageIO.read(Base64Stream);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+
+                                                   //set Element alignments
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show all elements present, URL image*/
+                                               else if (!billboard.getMessage().equals("") &&
+                                                       !billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureURL().equals("")) {
+                                                   java.net.URL BillboardImageURL = null;
+                                                   try {
+                                                       BillboardImageURL = new URL(billboard.getPictureURL());
+                                                   } catch (MalformedURLException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   BufferedImage URLtoImage = null;
+                                                   try {
+                                                       URLtoImage = ImageIO.read(BillboardImageURL);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+
+                                                   //set Element alignments
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show message and URL Image, no information*/
+                                               else if (!billboard.getMessage().equals("") &&
+                                                       billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureURL().equals("")) {
+                                                   URL BillboardImageURL = null;
+                                                   try {
+                                                       BillboardImageURL = new URL(billboard.getPictureURL());
+                                                   } catch (MalformedURLException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   BufferedImage URLtoImage = null;
+                                                   try {
+                                                       URLtoImage = ImageIO.read(BillboardImageURL);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+
+                                                   //set Element alignments
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show information and URL Image, no message*/
+                                               else if (billboard.getMessage().equals("") &&
+                                                       !billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureURL().equals("")) {
+                                                   URL BillboardImageURL = null;
+                                                   try {
+                                                       BillboardImageURL = new URL(billboard.getPictureURL());
+                                                   } catch (MalformedURLException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   BufferedImage URLtoImage = null;
+                                                   try {
+                                                       URLtoImage = ImageIO.read(BillboardImageURL);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+
+                                                   //set Element alignments
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show information and message, no image*/
+                                               else if (!billboard.getMessage().equals("") && !billboard.getInfoMessage().equals("") &&
+                                                       (billboard.getPictureData().equals("") || billboard.getPictureURL().equals(""))) {
+
+                                                   //set Element alignments
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createVerticalGlue());
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show only message*/
+                                               else if (!billboard.getMessage().equals("") && billboard.getInfoMessage().equals("") &&
+                                                       (billboard.getPictureData().equals("") || billboard.getPictureURL().equals(""))) {
+
+                                                   //set Element alignments
+                                                   BillboardMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardMessage);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show only information*/
+                                               else if (billboard.getMessage().equals("") && !billboard.getInfoMessage().equals("") &&
+                                                       (billboard.getPictureData().equals("") || billboard.getPictureURL().equals(""))) {
+
+                                                   //set Element alignments
+                                                   BillboardInformation.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(BillboardInformation);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show only Base64 Image*/
+                                               else if (billboard.getMessage().equals("") && billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureData().equals("")) {
+                                                   byte[] Base64toImage = Base64.getDecoder().decode(billboard.getPictureData());
+                                                   ByteArrayInputStream Base64Stream = new ByteArrayInputStream(Base64toImage);
+                                                   BufferedImage Base64Image = null;
+                                                   try {
+                                                       Base64Image = ImageIO.read(Base64Stream);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(Base64Image));
+
+                                                   //set Element alignments
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               }
+
+                                               /*Show only URL Image*/
+                                               else if (billboard.getMessage().equals("") && billboard.getInfoMessage().equals("") &&
+                                                       !billboard.getPictureURL().equals("")) {
+                                                   URL BillboardImageURL = null;
+                                                   try {
+                                                       BillboardImageURL = new URL(billboard.getPictureURL());
+                                                   } catch (MalformedURLException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   BufferedImage URLtoImage = null;
+                                                   try {
+                                                       assert BillboardImageURL != null;
+                                                       URLtoImage = ImageIO.read(BillboardImageURL);
+                                                   } catch (IOException ex) {
+                                                       ex.printStackTrace();
+                                                   }
+                                                   assert URLtoImage != null;
+                                                   JLabel ConvertedImage = new JLabel(new ImageIcon(URLtoImage));
+
+                                                   //set Element alignments
+                                                   ConvertedImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                                                   //add elements
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                                   BillboardElements.add(ConvertedImage);
+                                                   BillboardElements.add(Box.createRigidArea(new Dimension(0, 135)));
+                                               } else {
+                                                   JLabel ErrorMessage = new JLabel("Error: File not found or invalid.");
+                                                   ErrorMessage.setFont(new Font("Century Schoolbook", Font.PLAIN, 48));
+                                                   ErrorMessage.setForeground(Color.WHITE);
+                                                   ErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+                                                   BillboardFrame.getContentPane().add(ErrorMessage);
+                                                   BillboardFrame.getContentPane().setBackground(Color.BLUE);
+                                               }
+                                               /*finally adding all parts to the frame*/
+
+                                               BillboardFrame.getContentPane().add(BillboardElements);
+                                               BillboardFrame.setVisible(true);
+                                               BillboardFrame.setSize(1000,1000);
+
+                                           }
+                                       });
                                    }
 
                                }
-                               else {
-                                   JOptionPane.showMessageDialog(null, "Permission required ");
-                               }
-                           }
-                           else{
-                               if ((finalPermissions.getEditAllBillboards().equals("true"))) {
-                                   JOptionPane.showMessageDialog(null, "Confirm to delete " + curr_billboard);
-                                   try {
-                                       DeleteBillboard(token, curr_billboard);
-                                   } catch (IOException | ClassNotFoundException ex) {
-                                       ex.printStackTrace();
-                                   }
-                               }
-                               else {
-                                   JOptionPane.showMessageDialog(null, "Permission required ");
-                               }
-                           }
-                       }
-                       catch (IOException | ClassNotFoundException ex) {
-                           ex.printStackTrace();
-                       }
-
-                   }
-               });
-
-               Permissions finalPermissions1 = permissions;
-               Edit.addActionListener(new ActionListener() {
-                   @Override
-                   public void actionPerformed(ActionEvent e) {
-                       try {
-                       Billboard billboard = GetBillboardInfo(token, curr_billboard);
-//                       Billboard billboard = new Billboard(curr_billboard, "Sid" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                               "more information.", "#00FFFF");
-                           Billboard curr_scheduled_billboard = GetCurrentBillboard(token);
-
-//                       Billboard curr_scheduled_billboard = new Billboard(curr_billboard, "Siddgfdghd" , "#0000FF", "Welcome to the ____ Corporation's Annual", "#FFFF00", "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAALHRFWHRDcmVhdGlvbiBUaW1lAE1vbiAxNiBNYXIgMjAyMCAxMDowNTo0NyArMTAwMNQXthkAAAAHdElNRQfkAxAABh+N6nQI AAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAADVJREFUeNp1jkEKADAIwxr//+duIIhumJMUNUWSbU2AyPROFeVqaIH/T7JeRBd0DY+8SrLVPbTmFQ1iRvw3AAAAAElFTkSuQm CC", "https://example.com/fundraiser_image.jpg", "Be sure to check out https://example.com/ for\n" +
-//                               "more information.", "#00FFFF");
-                           if ((billboard.getUsername().equals(user)) &&  !(curr_scheduled_billboard.getbName().equals(curr_billboard)) ) {
-                               if ((finalPermissions1.getCreateBillboard().equals("true"))) {
-                                   SwingUtilities.invokeLater(new Runnable() {
-                                       public void run() {
-                                           JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
-                                           frame.setLocation(500, 300);
-                                           frame.setSize(550, 550);
-                                           frame.setVisible(true);
-                                       }
-                                   });
-                               }
-                               else {
-                                   JOptionPane.showMessageDialog(null, "Permission required ");
-                               }
-                           }
-                           else{
-                               if ((finalPermissions1.getEditAllBillboards().equals("true"))) {
-                                   SwingUtilities.invokeLater(new Runnable() {
-                                       public void run() {
-                                           JFrame frame = new Edit_billboard("Edit Billboard", token, billboard);
-                                           frame.setLocation(500, 300);
-                                           frame.setSize(550, 550);
-                                           frame.setVisible(true);
-                                       }
-                                   });
-                               }
-                               else {
-                                   JOptionPane.showMessageDialog(null, "Permission required ");
-                               }
-                           }
-
-                       }
-
-                       catch (IOException | ClassNotFoundException ex) {
-                           ex.printStackTrace();
-                       }
-
-                   }
-               });
-
-
-           }
-
-       }
 
         );
 
