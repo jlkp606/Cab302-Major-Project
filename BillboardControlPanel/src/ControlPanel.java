@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static Server.Client.sendRequest;
@@ -28,6 +27,10 @@ public class ControlPanel extends JFrame{
 
     //Constructor
     public ControlPanel(String title,String token,String user) throws IOException, ClassNotFoundException {
+//        JFrame frame = new ControlPanel("Control Panel",token,user);
+//        frame.setLocation(500, 300);
+//        frame.setSize(550, 550);
+//        frame.setVisible(true);
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // GUI window will close after Exist button on the top is pressed
         this.setContentPane(ControlPanel);
@@ -59,6 +62,8 @@ public class ControlPanel extends JFrame{
                                 frame.setVisible(true);
                             } catch (IOException exc) {
                                 exc.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                             }
                         }
                     });
@@ -85,6 +90,8 @@ public class ControlPanel extends JFrame{
                                 new listUsers(" Users", token, user);
                             } catch (IOException | ClassNotFoundException ex) {
                                 ex.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                             }
                         }
                     });
@@ -110,6 +117,8 @@ public class ControlPanel extends JFrame{
                                 frame.setVisible(true);
                             } catch (IOException | ClassNotFoundException ex) {
                                 ex.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                             }
                         }
                     });
@@ -132,6 +141,8 @@ public class ControlPanel extends JFrame{
                                 new List_billboard(token, user);
                             } catch (IOException | ParserConfigurationException | ClassNotFoundException | SAXException ex) {
                                 ex.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                             }
                         }
                     });
@@ -150,8 +161,12 @@ public class ControlPanel extends JFrame{
                     LogOut( token );
                     JOptionPane.showMessageDialog(null, "Logged out");
                     MyGui myGuo = new MyGui();
-                } catch (IOException | ClassNotFoundException ex) {
+                    CloseJframe();
+                }
+                catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                 }
 
             }
@@ -169,6 +184,8 @@ public class ControlPanel extends JFrame{
                             frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
+
                         }
                     }
                 });
@@ -186,6 +203,7 @@ public class ControlPanel extends JFrame{
                             frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Failed to Connect to server ");
                         }
                     }
                 });
@@ -193,15 +211,10 @@ public class ControlPanel extends JFrame{
         });
     }
 
+    public void CloseJframe(){
+        super.dispose();
+    }
 
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        String token = "htdyrd";
-//        String userName = "htdyrd";
-//        JFrame frame = new ControlPanel("Control Panel",token,userName);
-//        frame.setLocation(500, 300);
-//        frame.setSize(550, 550);
-//        frame.setVisible(true);
-//    }
 
     public static void LogOut(String token) throws IOException, ClassNotFoundException{
         Socket socket = Client.getClientSocket();

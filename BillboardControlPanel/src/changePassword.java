@@ -1,4 +1,3 @@
-import Database.Permissions;
 import Server.Client;
 
 import javax.swing.*;
@@ -41,11 +40,18 @@ public class changePassword extends JFrame {
                 if(password.equals(password1)){
                     try {
                         password = getHash(passwordField1.getText());
-                        SetUserPassword(token,userName,password);
-                        //Testing without Server
-//                    System.out.println("Sent to Server");
+                        String serverResponse = SetUserPassword(token,userName,password);
+                        if(serverResponse.equals("Success")){
+                            CloseJframe();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, serverResponse);
+                        }
+
                     } catch (NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                         ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, " Failed to connect to server ");
+
                     }
                 }
 
@@ -59,17 +65,8 @@ public class changePassword extends JFrame {
         });
     }
 
-//    Testing without Server
-//    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        String userName = "Sid";
-//        String token = "Sid";
-//        JFrame frame = new changePassword("Change Password",token,userName);
-//        frame.setLocation(500, 300);
-//        frame.setSize(350, 350);
-//        frame.setVisible(true);
-//    }
 
-    public static void SetUserPassword(String token,String userName,String hashedPassword) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
+    public static String SetUserPassword(String token, String userName, String hashedPassword) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
         //not working
         Socket socket = Client.getClientSocket();
         HashMap<String, Object> request = new HashMap<>();
@@ -78,6 +75,13 @@ public class changePassword extends JFrame {
         request.put("username", userName);
         request.put("password", hashedPassword);
         sendRequest(socket, request);
+        HashMap<String , Object> res = Client.getResponse(socket);
+        String message = (String) res.get("message");
         socket.close();
+        return message;
+    }
+
+    public void CloseJframe(){
+        super.dispose();
     }
 }

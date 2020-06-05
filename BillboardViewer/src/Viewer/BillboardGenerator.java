@@ -454,8 +454,6 @@ public class BillboardGenerator {
         JLabel BillboardMessage = new JLabel();
         JLabel BillboardInformation = new JLabel();
 
-        JLabel[] labels = {BillboardMessage, BillboardInformation};
-
         Timer timer = new Timer();
         TimerTask task = new UpdateBillboard(/*BillboardMessage, BillboardInformation,*/ BillboardFrame, BillboardElements, mouseExit, escapeExit);
         timer.schedule(task, 0, 5000);
