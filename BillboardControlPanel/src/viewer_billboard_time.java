@@ -177,7 +177,7 @@ public class viewer_billboard_time extends JFrame {
                     public void run() {
                         try {
                             JFrame frame = new Schedule_billboard("Add billboard to Schedule", token, user);
-                            frame.setSize(350, 350);
+                            frame.setSize(450, 400);
                             frame.setVisible(true);
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();

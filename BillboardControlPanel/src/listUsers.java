@@ -15,12 +15,9 @@ import static Server.Client.sendRequest;
 
 public class listUsers extends JFrame {
 
-
-
     private JButton modifyUserButton;
     private JButton createUserButton;
     private JButton deleteUserButton;
-//    private  String[] data = new String[100];
 
     public static ArrayList<String> ListUser(String token) throws IOException, ClassNotFoundException{
         Socket socket = Client.getClientSocket();
