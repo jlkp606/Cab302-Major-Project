@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.TimerTask;
-import Viewer.BillboardGenerator;
 
 class UpdateBillboard extends TimerTask
 {
@@ -27,7 +26,7 @@ class UpdateBillboard extends TimerTask
     public void run()
     {
         try {
-            BillboardGenerator.createBillboardViewer(/*this.BillboardMessage, this.BillboardInformation, */ this.BillboardFrame, this.BillboardElements, this.mouseExit, this.escapeExit);
+            BillboardViewer.createBillboardViewer(/*this.BillboardMessage, this.BillboardInformation, */ this.BillboardFrame, this.BillboardElements, this.mouseExit, this.escapeExit);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (IOException e) {

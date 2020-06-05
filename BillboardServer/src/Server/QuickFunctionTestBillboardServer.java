@@ -3,19 +3,13 @@ package Server;
 import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import Database.Billboard;
 import Database.Permissions;
 import Database.Schedule;
-import Token.Token;
-import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static Server.Client.getResponse;
@@ -38,7 +32,8 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
         HashMap<String, Object> res = Client.getResponse(socket);
         String token = (String) res.get("token");
-        System.out.println(token);
+
+        System.out.println(res);
         socket.close();
 
         return token;
@@ -63,6 +58,9 @@ public class QuickFunctionTestBillboardServer {
         request.put("password", hashedPassword);
         request.put("permission", permission);
         sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
 
     }
@@ -80,8 +78,7 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
 
         HashMap<String, Object> response = getResponse(socket);
-        Permissions permissions = (Permissions) response.get("permissions");
-        System.out.println(permissions.getCreateBillboard());
+        System.out.println(response);
 
         socket.close();
     }
@@ -107,6 +104,8 @@ public class QuickFunctionTestBillboardServer {
                 "#00FFFF");
         request.put("billboard", billboard);
         sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 
@@ -120,8 +119,7 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
 
         HashMap<String, Object> response = getResponse(socket);
-        ArrayList<Billboard> billboards = (ArrayList<Billboard>) response.get("billboardList");
-        System.out.println(billboards.get(0).getbName());
+        System.out.println(response);
 
         socket.close();
     }
@@ -134,8 +132,10 @@ public class QuickFunctionTestBillboardServer {
         request.put("token", token);
         request.put("type", "deleteBillboard");
         request.put("billboardName", "2ndBIllboard");
-
         sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 
@@ -155,6 +155,9 @@ public class QuickFunctionTestBillboardServer {
                 "false");
         request.put("permission", permission);
         sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 
@@ -171,7 +174,8 @@ public class QuickFunctionTestBillboardServer {
         request.put("password", hashedPassword);
 
         sendRequest(socket, request);
-
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
 
         socket.close();
     }
@@ -187,14 +191,16 @@ public class QuickFunctionTestBillboardServer {
         String username = "itsmeMario8";
         String billboardName = "MyNameJeff";
         String startTime = LocalDateTime.now().toString();
-        String endTime = LocalDateTime.now().plusSeconds(500).toString();
+        String endTime = LocalDateTime.now().plusSeconds(10).toString();
         String day = "Tuesday";
         String repeat = "day";
         Schedule schedule = new Schedule(username,billboardName,startTime,endTime,day,repeat);
-
         request.put("schedule", schedule);
-
         sendRequest(socket, request);
+
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
+
         socket.close();
     }
 
@@ -207,10 +213,10 @@ public class QuickFunctionTestBillboardServer {
         request.put("token", token);
         request.put("type", "getCurrentBillboard");
         sendRequest(socket, request);
-        HashMap<String, Object> response = getResponse(socket);
-        Billboard billboard = (Billboard) response.get("billboard");
 
-        System.out.println(billboard.getbName());
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
+
         socket.close();
 
     }
@@ -227,8 +233,7 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
 
         HashMap<String, Object> response = getResponse(socket);
-        Billboard billboard = (Billboard) response.get("billboard");
-        System.out.println(billboard.getMessageColour());
+        System.out.println(response);
         socket.close();
     }
 
@@ -244,9 +249,7 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
 
         HashMap<String, Object> response = getResponse(socket);
-        ArrayList<Schedule> scheduleList = (ArrayList<Schedule>) response.get("scheduleList");
-
-        System.out.println(scheduleList.get(0).getBillboardName());
+        System.out.println(response);
         socket.close();
     }
 
@@ -262,9 +265,7 @@ public class QuickFunctionTestBillboardServer {
         sendRequest(socket, request);
 
         HashMap<String, Object> response = getResponse(socket);
-        ArrayList<String> userList = (ArrayList<String>) response.get("userList");
-
-        System.out.println(userList);
+        System.out.println(response);
         socket.close();
     }
 
@@ -278,6 +279,8 @@ public class QuickFunctionTestBillboardServer {
         request.put("type", "deleteUser");
         request.put("username", "itsmeMario9");
         sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 
@@ -297,6 +300,8 @@ public class QuickFunctionTestBillboardServer {
         request.put("schedule", schedule);
 
         sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 
@@ -308,6 +313,8 @@ public class QuickFunctionTestBillboardServer {
         request.put("token", token);
         request.put("type", "logOut");
         sendRequest(socket, request);
+        HashMap<String, Object> response = getResponse(socket);
+        System.out.println(response);
         socket.close();
     }
 

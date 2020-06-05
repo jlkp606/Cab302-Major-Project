@@ -1,7 +1,5 @@
-package Viewer;
-import Server.Client;
 import Database.Billboard;
-
+import Server.Client;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
@@ -14,19 +12,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.security.NoSuchAlgorithmException;
-import java.net.URL;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.TimerTask;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import static Server.Client.getResponse;
 import static Server.Client.sendRequest;
 
-public class BillboardGenerator {
+public class BillboardPreview {
 
 
     public static Billboard GetCurrentBillboard() throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
@@ -43,10 +41,63 @@ public class BillboardGenerator {
 
     }
 
-    public static void createBillboardViewer( JFrame BillboardFrame, JPanel BillboardElements, MouseListener mouseExit, KeyListener escapeExit) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
 
-        BillboardElements.removeAll();
-        Billboard Billboard = GetCurrentBillboard();
+    public static void Preview(Billboard billboard) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchAlgorithmException {
+
+        /*Setting up the JFrame and JPanel*/
+        JFrame BillboardFrame = new JFrame("Billboard Viewer");
+        BillboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        BillboardFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        JPanel BillboardElements = new JPanel();
+        BillboardElements.setLayout(new BoxLayout(BillboardElements,BoxLayout.PAGE_AXIS));
+
+        /*Setting up a mouse listener to exit when the mouse is clicked*/
+        MouseListener mouseExit = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                BillboardFrame.dispose();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+            }
+        };
+        /*setting up a key listener to exit when the escape key is released*/
+        KeyListener escapeExit = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    BillboardFrame.dispose();
+                }
+            }
+        };
+
+        /*adding the mouse and key listeners to the frame*/
+        BillboardFrame.addMouseListener(mouseExit);
+        BillboardFrame.addKeyListener(escapeExit);
+        /*grabbing the billboard settings from the class grabbed from the server*/
+
+        Billboard Billboard = billboard;
 
         System.out.println(Billboard.getPictureData());
         System.out.println(Billboard.getbName());
@@ -389,75 +440,6 @@ public class BillboardGenerator {
         BillboardFrame.getContentPane().add(BillboardElements);
         BillboardFrame.validate();
         BillboardFrame.repaint();
-
-    }
-
-
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchAlgorithmException {
-
-        /*Setting up the JFrame and JPanel*/
-        JFrame BillboardFrame = new JFrame("Billboard Viewer");
-        BillboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        BillboardFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        JPanel BillboardElements = new JPanel();
-        BillboardElements.setLayout(new BoxLayout(BillboardElements,BoxLayout.PAGE_AXIS));
-
-        /*Setting up a mouse listener to exit when the mouse is clicked*/
-        MouseListener mouseExit = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                BillboardFrame.dispose();
-                System.exit(0);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-            }
-        };
-        /*setting up a key listener to exit when the escape key is released*/
-        KeyListener escapeExit = new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent keyEvent) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    BillboardFrame.dispose();
-                    System.exit(0);
-                }
-            }
-        };
-
-        /*adding the mouse and key listeners to the frame*/
-        BillboardFrame.addMouseListener(mouseExit);
-        BillboardFrame.addKeyListener(escapeExit);
-        /*grabbing the billboard settings from the class grabbed from the server*/
-
-
-        JLabel BillboardMessage = new JLabel();
-        JLabel BillboardInformation = new JLabel();
-
-        Timer timer = new Timer();
-        TimerTask task = new UpdateBillboard(/*BillboardMessage, BillboardInformation,*/ BillboardFrame, BillboardElements, mouseExit, escapeExit);
-        timer.schedule(task, 0, 5000);
-
 
         BillboardFrame.setUndecorated(true);
         BillboardFrame.setVisible(true);

@@ -1,9 +1,8 @@
 package Database;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
-import static Token.Token.generateRandomString;
+import static Server.Token.generateRandomString;
 
 public class User implements Comparable<User>, Serializable {
 

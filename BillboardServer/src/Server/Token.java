@@ -1,4 +1,4 @@
-package Token;
+package Server;
 
 import java.io.Serializable;
 import java.util.Random;
